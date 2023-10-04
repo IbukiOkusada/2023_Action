@@ -1,0 +1,38 @@
+﻿  precompile.cpp
+  billboard.cpp
+  camera.cpp
+  debugproc.cpp
+  fade.cpp
+  fileload.cpp
+  game.cpp
+  input.cpp
+  light.cpp
+  main.cpp
+  manager.cpp
+  mesh.cpp
+  meshcylinder.cpp
+  meshdome.cpp
+  meshfield.cpp
+  meshorbit.cpp
+  meshwall.cpp
+  number.cpp
+  object.cpp
+  object2D.cpp
+  object3D.cpp
+  コンパイル中...
+  objectX.cpp
+  pause.cpp
+  ranking.cpp
+  renderer.cpp
+  result.cpp
+  slow.cpp
+  sound.cpp
+  texture.cpp
+  title.cpp
+  tutorial.cpp
+  Xfile.cpp
+  コード生成しています。
+  All 435 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  コード生成が終了しました。
+  action.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\C++DirectX\action\action\action.exe
+  action.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\C++DirectX\action\action\action.pdb (Full PDB)
