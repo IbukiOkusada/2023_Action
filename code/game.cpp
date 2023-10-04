@@ -21,6 +21,7 @@
 #include "fileload.h"
 #include "debugproc.h"
 #include "player.h"
+#include "editor.h"
 
 //===============================================
 // マクロ定義
@@ -95,6 +96,13 @@ HRESULT CGame::Init(void)
 		}
 	}
 
+	// エディターの生成
+	if (m_pEditor == NULL)
+	{
+		m_pEditor = new CEditor;
+		m_pEditor->Init();
+	}
+
 	// ポーズの生成
 	if (m_pPause == NULL)
 	{
@@ -151,6 +159,20 @@ void CGame::Update(void)
 			return;
 		}
 	}
+
+#if _DEBUG
+
+	if (m_pEditor != NULL)
+	{
+		m_pEditor->Update();
+
+		if (m_pEditor->GetActive())
+		{
+			return;
+		}
+	}
+
+#endif
 
 	// 更新処理
 	CScene::Update();

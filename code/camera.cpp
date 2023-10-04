@@ -54,7 +54,7 @@ HRESULT CCamera::Init(void)
 {
 	//äeïœêîÇÃèâä˙âª
 	m_posR = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	m_posV = D3DXVECTOR3(1000.0f, 3500.0f, 0.0f);
+	m_posV = D3DXVECTOR3(2000.0f, 3500.0f, 0.0f);
 	m_fLength = sqrtf((m_posV.x - m_posR.x) * (m_posV.x - m_posR.x) + (m_posV.z - m_posR.z) * (m_posV.z - m_posR.z));
 	m_rot = D3DXVECTOR3(0.0f, atan2f(m_posR.x - m_posV.x, m_posR.z - m_posV.z), 1.29f);
 	m_vecU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);

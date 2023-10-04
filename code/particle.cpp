@@ -9,8 +9,6 @@
 #include "renderer.h"
 #include "input.h"
 #include "debugproc.h"
-#include "explosion.h"
-#include "enemy.h"
 #include "texture.h"
 
 //===============================================

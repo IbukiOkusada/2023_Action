@@ -158,6 +158,8 @@
     <ClCompile Include="code\billboard.cpp" />
     <ClCompile Include="code\camera.cpp" />
     <ClCompile Include="code\debugproc.cpp" />
+    <ClCompile Include="code\editor.cpp" />
+    <ClCompile Include="code\effect.cpp" />
     <ClCompile Include="code\fade.cpp" />
     <ClCompile Include="code\fileload.cpp" />
     <ClCompile Include="code\game.cpp" />
@@ -176,6 +178,7 @@
     <ClCompile Include="code\object2D.cpp" />
     <ClCompile Include="code\object3D.cpp" />
     <ClCompile Include="code\objectX.cpp" />
+    <ClCompile Include="code\particle.cpp" />
     <ClCompile Include="code\pause.cpp" />
     <ClCompile Include="code\player.cpp" />
     <ClCompile Include="code\precompile.cpp">
@@ -196,6 +199,8 @@
     <ClInclude Include="code\billboard.h" />
     <ClInclude Include="code\camera.h" />
     <ClInclude Include="code\debugproc.h" />
+    <ClInclude Include="code\editor.h" />
+    <ClInclude Include="code\effect.h" />
     <ClInclude Include="code\fade.h" />
     <ClInclude Include="code\fileload.h" />
     <ClInclude Include="code\game.h" />
@@ -214,6 +219,7 @@
     <ClInclude Include="code\object2D.h" />
     <ClInclude Include="code\object3D.h" />
     <ClInclude Include="code\objectX.h" />
+    <ClInclude Include="code\particle.h" />
     <ClInclude Include="code\pause.h" />
     <ClInclude Include="code\player.h" />
     <ClInclude Include="code\precompile.h" />

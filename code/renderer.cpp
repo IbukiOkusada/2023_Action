@@ -9,6 +9,7 @@
 #include "debugproc.h"
 #include "manager.h"
 #include "input.h"
+#include "editor.h"
 
 //===================================================
 // コンストラクタ
@@ -177,6 +178,15 @@ void CRenderer::Draw(void)
 
 		// オブジェクトの描画
 		CObject::DrawAll();
+
+#if _DEBUG	// デバッグ時
+
+		if (CManager::GetScene()->GetEditor() != NULL)
+		{
+			CManager::GetScene()->GetEditor()->Draw();
+		}
+
+#endif
 
 		// デバッグ表示
 		if (pDebugProc != NULL)

@@ -1,10 +1,3 @@
-﻿  fileload.cpp
-  コードを生成中...
-  スキップ中... (関連する変更は検出されませんでした)
-  tutorial.cpp
-  result.cpp
-  player.cpp
-  objectX.cpp
-  game.cpp
+﻿  renderer.cpp
   action.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\C++DirectX\action\action\Debug\action.exe
   action.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\C++DirectX\action\action\Debug\action.pdb (Full PDB)

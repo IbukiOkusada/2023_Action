@@ -30,21 +30,10 @@
 #define SHW_MOVE	(1.0f)	// シャワー中移動量
 #define PLAYER_GRAVITY	(-0.15f)		//プレイヤー重力
 #define PLAYER_JUMP		(10.0f)		//プレイヤージャンプ力
-#define DEF_SLOWTIME	(60 * 5)	// スロー可能時間
-#define SLOW_OK			(60 * 2)	// スロー可能になる時間
-#define SHOT_LENGTH	(4000.0f)		// 射程範囲
-#define SHOT_RANGE	(D3DX_PI * 0.9f)	// 射程角度
-#define SHOT_INTERVAL	(10)		// 攻撃インターバル
-#define GUN_BULMOVE	(50.0f)
-#define DEF_SLOWGAGELENGSH	(SCREEN_WIDTH * 0.4f)	// スローゲージマックスサイズ
-#define SLOWGAGE_HEIGHT	(SCREEN_HEIGHT * 0.01f)
-#define GAGE_TEXNAME	"data\\TEXTURE\\gage000.jpg"	// ゲージファイル名
-#define MANUAL_TEXNAME	"data\\TEXTURE\\slow_button.png"
-#define NOCHARGE_CNT	(20)		// チャージまでのカウント数
-#define BALLOON_MOVE	(25.0f)		// 風船移動量
-#define BALLOON_WEIGHT	(150.0f)	// 最大重量
+#define ROT_MULTI	(0.075f)		// 向き補正倍率
 #define WIDTH	(20.0f)		// 幅
 #define HEIGHT	(80.0f)		// 高さ
+
 
 //===============================================
 // コンストラクタ
@@ -323,43 +312,64 @@ void CPlayer::Rotation(void)
 //===============================================
 void CPlayer::Adjust(void)
 {
-	if (m_fRotDest > D3DX_PI || m_fRotDest < -D3DX_PI)
-	{//-3.14～3.14の範囲外の場合
-		if (m_fRotDest > D3DX_PI)
-		{
-			m_fRotDest += (-D3DX_PI * 2);
+	while (1)
+	{
+		if (m_fRotDest > D3DX_PI || m_fRotDest < -D3DX_PI)
+		{//-3.14～3.14の範囲外の場合
+			if (m_fRotDest > D3DX_PI)
+			{
+				m_fRotDest += (-D3DX_PI * 2);
+			}
+			else if (m_fRotDest < -D3DX_PI)
+			{
+				m_fRotDest += (D3DX_PI * 2);
+			}
 		}
-		else if (m_fRotDest < -D3DX_PI)
+		else
 		{
-			m_fRotDest += (D3DX_PI * 2);
+			break;
 		}
 	}
 
 	m_fRotDiff = m_fRotDest - m_fRotMove;	//目標までの移動方向の差分
 
-	if (m_fRotDiff > D3DX_PI || m_fRotDiff < -D3DX_PI)
-	{//-3.14～3.14の範囲外の場合
-		if (m_fRotDiff > D3DX_PI)
-		{
-			m_fRotDiff += (-D3DX_PI * 2);
+	while (1)
+	{
+		if (m_fRotDiff > D3DX_PI || m_fRotDiff < -D3DX_PI)
+		{//-3.14～3.14の範囲外の場合
+			if (m_fRotDiff > D3DX_PI)
+			{
+				m_fRotDiff += (-D3DX_PI * 2);
+			}
+			else if (m_fRotDiff < -D3DX_PI)
+			{
+				m_fRotDiff += (D3DX_PI * 2);
+			}
 		}
-		else if (m_fRotDiff < -D3DX_PI)
+		else
 		{
-			m_fRotDiff += (D3DX_PI * 2);
+			break;
 		}
 	}
 
-	m_Info.rot.y += m_fRotDiff * 0.1f;
+	m_Info.rot.y += m_fRotDiff * ROT_MULTI;
 
-	if (m_Info.rot.y > D3DX_PI || m_Info.rot.y < -D3DX_PI)
-	{//-3.14～3.14の範囲外の場合
-		if (m_Info.rot.y > D3DX_PI)
-		{
-			m_Info.rot.y += (-D3DX_PI * 2);
+	while (1)
+	{
+		if (m_Info.rot.y > D3DX_PI || m_Info.rot.y < -D3DX_PI)
+		{//-3.14～3.14の範囲外の場合
+			if (m_Info.rot.y > D3DX_PI)
+			{
+				m_Info.rot.y += (-D3DX_PI * 2);
+			}
+			else if (m_Info.rot.y < -D3DX_PI)
+			{
+				m_Info.rot.y += (D3DX_PI * 2);
+			}
 		}
-		else if (m_Info.rot.y < -D3DX_PI)
+		else
 		{
-			m_Info.rot.y += (D3DX_PI * 2);
+			break;
 		}
 	}
 }
