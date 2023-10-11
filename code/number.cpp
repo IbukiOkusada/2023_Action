@@ -104,11 +104,11 @@ void CNumber::Update(void)
 //===============================================
 void CNumber::Draw(void)
 {
-	if (m_pObject2D != NULL)
-	{// Žg—p‚³‚ê‚Ä‚¢‚éê‡
-		// •`‰æˆ—
-		m_pObject2D->Draw();
-	}
+	//if (m_pObject2D != NULL)
+	//{// Žg—p‚³‚ê‚Ä‚¢‚éê‡
+	//	// •`‰æˆ—
+	//	m_pObject2D->Draw();
+	//}
 }
 
 //===============================================

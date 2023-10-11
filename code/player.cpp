@@ -163,7 +163,7 @@ CPlayer *CPlayer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 move, con
 
 	if (pPlayer != NULL)
 	{// 生成できた場合
-	 // 初期化処理
+		// 初期化処理
 		pPlayer->Init(pBodyName, pLegName);
 
 		// 座標設定
@@ -219,8 +219,9 @@ void CPlayer::Controller(void)
 	Adjust();
 
 	// オブジェクトとの当たり判定
-	D3DXVECTOR3 vtxMax = D3DXVECTOR3(WIDTH, HEIGHT, WIDTH);
-	D3DXVECTOR3 vtxMin = D3DXVECTOR3(-WIDTH, 0.0f, -WIDTH);
+	CXFile *pFile = CManager::GetModelFile();
+	D3DXVECTOR3 vtxMax = pFile->GetMax(GetIdx());
+	D3DXVECTOR3 vtxMin = pFile->GetMin(GetIdx());
 	CObjectX::Collision(pos, m_Info.posOld, m_Info.move, vtxMin, vtxMax, 0.3f);
 
 	// 壁との当たり判定

@@ -22,6 +22,8 @@
 #include "debugproc.h"
 #include "player.h"
 #include "editor.h"
+#include "gimmick_move.h"
+#include "gimmick_rotate.h"
 
 //===============================================
 // マクロ定義
@@ -110,6 +112,9 @@ HRESULT CGame::Init(void)
 	}
 
 	CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
+	CGimmickMove::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 0.0f, 0.0f), 120.0f);
+	CGimmickRotate *p = CGimmickRotate::Create();
+	p->SetPosition(D3DXVECTOR3(-300.0f, 0.0f, -500.0f));
 
 	// スポットライトをオン
 	CManager::GetLight()->EnablePointLight(true);

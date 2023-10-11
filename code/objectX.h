@@ -21,7 +21,7 @@ class CObjectX : public CObject
 public:	// 誰でもアクセス可能
 
 	CObjectX(int nPriority = 0);	// コンストラクタ
-	~CObjectX();	// デストラクタ
+	virtual ~CObjectX();	// デストラクタ
 
 	// メンバ関数
 	virtual HRESULT Init(void);
@@ -42,6 +42,7 @@ public:	// 誰でもアクセス可能
 	D3DXVECTOR3 GetPosition(void) { return m_pos; }
 	D3DXVECTOR3 GetRotation(void) { return m_rot; }
 	CObject2D *GetObject2D(void) { return NULL; }
+	virtual D3DXMATRIX *GetMtx(void) { return &m_mtxWorld; }
 	int GetIdx(void) { return m_nIdxModel; }
 	int GetModelType(void) { return m_nIdxModel; }
 
@@ -49,6 +50,7 @@ private:	// 自分だけがアクセス可能
 	
 	// メンバ関数
 	//D3DMATERIAL9 SetSlowCol(D3DMATERIAL9 *pMat);
+	virtual bool CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, const float fRefMulti = 0.5f);
 
 	// メンバ変数c
 	static CObjectX *m_pTop;	// 先頭のオブジェクトへのポインタ

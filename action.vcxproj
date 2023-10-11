@@ -173,10 +173,14 @@
     <ClCompile Include="code\meshfield.cpp" />
     <ClCompile Include="code\meshorbit.cpp" />
     <ClCompile Include="code\meshwall.cpp" />
+    <ClCompile Include="code\model.cpp" />
     <ClCompile Include="code\number.cpp" />
     <ClCompile Include="code\object.cpp" />
     <ClCompile Include="code\object2D.cpp" />
     <ClCompile Include="code\object3D.cpp" />
+    <ClCompile Include="code\gimmick_move.cpp" />
+    <ClCompile Include="code\gimmick_press.cpp" />
+    <ClCompile Include="code\gimmick_rotate.cpp" />
     <ClCompile Include="code\objectX.cpp" />
     <ClCompile Include="code\particle.cpp" />
     <ClCompile Include="code\pause.cpp" />
@@ -188,6 +192,7 @@
     <ClCompile Include="code\ranking.cpp" />
     <ClCompile Include="code\renderer.cpp" />
     <ClCompile Include="code\result.cpp" />
+    <ClCompile Include="code\sample\sample.cpp" />
     <ClCompile Include="code\slow.cpp" />
     <ClCompile Include="code\sound.cpp" />
     <ClCompile Include="code\texture.cpp" />
@@ -214,10 +219,14 @@
     <ClInclude Include="code\meshfield.h" />
     <ClInclude Include="code\meshorbit.h" />
     <ClInclude Include="code\meshwall.h" />
+    <ClInclude Include="code\model.h" />
     <ClInclude Include="code\number.h" />
     <ClInclude Include="code\object.h" />
     <ClInclude Include="code\object2D.h" />
     <ClInclude Include="code\object3D.h" />
+    <ClInclude Include="code\gimmick_move.h" />
+    <ClInclude Include="code\gimmick_press.h" />
+    <ClInclude Include="code\gimmick_rotate.h" />
     <ClInclude Include="code\objectX.h" />
     <ClInclude Include="code\particle.h" />
     <ClInclude Include="code\pause.h" />
@@ -226,6 +235,7 @@
     <ClInclude Include="code\ranking.h" />
     <ClInclude Include="code\renderer.h" />
     <ClInclude Include="code\result.h" />
+    <ClInclude Include="code\sample\sample.h" />
     <ClInclude Include="code\slow.h" />
     <ClInclude Include="code\sound.h" />
     <ClInclude Include="code\texture.h" />

@@ -1,7 +1,8 @@
-﻿  precompile.cpp
-  billboard.cpp
+﻿  billboard.cpp
   camera.cpp
   debugproc.cpp
+  editor.cpp
+  effect.cpp
   fade.cpp
   fileload.cpp
   game.cpp
@@ -15,24 +16,27 @@
   meshfield.cpp
   meshorbit.cpp
   meshwall.cpp
-  number.cpp
   object.cpp
   object2D.cpp
-  object3D.cpp
   コンパイル中...
+  object3D.cpp
   objectX.cpp
+  particle.cpp
   pause.cpp
+  player.cpp
   ranking.cpp
   renderer.cpp
   result.cpp
+  sample.cpp
   slow.cpp
-  sound.cpp
   texture.cpp
   title.cpp
   tutorial.cpp
   Xfile.cpp
   コード生成しています。
-  All 435 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  121 of 489 functions (24.7%) were compiled, the rest were copied from previous compilation.
+    40 functions were new in current compilation
+    59 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   action.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\C++DirectX\action\action\action.exe
   action.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\C++DirectX\action\action\action.pdb (Full PDB)
