@@ -120,15 +120,22 @@ void CGimmickMove::Controller(void)
 {
 	// 座標更新
 	D3DXVECTOR3 pos = GetPosition();
+	float m_fSlowMulti = 1.0f;	// スロー倍率
+
+	if (!m_pSlow)
+	{
+		m_fSlowMulti = m_pSlow->Get();
+	}
+
 	pos += m_move;
 	SetPosition(pos);
 
-	if (m_fNumMoveTimer == 0.0f || !m_pSlow)
+	if (m_fNumMoveTimer == 0.0f)
 	{// 往復しない
 		return;
 	}
 
-	m_fNowMoveTimer -= m_pSlow->Get();
+	m_fNowMoveTimer -= m_fSlowMulti;
 
 	if (m_fNowMoveTimer <= 0.0f)
 	{

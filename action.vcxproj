@@ -163,6 +163,7 @@
     <ClCompile Include="code\fade.cpp" />
     <ClCompile Include="code\fileload.cpp" />
     <ClCompile Include="code\game.cpp" />
+    <ClCompile Include="code\gimmick_fish.cpp" />
     <ClCompile Include="code\input.cpp" />
     <ClCompile Include="code\light.cpp" />
     <ClCompile Include="code\main.cpp" />
@@ -195,6 +196,8 @@
     <ClCompile Include="code\sample\sample.cpp" />
     <ClCompile Include="code\slow.cpp" />
     <ClCompile Include="code\sound.cpp" />
+    <ClCompile Include="code\task.cpp" />
+    <ClCompile Include="code\task_manager.cpp" />
     <ClCompile Include="code\texture.cpp" />
     <ClCompile Include="code\title.cpp" />
     <ClCompile Include="code\tutorial.cpp" />
@@ -209,6 +212,7 @@
     <ClInclude Include="code\fade.h" />
     <ClInclude Include="code\fileload.h" />
     <ClInclude Include="code\game.h" />
+    <ClInclude Include="code\gimmick_fish.h" />
     <ClInclude Include="code\input.h" />
     <ClInclude Include="code\light.h" />
     <ClInclude Include="code\main.h" />
@@ -238,6 +242,8 @@
     <ClInclude Include="code\sample\sample.h" />
     <ClInclude Include="code\slow.h" />
     <ClInclude Include="code\sound.h" />
+    <ClInclude Include="code\task.h" />
+    <ClInclude Include="code\task_manager.h" />
     <ClInclude Include="code\texture.h" />
     <ClInclude Include="code\title.h" />
     <ClInclude Include="code\tutorial.h" />

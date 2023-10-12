@@ -25,7 +25,7 @@ class CObject
 {
 public:	// 誰でもアクセス可能
 
-		// 種類列挙型の定義
+	// 種類列挙型の定義
 	typedef enum
 	{
 		TYPE_NONE = 0,	// 何もない
@@ -78,6 +78,7 @@ public:	// 誰でもアクセス可能
 	static int GetPriNumAll(int nPriority) { return m_aPriNumAll[nPriority]; }
 	static int GetNumEnemAll(void) { return m_nNumEnemyAll; }
 	virtual void Hit(float fDamage){ }
+	void SetDraw(bool bUse = true) { m_bDraw = bUse; }
 
 	// メンバ関数(取得
 	TYPE GetType(void) { return m_type; }
@@ -104,7 +105,8 @@ private:	// 自分だけがアクセス可能
 	static CObject *m_apCur[NUM_PRIORITY];	// 最後尾のオブジェクトへのポインタ
 	CObject *m_pPrev;	// 前のオブジェクトへのポインタ
 	CObject *m_pNext;	// 次のオブジェクトへのポインタ
-	bool m_bDeath;		// 死亡フラグ
+	bool m_bDeath;	// 死亡フラグ
+	bool m_bDraw;		// 描画フラグ
 	int m_nPriority;	// 優先順位の位置
 	TYPE m_type;		// 種類
 };

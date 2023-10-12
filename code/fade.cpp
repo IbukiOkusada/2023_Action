@@ -12,9 +12,10 @@ LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffFade = NULL;	//頂点バッファへのポインタ
 //===============================================
 // コンストラクタ
 //===============================================
-CFade::CFade(const int nPriOrity) : CObject2D(nPriOrity)
+CFade::CFade()
 {
 	// 値のクリア
+	m_modeNext = CScene::MODE_TITLE;
 	m_state = STATE_NONE;
 	m_Col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 }
@@ -30,14 +31,33 @@ CFade::~CFade()
 //===============================================
 // 初期化処理
 //===============================================
-HRESULT CFade::Init(CScene::MODE modeNext)
+HRESULT CFade::Init(void)
 {
+	m_pObject = CObject2D::Create(NUM_PRIORITY - 1);
+
 	// ポリゴンの生成
-	CObject2D::Init();
+	m_pObject->Init();
 
 	// サイズ設定
-	SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f));
-	SetSize(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f);
+	m_pObject->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f));
+	m_pObject->SetSize(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f);
+
+	return S_OK;
+}
+
+//===============================================
+// 初期化処理
+//===============================================
+HRESULT CFade::Init(CScene::MODE modeNext)
+{
+	m_pObject = CObject2D::Create(NUM_PRIORITY - 1);
+
+	// ポリゴンの生成
+	m_pObject->Init();
+
+	// サイズ設定
+	m_pObject->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f));
+	m_pObject->SetSize(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f);
 
 	//モードの設定
 	Set(modeNext);
@@ -50,7 +70,13 @@ HRESULT CFade::Init(CScene::MODE modeNext)
 //===============================================
 void CFade::Uninit(void)
 {
-	CObject2D::Uninit();
+	if (m_pObject != NULL)
+	{
+		m_pObject->Uninit();
+		m_pObject = NULL;
+	}
+
+	Release();
 }
 
 //===============================================
@@ -68,6 +94,11 @@ void CFade::Update(void)
 			{//完全に透明になった場合
 				m_Col.a = 0.0f;	//透明度を透明に
 				m_state = STATE_NONE;	//何もしていない状態に
+
+				if (m_pObject != NULL)
+				{
+					m_pObject->SetDraw(false);
+				}
 			}
 		}
 		else if (m_state == STATE_OUT)
@@ -86,17 +117,9 @@ void CFade::Update(void)
 		}
 	}
 
-	SetCol(m_Col);
-}
-
-//===============================================
-// 描画処理
-//===============================================
-void CFade::Draw(void)
-{
-	if (m_state != STATE_NONE)
+	if (m_pObject != NULL)
 	{
-		CObject2D::Draw();
+		m_pObject->SetCol(m_Col);
 	}
 }
 
@@ -110,6 +133,11 @@ void CFade::Set(CScene::MODE modeNext)
 		m_state = STATE_OUT;	//フェードアウト状態に
 		m_modeNext = modeNext;	//次の画面(モード)に
 		m_Col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);	//透明に設定
+
+		if (m_pObject != NULL)
+		{
+			m_pObject->SetDraw();
+		}
 	}
 }
 
@@ -144,7 +172,10 @@ void CFade::SetState(STATE state)
 		break;
 	}
 
-	SetCol(m_Col);
+	if (m_pObject != NULL)
+	{
+		m_pObject->SetCol(m_Col);
+	}
 }
 
 //===============================================

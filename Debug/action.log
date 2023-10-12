@@ -1,9 +1,3 @@
-﻿  gimmick_rotate.cpp
-  gimmick_press.cpp
-  game.cpp
-  コードを生成中...
-  コンパイル中...
-  gimmick_move.cpp
-  コードを生成中...
-  action.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\C++DirectX\action\action\Debug\action.exe
-  action.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\C++DirectX\action\action\Debug\action.pdb (Full PDB)
+﻿  gimmick_move.cpp
+  action.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\C++DirectX\action\action_task\Debug\action.exe
+  action.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\C++DirectX\action\action_task\Debug\action.pdb (Full PDB)

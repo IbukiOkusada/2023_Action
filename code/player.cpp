@@ -26,14 +26,14 @@
 //===============================================
 // マクロ定義
 //===============================================
-#define MOVE	(0.05f)		// 移動量
+#define MOVE	(0.1f)		// 移動量
 #define SHW_MOVE	(1.0f)	// シャワー中移動量
 #define PLAYER_GRAVITY	(-0.15f)		//プレイヤー重力
 #define PLAYER_JUMP		(10.0f)		//プレイヤージャンプ力
 #define ROT_MULTI	(0.075f)		// 向き補正倍率
 #define WIDTH	(20.0f)		// 幅
 #define HEIGHT	(80.0f)		// 高さ
-
+#define INER	(0.003f)	// 慣性
 
 //===============================================
 // コンストラクタ
@@ -58,6 +58,7 @@ CPlayer::CPlayer(const D3DXVECTOR3 pos)
 	m_fRotMove = 0.0f;
 	m_fRotDiff = 0.0f;
 	m_fRotDest = 0.0f;
+	m_pObject = NULL;
 }
 
 //===============================================
@@ -73,6 +74,7 @@ CPlayer::CPlayer(int nPriOrity)
 	m_fRotMove = 0.0f;
 	m_fRotDiff = 0.0f;
 	m_fRotDest = 0.0f;
+	m_pObject = NULL;
 }
 
 //===============================================
@@ -88,9 +90,11 @@ CPlayer::~CPlayer()
 //===============================================
 HRESULT CPlayer::Init(void)
 {
-	CObjectX::Init();
-
-	BindFile(CManager::GetModelFile()->Regist("data\\MODEL\\triangle.x"));
+	if (m_pObject == NULL)
+	{
+		m_pObject = CObjectX::Create(GetPosition(), GetRotation(), "data\\MODEL\\triangle.x");
+		m_pObject->SetType(CObject::TYPE_PLAYER);
+	}
 
 	return S_OK;
 }
@@ -100,9 +104,11 @@ HRESULT CPlayer::Init(void)
 //===============================================
 HRESULT CPlayer::Init(const char *pBodyName, const char *pLegName)
 {
-	CObjectX::Init();
-
-	BindFile(CManager::GetModelFile()->Regist("data\\MODEL\\triangle.x"));
+	if (m_pObject == NULL)
+	{
+		m_pObject = CObjectX::Create(GetPosition(), GetRotation(), "data\\MODEL\\triangle.x");
+		m_pObject->SetType(CObject::TYPE_PLAYER);
+	}
 
 	return S_OK;
 }
@@ -112,10 +118,14 @@ HRESULT CPlayer::Init(const char *pBodyName, const char *pLegName)
 //===============================================
 void CPlayer::Uninit(void)
 {
-	CObjectX::Uninit();
+	if (m_pObject != NULL)
+	{
+		m_pObject->Uninit();
+		m_pObject = NULL;
+	}
 
 	// 廃棄
-	//Release();
+	Release();
 }
 
 //===============================================
@@ -123,7 +133,6 @@ void CPlayer::Uninit(void)
 //===============================================
 void CPlayer::Update(void)
 {
-
 	// 前回の座標を取得
 	m_Info.posOld = GetPosition();
 
@@ -140,14 +149,6 @@ void CPlayer::Update(void)
 
 	// パーティクル
 	//Particle();
-}
-
-//===============================================
-// 描画処理
-//===============================================
-void CPlayer::Draw(void)
-{
-	CObjectX::Draw();
 }
 
 //===============================================
@@ -178,7 +179,7 @@ CPlayer *CPlayer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 move, con
 		pPlayer->SetMove(move);
 
 		// 種類の設定
-		pPlayer->SetType(TYPE_PLAYER);
+		//pPlayer->SetType(TYPE_PLAYER);
 
 		CManager::GetCamera()->Setting(pos, rot);
 	}
@@ -210,8 +211,8 @@ void CPlayer::Controller(void)
 		Rotation();	// 回転
 	}
 
-	m_Info.move.x += (0.0f - m_Info.move.x) * 0.0025f;	//x座標
-	m_Info.move.z += (0.0f - m_Info.move.z) * 0.0025f;	//x座標
+	m_Info.move.x += (0.0f - m_Info.move.x) * INER;	//x座標
+	m_Info.move.z += (0.0f - m_Info.move.z) * INER;	//x座標
 	pos.x += m_Info.move.x * CManager::GetSlow()->Get();
 	pos.z += m_Info.move.z * CManager::GetSlow()->Get();
 
@@ -219,10 +220,13 @@ void CPlayer::Controller(void)
 	Adjust();
 
 	// オブジェクトとの当たり判定
-	CXFile *pFile = CManager::GetModelFile();
-	D3DXVECTOR3 vtxMax = pFile->GetMax(GetIdx());
-	D3DXVECTOR3 vtxMin = pFile->GetMin(GetIdx());
-	CObjectX::Collision(pos, m_Info.posOld, m_Info.move, vtxMin, vtxMax, 0.3f);
+	if (m_pObject != NULL)
+	{
+		CXFile *pFile = CManager::GetModelFile();
+		D3DXVECTOR3 vtxMax = pFile->GetMax(m_pObject->GetIdx());
+		D3DXVECTOR3 vtxMin = pFile->GetMin(m_pObject->GetIdx());
+		CObjectX::Collision(pos, m_Info.posOld, m_Info.move, vtxMin, vtxMax, 0.3f);
+	}
 
 	// 壁との当たり判定
 	CMeshWall::Collision(pos, m_Info.posOld);
@@ -231,10 +235,12 @@ void CPlayer::Controller(void)
 	D3DXVECTOR3 nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	float fHeight = CMeshField::GetHeight(pos);
 
-	CObjectX::SetPosition(pos);
 	m_Info.pos = pos;
 
-	pos = GetPosition();
+	if (m_pObject != NULL)
+	{
+		m_pObject->SetPosition(m_Info.pos);
+	}
 
 	//デバッグ表示
 	CManager::GetDebugProc()->Print("\n移動[W,A,S,D] : ジャンプ[SPACE] : 発射[L, マウス左クリック(長押し可)]\n"
@@ -305,7 +311,11 @@ void CPlayer::Rotation(void)
 	D3DXVec2Normalize(&vec, &vec);
 
 	m_fRotDest = atan2f(vec.y, vec.x);
-	CObjectX::SetRotation(m_Info.rot);
+
+	if (m_pObject != NULL)
+	{
+		m_pObject->SetRotation(m_Info.rot);
+	}
 }
 
 //===============================================

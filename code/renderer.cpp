@@ -10,6 +10,7 @@
 #include "manager.h"
 #include "input.h"
 #include "editor.h"
+#include "task_manager.h"
 
 //===================================================
 // コンストラクタ
@@ -60,10 +61,11 @@ HRESULT CRenderer::Init(HWND hWnd, BOOL bWindow)
 	d3dpp.BackBufferCount = 1;									// バックバッファの数
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;					// ダブルバッファの切り替え
 	d3dpp.EnableAutoDepthStencil = TRUE;						// デプスバッファとステンシルバッファを作成
-	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;					// デプスバッファとして16bitを使う
+	d3dpp.AutoDepthStencilFormat = D3DFMT_D24S8;					// デプスバッファとして16bitを使う
 	d3dpp.Windowed = bWindow;									// ウインドウモード
 	d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;	// リフレッシュレート
 	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;	// インターバル
+	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;					// デプスバッファとして16bitを使う	
 
 	// Direct3Dデバイスの作成
 	if (FAILED(m_pD3D->CreateDevice(
@@ -120,6 +122,10 @@ HRESULT CRenderer::Init(HWND hWnd, BOOL bWindow)
 //===================================================
 void CRenderer::Uninit(void)
 {
+	// タスクの廃棄
+	CTaskManager::GetInstance()->Uninit();
+
+	// オブジェクトの廃棄
 	CObject::ReleaseAll();
 
 	// Direct3Dデバイスの廃棄
@@ -144,6 +150,8 @@ void CRenderer::Update(void)
 {
 	// オブジェクトの全更新
 	CObject::UpdateAll();
+
+	CTaskManager::GetInstance()->Update();
 
 #if _DEBUG	// デバッグ時
 	CInputKeyboard *pKey = CManager::GetInputKeyboard();
@@ -171,13 +179,14 @@ void CRenderer::Draw(void)
 		D3DCOLOR_RGBA(0, 0, 0, 0),
 		1.0f,
 		0);
-	
+
 	// 描画開始
 	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{// 描画が成功した場合
 
 		// オブジェクトの描画
 		CObject::DrawAll();
+
 
 #if _DEBUG	// デバッグ時
 

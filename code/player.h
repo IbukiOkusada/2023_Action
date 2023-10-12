@@ -10,6 +10,7 @@
 #include "main.h"
 #include "object.h"
 #include "objectX.h"
+#include "task.h"
 
 // 前方宣言
 class CShadow;
@@ -27,7 +28,7 @@ class CObjectX;
 //==========================================================
 // プレイヤーのクラス定義(派生クラス)
 //==========================================================
-class CPlayer : public CObjectX
+class CPlayer : public CTask
 {
 private:	// 自分だけがアクセス可能な定義
 
@@ -53,7 +54,6 @@ public:	// 誰でもアクセス可能
 	HRESULT Init(const char *pBodyName, const char *pLegName);	// オーバーロード
 	void Uninit(void);
 	void Update(void);
-	void Draw(void);
 	static CPlayer *Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const D3DXVECTOR3 move,
 		const char *pBodyName, const char *pLegName, const int nPriority = 4);
 
@@ -77,6 +77,7 @@ private:	// 自分だけがアクセス可能
 
 	// メンバ変数
 	SInfo m_Info;			// 自分自身の情報
+	CObjectX *m_pObject;	// 描画オブジェクト
 	float m_fRotMove;		// 現在の角度
 	float m_fRotDiff;		// 目的の角度
 	float m_fRotDest;		// 角度計算

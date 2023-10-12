@@ -10,11 +10,12 @@
 #include "main.h"	//main.hで定義しているものが必要なためinclude
 #include "manager.h"
 #include "object2D.h"
+#include "task.h"
 
 //===============================================
 // フェードクラスの定義(派生クラス)
 //===============================================
-class CFade : public CObject2D
+class CFade : public CTask
 {
 public:	// 誰でもアクセス可能な定義
 
@@ -29,14 +30,14 @@ public:	// 誰でもアクセス可能な定義
 
 public:	// 誰でもアクセス可能
 
-	CFade(const int nPriOrity = NUM_PRIORITY - 1);	// コンストラクタ
+	CFade();	// コンストラクタ
 	~CFade();	// デストラクタ
 
 	// メンバ関数
+	HRESULT Init(void);
 	HRESULT Init(CScene::MODE modeNext);
 	void Uninit(void);
 	void Update(void);
-	void Draw(void);
 	void Set(CScene::MODE modeNext);
 	void SetState(STATE state);
 	STATE GetState(void) { return m_state; }
@@ -48,6 +49,7 @@ private:	// 自分だけがアクセス可能な定義
 	STATE m_state;				// 状態
 	CScene::MODE m_modeNext;	// 次の画面(モード)
 	D3DXCOLOR m_Col;			// フェードカラー
+	CObject2D *m_pObject;		// 描画オブジェクト
 };
 
 #endif

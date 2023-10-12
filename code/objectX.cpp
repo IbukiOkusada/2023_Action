@@ -122,6 +122,8 @@ void CObjectX::Update(void)
 //==========================================================
 void CObjectX::Draw(void)
 {
+	//Update();
+
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスへのポインタを取得
 	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
 	CXFile *pModelFile = CManager::GetModelFile();	// Xファイル情報のポインタ
@@ -281,7 +283,6 @@ bool CObjectX::Collision(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &mov
 		CObjectX *pObjNext = pObj->m_pNext;
 		D3DXVECTOR3 vtxObjMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		D3DXVECTOR3 vtxObjMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
 		if (pObj->CollisionCheck(pos, posOld, move, vtxMin, vtxMax, fRefMulti))
 		{
 			bLand = false;
@@ -430,11 +431,11 @@ bool CObjectX::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3
 		&& pos.z + vtxMax.z > m_pos.z + vtxObjMin.z
 		&& pos.z + vtxMin.z < m_pos.z + vtxObjMax.z)
 	{//範囲内にある
-	 //上からの判定
+		//上からの判定
 		if (posOld.y + vtxMin.y >= m_pos.y + vtxObjMax.y
 			&& pos.y + vtxMin.y < m_pos.y + vtxObjMax.y)
 		{//上からめり込んだ
-		 //上にのせる
+			//上にのせる
 			pos.y = m_pos.y + vtxObjMax.y - vtxMin.y;
 			move.y = 0.0f;
 			bLand = true;

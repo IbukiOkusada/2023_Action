@@ -23,6 +23,8 @@ CGimmickRotate::CGimmickRotate(int nPriOrity) : CObjectX(nPriOrity)
 	{
 		m_aObj[nCnt].s_pModel = NULL;
 	}
+
+	m_RotateSpeed = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 }
 
 //==========================================================
@@ -41,6 +43,7 @@ HRESULT CGimmickRotate::Init(void)
 	CXFile *pFile = CManager::GetModelFile();
 	BindFile(pFile->Regist("data\\MODEL\\1mcube.x"));
 	m_fSize = SETSIZE;
+	m_RotateSpeed = D3DXVECTOR3(0.0f, 0.01f, 0.0f);
 
 	for (int nCnt = 0; nCnt < NUM_ROTATEBOX; nCnt++)
 	{
@@ -70,6 +73,8 @@ void CGimmickRotate::Uninit(void)
 		}
 	}
 
+	CObjectX::Uninit();
+
 	// ”pŠü
 	Release();
 }
@@ -81,11 +86,15 @@ void CGimmickRotate::Update(void)
 {
 	// Œü‚«‚ÌÝ’è
 	D3DXVECTOR3 rot = GetRotation();
-	rot.y += 0.01f;
+	rot += m_RotateSpeed;
 
 	if (rot.y > D3DX_PI)
 	{
 		rot.y += -D3DX_PI * 2;
+	}
+	else if (rot.y < -D3DX_PI)
+	{
+		rot.y += D3DX_PI * 2;
 	}
 
 	SetRotation(rot);
@@ -265,7 +274,7 @@ bool CGimmickRotate::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXV
 		D3DXVec3Normalize(&movevec, &move);
 		D3DXVECTOR3 vecDiff = movevec - vec;
 		D3DXVec3Normalize(&vecDiff, &vecDiff);
-		move = D3DXVECTOR3(move.x - move.x * vecDiff.x, move.y - move.y * vecDiff.y, move.z - move.z * vecDiff.z);
+		//move = D3DXVECTOR3(move.x + move.x * vecDiff.x, move.y + move.y * vecDiff.y, move.z +  move.z * vecDiff.z);
 	}
 
 	return bLand;

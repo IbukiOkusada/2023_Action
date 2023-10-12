@@ -51,6 +51,7 @@ CObject::CObject(int nPriority)
 	m_pNext = NULL;
 	m_pPrev = NULL;
 	m_bDeath = false;
+	m_bDraw = true;
 
 	// 優先順位の確認
 	if (nPriority < 0)
@@ -207,12 +208,10 @@ void CObject::DrawAll(void)
 		{// 使用されていない状態まで
 			CObject *pObjectNext = pObject->m_pNext;	// 次のオブジェクトへのポインタを取得
 
-			if (pObject->m_type != TYPE_PAUSE && pObject->m_type != TYPE_MAP)
+			if (pObject->m_type != TYPE_PAUSE && pObject->m_type != TYPE_MAP && pObject->m_bDraw == true)
 			{// ポーズ画面以外
-
 				// 描画処理
 				pObject->Draw();
-
 			}
 			pObject = pObjectNext;	// 次のオブジェクトに移動
 		}

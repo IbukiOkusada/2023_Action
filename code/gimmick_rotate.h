@@ -43,8 +43,10 @@ public:	// 誰でもアクセス可能
 	static CGimmickRotate *Create(void);
 
 	// メンバ関数(取得)
+	D3DXVECTOR3 GetRotate(void) { return m_RotateSpeed; }
 
 	// メンバ関数(設定)
+	void SetRotate(D3DXVECTOR3 rotate) { m_RotateSpeed = rotate; }
 
 private:	// 自分だけがアクセス可能
 
@@ -53,6 +55,7 @@ private:	// 自分だけがアクセス可能
 
 	// メンバ変数
 	Obj m_aObj[NUM_ROTATEBOX];	// オブジェ配列
+	D3DXVECTOR3 m_RotateSpeed;	// 回転量
 	float m_fSize;		// 1つ辺りのオブジェサイズ
 };
 

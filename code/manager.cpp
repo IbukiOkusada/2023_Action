@@ -21,6 +21,7 @@
 #include "object.h"
 #include "ranking.h"
 #include "slow.h"
+#include "task_manager.h"
 
 //===============================================
 // 静的メンバ変数
@@ -204,6 +205,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		m_pSlow = new CSlow;
 		m_pSlow->Init();
 	}
+
 
 	// モードの生成
 	SetMode(CScene::MODE_TITLE);
@@ -463,6 +465,9 @@ CFade *CManager::GetFade(void)
 //===================================================
 void CManager::DataReset(void)
 {
+	// タスクマネージャーの終了
+	CTaskManager::GetInstance()->Uninit();
+
 	// オブジェクトの全廃棄
 	CObject::ReleaseAll();
 
@@ -511,6 +516,9 @@ void CManager::DataReset(void)
 	{// 使用していない場合
 		m_pModelFile = new CXFile;
 	}
+
+	// タスクマネージャーの更新
+	CTaskManager::GetInstance()->Init();
 }
 
 //===================================================

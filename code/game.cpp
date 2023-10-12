@@ -114,7 +114,8 @@ HRESULT CGame::Init(void)
 	CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
 	CGimmickMove::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 0.0f, 0.0f), 120.0f);
 	CGimmickRotate *p = CGimmickRotate::Create();
-	p->SetPosition(D3DXVECTOR3(-300.0f, 0.0f, -500.0f));
+	p->SetPosition(D3DXVECTOR3(-5600.0f, 0.0f, -420.0f));
+	p->SetRotate(D3DXVECTOR3(p->GetRotate().x, p->GetRotate().y * -1.0f, p->GetRotate().z));
 
 	// スポットライトをオン
 	CManager::GetLight()->EnablePointLight(true);
@@ -178,6 +179,11 @@ void CGame::Update(void)
 	}
 
 #endif
+
+	if (CManager::GetInputKeyboard()->GetTrigger(DIK_RETURN))
+	{
+		CManager::GetFade()->Set(CScene::MODE_RESULT);
+	}
 
 	// 更新処理
 	CScene::Update();
