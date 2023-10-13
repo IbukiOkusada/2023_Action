@@ -1,7 +1,7 @@
 #==============================================================================
 #
-# 『モデルビューワ』スクリプトファイル [model.txt]
-# Author : AKIRA TANAKA
+# マップ配置スクリプトファイル [model.txt]
+# Author : IBUKI OKUSADA
 #
 #==============================================================================
 SCRIPT			# この行は絶対消さないこと！
@@ -9,29 +9,13 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------------------------
 # テクスチャ数
 #------------------------------------------------------------------------------
-NUM_TEXTURE = 18
+NUM_TEXTURE = 2
 
 #------------------------------------------------------------------------------
 # テクスチャファイル名
 #------------------------------------------------------------------------------
-TEXTURE_FILENAME = data/TEXTURE/field000.jpg			# [0]土
-TEXTURE_FILENAME = data/TEXTURE/road000.jpg				# [1]山テクスチャ
-TEXTURE_FILENAME = data/TEXTURE/dansa000.jpg			# [2]段差
-TEXTURE_FILENAME = data/TEXTURE/field001.jpg			# [3]草テクスチャ
-TEXTURE_FILENAME = data/TEXTURE/field002.jpg			# [4]草
-TEXTURE_FILENAME = data/TEXTURE/field003.jpg			# [5]モール公園仕切り床
-TEXTURE_FILENAME = data/TEXTURE/field004.jpg			# [6]道路
-TEXTURE_FILENAME = data/TEXTURE/dansa000.png			# [7]道路
-TEXTURE_FILENAME = data/TEXTURE/field005.jpg			# [8]砂場
-TEXTURE_FILENAME = data/TEXTURE/field006.jpg			# [9]アスファルト
-TEXTURE_FILENAME = data/TEXTURE/field007.jpg			# [10]ステージ商店街間道路
-TEXTURE_FILENAME = data/TEXTURE/block002.jpg			# [11]商店街奥壁
-TEXTURE_FILENAME = data/TEXTURE/streetlamp000.jpg		# [12]商店街奥仕切り
-TEXTURE_FILENAME = data/TEXTURE/block003.jpg			# [13]商店街奥壁
-TEXTURE_FILENAME = data/TEXTURE/field008.jpg			# [14]商店街道路
-TEXTURE_FILENAME = data/TEXTURE/block004.jpg			# [15]商店街道路
-TEXTURE_FILENAME = data/TEXTURE/field009.jpg			# [16]商店街道路
-TEXTURE_FILENAME = data/TEXTURE/field010.jpg			# [17]商店街道路
+TEXTURE_FILENAME = data/TEXTURE/river000.jpg			# [0]川水(下)
+TEXTURE_FILENAME = data/TEXTURE/river000.png			# [1]川水(上)
 
 #------------------------------------------------------------------------------
 # モデル数
@@ -42,10 +26,10 @@ NUM_MODEL = 5
 # モデルファイル名
 #------------------------------------------------------------------------------
 MODEL_FILENAME = data/MODEL/1mcube.x	# [0]砂場
-MODEL_FILENAME = data/MODEL/2mcube.x			# [1]木
-MODEL_FILENAME = data/MODEL/3mcube.x			# [2]木
-MODEL_FILENAME = data/MODEL/4mcube.x			# [3]木
-MODEL_FILENAME = data/MODEL/5mcube.x			# [4]フェンス上
+MODEL_FILENAME = data/MODEL/2mcube.x	# [1]木
+MODEL_FILENAME = data/MODEL/3mcube.x	# [2]木
+MODEL_FILENAME = data/MODEL/4mcube.x	# [3]木
+MODEL_FILENAME = data/MODEL/5mcube.x	# [4]フェンス上
 
 #------------------------------------------------------------------------------
 # カメラ情報
@@ -88,6 +72,27 @@ MOUNTAINSET
 	TEXTYPE = 1
 END_MOUNTAINSET
 
+# 床配置情報
+
+FIELDSET
+	TEXTYPE = 0
+	POS = -9750.0 -300.0 0.0
+	ROT = 0 0 0
+	BLOCK = 40 150
+	SIZE = 100 100
+	MOVE = -0.0025 0.0
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 1
+	POS = -9750.0 -299.0 0.0
+	ROT = 0 0 0
+	BLOCK = 40 150
+	SIZE = 100 100
+	MOVE = -0.0005 0.0
+END_FIELDSET
+
+# モデル配置
 MODELSET
 	TYPE = 4
 	POS = 260.0 0.0 -0.0
@@ -1974,6 +1979,1252 @@ END_MODELSET
 MODELSET
 	TYPE = 4
 	POS = -6894.6 0.0 -255.5
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6993.4 0.0 -236.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7073.4 0.0 -276.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7141.7 0.0 -304.9
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7210.0 0.0 -333.1
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7258.3 0.0 -361.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7298.3 0.0 -401.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7398.3 0.0 -401.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7498.3 0.0 -401.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7532.4 0.0 -347.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7566.6 0.0 -313.1
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7614.9 0.0 -284.9
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7674.9 0.0 -264.9
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7774.9 0.0 -284.9
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7874.9 0.0 -284.9
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7974.9 0.0 -284.9
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8074.9 0.0 -284.9
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8134.9 0.0 -304.9
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8174.9 0.0 -344.9
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8229.0 0.0 -379.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8283.1 0.0 -413.1
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8323.1 0.0 -433.1
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8363.1 0.0 -473.1
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8463.1 0.0 -473.1
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8503.1 0.0 -433.1
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8543.1 0.0 -393.1
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8597.3 0.0 -359.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8637.3 0.0 -319.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8697.3 0.0 -299.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8797.3 0.0 -299.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8897.3 0.0 -299.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8997.3 0.0 -299.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9057.3 0.0 -319.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9117.3 0.0 -359.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9197.3 0.0 -399.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9285.6 0.0 -447.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9325.6 0.0 -507.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9365.6 0.0 -567.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9425.6 0.0 -527.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9465.6 0.0 -487.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9505.6 0.0 -447.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9545.6 0.0 -407.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9585.6 0.0 -367.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9625.6 0.0 -327.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9705.6 0.0 -307.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9785.6 0.0 -287.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9885.6 0.0 -287.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9985.6 0.0 -287.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10045.6 0.0 -307.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10105.6 0.0 -327.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10125.6 0.0 -347.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10159.7 0.0 -381.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10213.9 0.0 -415.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10273.9 0.0 -455.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10333.9 0.0 -495.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10353.9 0.0 -535.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10393.9 0.0 -595.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10393.9 0.0 -1235.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10313.9 0.0 -1275.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10245.6 0.0 -1323.8
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10171.4 0.0 -1358.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10091.4 0.0 -1378.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10031.4 0.0 -1398.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9951.4 0.0 -1418.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9851.4 0.0 -1418.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9771.4 0.0 -1398.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9697.3 0.0 -1383.8
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9637.3 0.0 -1343.8
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9577.3 0.0 -1303.8
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9523.1 0.0 -1269.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9463.1 0.0 -1229.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9429.0 0.0 -1195.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9369.0 0.0 -1195.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9329.0 0.0 -1215.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9294.9 0.0 -1269.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9254.9 0.0 -1309.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9214.9 0.0 -1349.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9174.9 0.0 -1369.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9094.9 0.0 -1389.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9014.9 0.0 -1409.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8914.9 0.0 -1409.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8814.9 0.0 -1409.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8740.7 0.0 -1395.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8666.6 0.0 -1381.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8612.4 0.0 -1367.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8558.3 0.0 -1333.1
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8504.1 0.0 -1319.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8450.0 0.0 -1284.9
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8410.0 0.0 -1244.9
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8330.0 0.0 -1244.9
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8275.9 0.0 -1279.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8195.9 0.0 -1299.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8107.6 0.0 -1327.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8047.6 0.0 -1387.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7947.6 0.0 -1407.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7853.4 0.0 -1421.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7773.4 0.0 -1421.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7693.4 0.0 -1381.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7613.4 0.0 -1361.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7573.4 0.0 -1321.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7513.4 0.0 -1301.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7453.4 0.0 -1261.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7413.4 0.0 -1241.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7353.4 0.0 -1241.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7393.4 0.0 -1201.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7305.1 0.0 -1289.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7231.0 0.0 -1323.8
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7148.6 0.0 -1366.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7080.3 0.0 -1394.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7000.3 0.0 -1394.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6926.1 0.0 -1408.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6826.1 0.0 -1408.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6746.1 0.0 -1388.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6652.0 0.0 -1374.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6577.9 0.0 -1360.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6240.0 0.0 -1740.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6260.0 0.0 -1800.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6288.3 0.0 -1868.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6342.4 0.0 -1902.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6376.6 0.0 -1956.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6416.6 0.0 -1996.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6476.6 0.0 -2036.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6536.6 0.0 -2056.6
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6610.7 0.0 -2070.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6664.9 0.0 -2084.9
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6739.0 0.0 -2099.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6813.1 0.0 -2113.1
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6887.3 0.0 -2127.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -6961.4 0.0 -2141.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7061.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7161.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7261.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7361.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7461.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7561.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7661.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7761.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7861.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -7961.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8061.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8161.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8261.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8361.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8461.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8561.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8661.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8761.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8861.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -8961.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9061.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9161.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9261.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9361.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9461.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9561.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9661.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9761.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9861.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -9961.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10061.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10161.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10261.4 0.0 -2161.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10341.4 0.0 -2141.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10401.4 0.0 -2121.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10481.4 0.0 -2101.4
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10555.6 0.0 -2087.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10615.6 0.0 -2067.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10655.6 0.0 -2027.3
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10709.7 0.0 -1993.1
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10749.7 0.0 -1953.1
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10769.7 0.0 -1913.1
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10809.7 0.0 -1893.1
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10823.8 0.0 -1859.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10863.8 0.0 -1819.0
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10918.0 0.0 -1784.9
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -10972.1 0.0 -1730.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -11012.1 0.0 -1690.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -11032.1 0.0 -1650.7
+	ROT = 0.0 0.0 0.0
+	SHADOW = 1		#使用しない場合は0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -11066.3 0.0 -1616.6
 	ROT = 0.0 0.0 0.0
 	SHADOW = 1		#使用しない場合は0
 END_MODELSET

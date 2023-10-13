@@ -24,6 +24,7 @@ private:	// 自分だけがアクセス可能な定義
 		STATE_NONE = 0,	// 何もしていない
 		STATE_UP,		// 上昇
 		STATE_ATK,		// 攻撃
+		STATE_ATKEND,		// 攻撃終了
 		STATE_DOWN,		// 下降
 		STATE_WAIT,		// 待機
 	};
@@ -60,9 +61,10 @@ private:	// 自分だけがアクセス可能
 
 	// メンバ変数
 	D3DXVECTOR3 m_move;	// 移動量
-	D3DXVECTOR3 m_posOld;
+	D3DXVECTOR3 m_posOld;	
 	float m_fNowFishTimer;
 	float m_fNumFishTimer;
+	float m_fStateCounter;	// 状態管理カウンター
 	CSlow *m_pSlow;		// スロー
 	STATE m_state;	// 状態
 };

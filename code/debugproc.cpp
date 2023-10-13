@@ -71,7 +71,7 @@ void CDebugProc::Init(void)
 #if _DEBUG
 	m_bDisp = true;
 #else NDEBUG
-	m_bDisp = false;
+	m_bDisp = true;
 #endif
 
 }
@@ -102,7 +102,7 @@ void CDebugProc::Update(void)
 	}
 
 	Print("FPS : %d\n", GetFPS());
-	Print("現在のモード [ %s ]\n", m_apMode[CManager::GetMode()]);
+	Print("現在のモード [ %s ] : [Enter]で遷移\n", m_apMode[CManager::GetMode()]);
 	Print("オブジェクトの総数 : %d\n", CObject::GetNumAll());
 	Print("アイテムの総数 : %d\n", CObject::GetItemNumAll());
 	Print("優先順位別(%d個分) ↓\n", NUM_PRIORITY);

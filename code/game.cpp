@@ -24,6 +24,7 @@
 #include "editor.h"
 #include "gimmick_move.h"
 #include "gimmick_rotate.h"
+#include "gimmick_fish.h"
 
 //===============================================
 // マクロ定義
@@ -111,11 +112,10 @@ HRESULT CGame::Init(void)
 		m_pPause = CPause::Create();
 	}
 
-	CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
-	CGimmickMove::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 0.0f, 0.0f), 120.0f);
-	CGimmickRotate *p = CGimmickRotate::Create();
-	p->SetPosition(D3DXVECTOR3(-5600.0f, 0.0f, -420.0f));
-	p->SetRotate(D3DXVECTOR3(p->GetRotate().x, p->GetRotate().y * -1.0f, p->GetRotate().z));
+	CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, -150.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
+	
+	// ギミック設置
+	GimmickSet();
 
 	// スポットライトをオン
 	CManager::GetLight()->EnablePointLight(true);
@@ -256,4 +256,62 @@ CPause *CGame::GetPause(void)
 CEditor *CGame::GetEditor(void)
 {
 	return m_pEditor;
+}
+
+//===================================================
+// ギミックの設置
+//===================================================
+void CGame::GimmickSet(void)
+{
+	// 移動
+	CGimmickMove *pMove = CGimmickMove::Create(D3DXVECTOR3(-7300.0f, 0.0f, -2100.0f), D3DXVECTOR3(0.0f, 0.0f, 2.0f), 300.0f);
+	pMove = CGimmickMove::Create(D3DXVECTOR3(-7800.0f, 0.0f, -1600.0f), D3DXVECTOR3(0.0f, 0.0f, -3.0f), 120.0f);
+	pMove = CGimmickMove::Create(D3DXVECTOR3(-8000.0f, 0.0f, -1980.0f), D3DXVECTOR3(-8.0f, 0.0f, 0.0f), 60.0f);
+	pMove = CGimmickMove::Create(D3DXVECTOR3(-8400.0f, 0.0f, -1500.0f), D3DXVECTOR3(4.0f, 0.0f, 0.0f), 100.0f);
+	pMove = CGimmickMove::Create(D3DXVECTOR3(-9400.0f, 0.0f, -2100.0f), D3DXVECTOR3(-4.0f, 0.0f, 4.0f), 150.0f);
+	pMove = CGimmickMove::Create(D3DXVECTOR3(-9400.0f, 0.0f, -1400.0f), D3DXVECTOR3(-6.0f, 0.0f, -6.0f), 100.0f);
+
+	// 回転
+	CGimmickRotate *p = CGimmickRotate::Create();
+	p->SetPosition(D3DXVECTOR3(-5625.0f, 0.0f, -350.0f));
+	p->SetRotate(p->GetRotate() * -1.0f);
+
+	p = CGimmickRotate::Create();
+	p->SetPosition(D3DXVECTOR3(-6900.0f, 0.0f, -850.0f));
+	p->SetRotate(p->GetRotate() * 0.8f);
+	p->SetRotation(D3DXVECTOR3(0.0f, D3DX_PI * 0.1f, 0.0f));
+
+	p = CGimmickRotate::Create();
+	p->SetPosition(D3DXVECTOR3(-7900.0f, 0.0f, -850.0f));
+	p->SetRotate(p->GetRotate() * -1.0f);
+
+	p = CGimmickRotate::Create();
+	p->SetPosition(D3DXVECTOR3(-8900.0f, 0.0f, -850.0f));
+	p->SetRotate(p->GetRotate() * 1.2f);
+	p->SetRotation(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+	p = CGimmickRotate::Create();
+	p->SetPosition(D3DXVECTOR3(-8900.0f, 0.0f, -850.0f));
+	p->SetRotate(p->GetRotate() * 1.2f);
+	p->SetRotation(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+
+	p = CGimmickRotate::Create();
+	p->SetPosition(D3DXVECTOR3(-9900.0f, 0.0f, -850.0f));
+	p->SetRotate(p->GetRotate() * -1.5f);
+	p->SetRotation(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+	p = CGimmickRotate::Create();
+	p->SetPosition(D3DXVECTOR3(-9900.0f, 0.0f, -850.0f));
+	p->SetRotate(p->GetRotate() * -1.5f);
+	p->SetRotation(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+
+	// 魚
+	CGimmickFish *pFish = CGimmickFish::Create();
+	pFish->SetPosition(D3DXVECTOR3(-500.0f, -600.0f, -400.0f));
+
+	pFish = CGimmickFish::Create();
+	pFish->SetPosition(D3DXVECTOR3(-3950.0f, -600.0f, -650.0f));
+
+	pFish = CGimmickFish::Create();
+	pFish->SetPosition(D3DXVECTOR3(-8800.0f, -600.0f, -1750.0f));
 }

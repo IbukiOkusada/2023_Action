@@ -11,7 +11,7 @@
 
 // マクロ定義
 #define MAX_CAMERA_ROTZ (D3DX_PI * 0.999f)	// カメラ最大角度
-#define MIN_CAMERA_ROTZ (D3DX_PI * 0.001f)	// カメラ最大角度
+#define MIN_CAMERA_ROTZ (D3DX_PI * 0.1f)	// カメラ最大角度
 
 //**********************************************************
 // カメラクラスの定義

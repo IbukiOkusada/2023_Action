@@ -13,7 +13,7 @@
 class CModel;
 
 // マクロ定義
-#define NUM_ROTATEBOX	(8)
+#define NUM_ROTATEBOX	(10)
 
 //==========================================================
 // サンプルのクラス定義

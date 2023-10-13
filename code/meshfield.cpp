@@ -35,6 +35,8 @@ CMeshField::CMeshField()
 	}
 
 	m_bHot = false;
+	m_tex = D3DXVECTOR2(0.0f, 0.0f);
+	m_texmove = D3DXVECTOR2(0.0f, 0.0f);
 }
 
 //==========================================================
@@ -106,7 +108,26 @@ void CMeshField::Uninit(void)
 //==========================================================
 void CMeshField::Update(void)
 {
-	
+	// テクスチャ更新
+	m_tex += m_texmove;
+	if (m_tex.x < 0.0f)
+	{
+		m_tex.x += 1.0f;
+	}
+	else if (m_tex.x > 1.0f)
+	{
+		m_tex.x -= 1.0f;
+	}
+	if (m_tex.y < 0.0f)
+	{
+		m_tex.y += 1.0f;
+	}
+	else if (m_tex.y > 1.0f)
+	{
+		m_tex.y -= 1.0f;
+	}
+
+	SetTex();
 }
 
 //==========================================================
@@ -138,7 +159,7 @@ void CMeshField::SetVtxInfo(void)
 		//色
 		m_pVtx[nCntpVtx].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
-		m_pVtx[nCntpVtx].tex = D3DXVECTOR2(1.0f * (nCntpVtx % (nNumWidth + 1)), 1.0f * (nCntpVtx / (nNumWidth + 1)));
+		m_pVtx[nCntpVtx].tex = D3DXVECTOR2(m_tex.x + 1.0f * (nCntpVtx % (nNumWidth + 1)), m_tex.y + 1.0f * (nCntpVtx / (nNumWidth + 1)));
 	}
 
 	// 法線ベクトルの設定
@@ -196,6 +217,24 @@ void CMeshField::SetVtxInfo(void)
 	//}
 
 	// 頂点設定
+	SetVtx();
+}
+
+//==========================================================
+// テクスチャ情報設定
+//==========================================================
+void CMeshField::SetTex(void)
+{
+	int nVertex = GetVertex();			// 頂点数を取得
+	int nNumWidth = GetNumWidth();		// 幅枚数を取得
+	int nNumHeight = GetNumHeight();	// 高さ枚数を取得
+
+	// テクスチャ座標(左奥から右手前に向かって頂点情報を設定する
+	for (int nCntpVtx = 0; nCntpVtx < nVertex; nCntpVtx++)
+	{
+		m_pVtx[nCntpVtx].tex = D3DXVECTOR2(m_tex.x + 1.0f * (nCntpVtx % (nNumWidth + 1)), m_tex.y + 1.0f * (nCntpVtx / (nNumWidth + 1)));
+	}
+
 	SetVtx();
 }
 
@@ -775,38 +814,6 @@ void CMeshField::UpDownLoad(const char *pFileName)
 
 	// 頂点情報設定
 	SetVtx();
-}
-
-//==========================================================
-// 現在地の暑さ確認
-//==========================================================
-bool CMeshField::GetAreaHot(D3DXVECTOR3 pos)
-{
-	int nCnt = 0;
-
-	// 床の描画
-	CMeshField *pMesh = CMeshField::GetTop();	// 先頭を取得
-	CMeshField *pArea = NULL;;
-
-	while (pMesh != NULL)
-	{// 使用されている間繰り返し
-		CMeshField *pMeshNext = pMesh->GetNext();	// 次を保持
-		D3DXVECTOR3 MeshPos = pMesh->GetPosition();
-
-		if (pos.x > MeshPos.x + pMesh->m_pVtx[0].pos.x && pos.x < MeshPos.x + pMesh->m_pVtx[pMesh->GetVertex() - 1].pos.x &&
-			pos.z < MeshPos.z + pMesh->m_pVtx[0].pos.z && pos.z > MeshPos.z + pMesh->m_pVtx[pMesh->GetVertex() - 1].pos.z)
-		{// 範囲外
-			if (pMesh->GetHot() == true)
-			{
-				return true;
-			}
-		}
-
-		pMesh = pMeshNext;	// 次に移動
-
-		nCnt++;
-	}
-	return false;
 }
 
 //==========================================================

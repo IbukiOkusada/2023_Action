@@ -8,8 +8,14 @@
 #include "manager.h"
 #include "slow.h"
 #include "Xfile.h"
+#include "debugproc.h"
 
 // マクロ定義
+#define WAIT_COUNTER	(180.0f)
+#define ATK_COUNTER	(60.0f)
+#define UP_COUNTER	(60.0f)
+#define DOWN_COUNTER	(30.0f)
+#define ATK_ENDCOUNTER	(30.0f)
 
 //==========================================================
 // コンストラクタ
@@ -19,6 +25,7 @@ CGimmickFish::CGimmickFish(int nPriOrity) : CObjectX(nPriOrity)
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fNowFishTimer = 0.0f;
 	m_fNumFishTimer = 0.0f;
+	m_state = STATE_NONE;
 }
 
 //==========================================================
@@ -41,10 +48,13 @@ HRESULT CGimmickFish::Init(void)
 
 	// 読み込み確認
 	CXFile *pFile = CManager::GetModelFile();
-	BindFile(pFile->Regist("data\\MODEL\\5mcube.x"));
+	BindFile(pFile->Regist("data\\MODEL\\30msphere.x"));
 
 	// スローを覚える
 	m_pSlow = CManager::GetSlow();
+
+	m_state = STATE_WAIT;
+	m_fStateCounter = WAIT_COUNTER;
 
 	return S_OK;
 }
@@ -118,23 +128,66 @@ CGimmickFish *CGimmickFish::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fTim
 //==========================================================
 void CGimmickFish::Controller(void)
 {
-	// 座標更新
+	m_fStateCounter -= CManager::GetSlow()->Get();
 	D3DXVECTOR3 pos = GetPosition();
-	pos += m_move;
+	pos += m_move * CManager::GetSlow()->Get();
 	SetPosition(pos);
 
-	if (m_fNumFishTimer == 0.0f || !m_pSlow)
-	{// 往復しない
-		return;
-	}
-
-	m_fNowFishTimer -= m_pSlow->Get();
-
-	if (m_fNowFishTimer <= 0.0f)
+	// 状態ごとに更新
+	if (m_fStateCounter <= 0.0f)
 	{
-		m_move *= -1.0f;
-		m_fNowFishTimer = m_fNumFishTimer;
+		switch (m_state)
+		{
+		case STATE_NONE:
+
+			break;
+
+		case STATE_UP:
+
+			m_state = STATE_ATK;
+			m_fStateCounter = ATK_COUNTER;
+			m_move = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+
+			break;
+
+		case STATE_ATK:
+
+			m_state = STATE_ATKEND;
+			m_fStateCounter = ATK_ENDCOUNTER;
+			m_move = D3DXVECTOR3(0.0f, -2.0f, 0.0f);
+
+			break;
+
+		case STATE_ATKEND:
+
+			m_state = STATE_DOWN;
+			m_fStateCounter = DOWN_COUNTER;
+			m_move = D3DXVECTOR3(0.0f, -21.0f, 0.0f);
+
+			break;
+
+		case STATE_DOWN:
+
+			m_state = STATE_WAIT;
+			m_fStateCounter = WAIT_COUNTER;
+			m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+			break;
+
+		case STATE_WAIT:
+
+			m_state = STATE_UP;
+			m_fStateCounter = UP_COUNTER;
+			m_move = D3DXVECTOR3(0.0f, 10.5f, 0.0f);
+			break;
+
+		default:
+
+			break;
+		}
 	}
+
+	CManager::GetDebugProc()->Print("カウント [ %f ], 状態 [ %d ]\n", m_fStateCounter, m_state);
 }
 
 //==========================================================
@@ -142,6 +195,11 @@ void CGimmickFish::Controller(void)
 //==========================================================
 bool CGimmickFish::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, const float fRefMulti)
 {
+	if (m_state != STATE_ATK)
+	{
+		return false;
+	}
+
 	CXFile *pFile = CManager::GetModelFile();
 	bool bLand = false;	// 着地したか否か
 	D3DXVECTOR3 vtxObjMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);

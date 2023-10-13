@@ -383,6 +383,7 @@ void CFileLoad::LoadMeshFieldData(FILE *pFile)
 
 	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR2 move = D3DXVECTOR2(0.0f, 0.0f);
 	int nWidth = 0;			// 幅枚数
 	int nHeight = 0;		// 高さ枚数
 	float fWidth = 0.0f;	// 幅
@@ -432,6 +433,12 @@ void CFileLoad::LoadMeshFieldData(FILE *pFile)
 			fscanf(pFile, "%s", &aStr[0]);	//(=)読み込み
 			fscanf(pFile, "%s", &aUpDown[0]);  //縦幅読み込み
 		}
+		else if (strcmp(&aStr[0], "MOVE") == 0)
+		{//サイズ
+			fscanf(pFile, "%s", &aStr[0]);	//(=)読み込み
+			fscanf(pFile, "%f", &move.x);  //縦読み込み
+			fscanf(pFile, "%f", &move.y);	//横読み込み
+		}
 
 		//終了
 		if (strcmp(&aStr[0], ENDFIELDSET_TXT) == 0)
@@ -442,6 +449,11 @@ void CFileLoad::LoadMeshFieldData(FILE *pFile)
 
 	//フィールドの配置
 	CMeshField *pMesh = CMeshField::Create(pos, D3DXToRadian(rot), fWidth, fHeight, GetTextureFileName(nIdx), nWidth, nHeight);
+	
+	if (pMesh)
+	{
+		pMesh->SetTexMove(move);
+	}
 
 	if (CGame::GetMeshField() == NULL && CManager::GetMode() == CScene::MODE_GAME)
 	{

@@ -65,6 +65,8 @@ public:
 
 private:
 
+	void GimmickSet(void);
+
 	CFileLoad *m_pFileLoad;			// ファイル読み込みのポインタ
 	static CScore *m_pScore;		// スコアのポインタ
 	CTime *m_pTime;					// タイムのポインタ

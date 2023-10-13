@@ -34,6 +34,9 @@
 #define WIDTH	(20.0f)		// 幅
 #define HEIGHT	(80.0f)		// 高さ
 #define INER	(0.003f)	// 慣性
+#define STEP_SPEED	(50.0f)
+#define STEP_COOLTIME	(180.0f)
+#define STEP_INER	(0.115f)
 
 //===============================================
 // コンストラクタ
@@ -146,6 +149,7 @@ void CPlayer::Update(void)
 	pCamera->Pursue(GetPosition(), GetRotation());
 
 	CManager::GetDebugProc()->Print("向き [%f, %f, %f]", GetRotation().x, GetRotation().y, GetRotation().z);
+	CManager::GetDebugProc()->Print("位置 [%f, %f, %f]", GetPosition().x, GetPosition().y, GetPosition().z);
 
 	// パーティクル
 	//Particle();
@@ -211,8 +215,20 @@ void CPlayer::Controller(void)
 		Rotation();	// 回転
 	}
 
-	m_Info.move.x += (0.0f - m_Info.move.x) * INER;	//x座標
-	m_Info.move.z += (0.0f - m_Info.move.z) * INER;	//x座標
+	pos = GetPosition();	// 座標を取得
+
+	if (m_fStepCoolTime <= 0.0f)
+	{
+		m_Info.move.x += (0.0f - m_Info.move.x) * INER;	//x座標
+		m_Info.move.z += (0.0f - m_Info.move.z) * INER;	//x座標
+	}
+	else
+	{
+		m_fStepCoolTime -= CManager::GetSlow()->Get();
+		m_Info.move.x += (0.0f - m_Info.move.x) * STEP_INER;	//x座標
+		m_Info.move.z += (0.0f - m_Info.move.z) * STEP_INER;	//x座標
+	}
+
 	pos.x += m_Info.move.x * CManager::GetSlow()->Get();
 	pos.z += m_Info.move.z * CManager::GetSlow()->Get();
 
@@ -237,49 +253,19 @@ void CPlayer::Controller(void)
 
 	m_Info.pos = pos;
 
-	if (m_pObject != NULL)
-	{
+	if (m_pObject != NULL){
 		m_pObject->SetPosition(m_Info.pos);
+		m_pObject->SetRotation(m_Info.rot);
 	}
 
 	//デバッグ表示
-	CManager::GetDebugProc()->Print("\n移動[W,A,S,D] : ジャンプ[SPACE] : 発射[L, マウス左クリック(長押し可)]\n"
-		"スロー[ゲージを貯めてENTER, マウス右クリック] : 武器切り替え[Q]\n");
+	CManager::GetDebugProc()->Print("\n回転[W,A,S,D] : 加速[SPACE] : ステップ[K, (Rボタン)]\n");
 }
 
 //===============================================
 // 移動
 //===============================================
 void CPlayer::Move(void)
-{
-	CCamera *pCamera = CManager::GetCamera();		// カメラのポインタ
-	D3DXVECTOR3 CamRot = pCamera->GetRotation();	// カメラの角度
-	CInputKeyboard *pInputKey = CManager::GetInputKeyboard();	// キーボードのポインタ
-	CInputPad *pInputPad = CManager::GetInputPad();
-	float fSpeed = MOVE;	// 移動量
-
-	// 入力装置確認
-	if (!pInputKey){
-		return;
-	}
-
-	// 入力装置確認
-	if (!pInputPad){
-		return;
-	}
-
-	//プレイヤーの更新
-	if (pInputKey->GetPress(DIK_SPACE) || pInputPad->GetPress(CInputPad::BUTTON_A, 0))
-	{
-		m_Info.move.x += -sinf(m_Info.rot.y) * fSpeed;
-		m_Info.move.z += -cosf(m_Info.rot.y) * fSpeed;
-	}
-}
-
-//===============================================
-// 回転
-//===============================================
-void CPlayer::Rotation(void)
 {
 	CCamera *pCamera = CManager::GetCamera();		// カメラのポインタ
 	D3DXVECTOR3 CamRot = pCamera->GetRotation();	// カメラの角度
@@ -297,11 +283,44 @@ void CPlayer::Rotation(void)
 		return;
 	}
 
+	if (pInputKey->GetTrigger(DIK_K) || pInputPad->GetTrigger(CInputPad::BUTTON_RIGHTBUTTON, 0))
+	{
+		if (m_fStepCoolTime <= 0.0f)
+		{
+			m_fStepCoolTime = STEP_COOLTIME;
+			m_Info.move.x += -sinf(m_Info.rot.y) * STEP_SPEED;
+			m_Info.move.z += -cosf(m_Info.rot.y) * STEP_SPEED;
+		}
+	}
+
+	//プレイヤーの更新
+	if (pInputKey->GetPress(DIK_SPACE) || pInputPad->GetPress(CInputPad::BUTTON_A, 0))
+	{
+		m_Info.move.x += -sinf(m_Info.rot.y) * fSpeed;
+		m_Info.move.z += -cosf(m_Info.rot.y) * fSpeed;
+	}
+}
+
+//===============================================
+// 回転
+//===============================================
+void CPlayer::Rotation(void)
+{
+	CCamera *pCamera = CManager::GetCamera();		// カメラのポインタ
+	D3DXVECTOR3 CamRot = pCamera->GetRotation();	// カメラの角度
+	CInputPad *pInputPad = CManager::GetInputPad();
+
+	// 入力装置確認
+	if (pInputPad == NULL){
+		return;
+	}
+
 	if (!pInputPad->GetStickPress(0, CInputPad::BUTTON_LEFT_X, 0.1f, CInputPad::STICK_PLUS) && 
 		!pInputPad->GetStickPress(0, CInputPad::BUTTON_LEFT_X, 0.1f, CInputPad::STICK_MINUS) &&
 		!pInputPad->GetStickPress(0, CInputPad::BUTTON_LEFT_Y, 0.1f, CInputPad::STICK_PLUS) &&
 		!pInputPad->GetStickPress(0, CInputPad::BUTTON_LEFT_Y, 0.1f, CInputPad::STICK_MINUS))
-	{
+	{// コントローラー入力無し
+		KeyBoardRotation();
 		return;
 	}
 
@@ -311,10 +330,56 @@ void CPlayer::Rotation(void)
 	D3DXVec2Normalize(&vec, &vec);
 
 	m_fRotDest = atan2f(vec.y, vec.x);
+}
 
-	if (m_pObject != NULL)
+//===============================================
+// 回転
+//===============================================
+void CPlayer::KeyBoardRotation(void)
+{
+	CInputKeyboard *pInputKey = CManager::GetInputKeyboard();	// キーボードのポインタ
+
+	if (pInputKey == NULL){
+		return;
+	}
+
+	if (pInputKey->GetPress(DIK_W))
 	{
-		m_pObject->SetRotation(m_Info.rot);
+		if (pInputKey->GetPress(DIK_A))
+		{
+			m_fRotDest = -D3DX_PI * 0.25f;
+		}
+		else if (pInputKey->GetPress(DIK_D))
+		{
+			m_fRotDest = D3DX_PI * 0.25f;
+		}
+		else
+		{
+			m_fRotDest = D3DX_PI * 0.0f;
+		}
+	}
+	else if (pInputKey->GetPress(DIK_S))
+	{
+		if (pInputKey->GetPress(DIK_A))
+		{
+			m_fRotDest = -D3DX_PI * 0.75f;
+		}
+		else if (pInputKey->GetPress(DIK_D))
+		{
+			m_fRotDest = D3DX_PI * 0.75f;
+		}
+		else
+		{
+			m_fRotDest = D3DX_PI * 1.0f;
+		}
+	}
+	else if (pInputKey->GetPress(DIK_A))
+	{
+		m_fRotDest = -D3DX_PI * 0.5f;
+	}
+	else if (pInputKey->GetPress(DIK_D))
+	{
+		m_fRotDest = D3DX_PI * 0.5f;
 	}
 }
 
