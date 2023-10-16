@@ -40,7 +40,7 @@ CModel::~CModel()
 //==========================================================
 HRESULT CModel::Init(const char *pFileName)
 {
-	CXFile *pModelFile = CManager::GetModelFile();	// モデルファイル情報のポインタ
+	CXFile *pModelFile = CManager::GetInstance()->GetModelFile();	// モデルファイル情報のポインタ
 
 	//Xファイル情報を読み込み
 	m_nIdxModel = pModelFile->Regist(pFileName);
@@ -70,14 +70,14 @@ void CModel::Update(void)
 //==========================================================
 void CModel::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();	//デバイスへのポインタを取得
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイスへのポインタを取得
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
-	CXFile *pModelFile = CManager::GetModelFile();	// Xファイル情報のポインタ
+	CXFile *pModelFile = CManager::GetInstance()->GetModelFile();	// Xファイル情報のポインタ
 	D3DMATERIAL9 matDef;			//現在のマテリアル保存用
 	D3DXMATERIAL *pMat;				//マテリアルデータへのポインタ
 	D3DXMATRIX mtxParent;			// 親のマトリックス情報
-	CSlow *pSlow = CManager::GetSlow();
+	CSlow *pSlow = CManager::GetInstance()->GetSlow();
 
 	//ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
@@ -160,7 +160,7 @@ void CModel::Draw(void)
 CModel *CModel::Create(const char *pFileName)
 {
 	CModel *pModel = NULL;
-	CXFile *pModelFile = CManager::GetModelFile();
+	CXFile *pModelFile = CManager::GetInstance()->GetModelFile();
 
 	// オブジェクトXの生成
 	pModel = new CModel;

@@ -111,7 +111,7 @@ void CFade::Update(void)
 				m_Col.a = 1.0f;	//透明度を不透明に
 
 				//モードの設定(次の画面に移行)
-				CManager::SetMode(m_modeNext);
+				CManager::GetInstance()->SetMode(m_modeNext);
 				return;
 			}
 		}

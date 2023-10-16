@@ -187,8 +187,8 @@ void CObject::UpdateAll(void)
 //===============================================
 void CObject::DrawAll(void)
 {
-	CCamera *pCamera = CManager::GetCamera();
-	CCamera *pMapCamera = CManager::GetScene()->GetMapCamera();
+	CCamera *pCamera = CManager::GetInstance()->GetCamera();
+	CCamera *pMapCamera = CManager::GetInstance()->GetScene()->GetMapCamera();
 
 	if (pMapCamera != NULL)
 	{

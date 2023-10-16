@@ -18,17 +18,6 @@ class CMeshDome;
 //===============================================
 class CResult : public CScene
 {
-private:
-
-	// スコア列挙型
-	enum SCORE
-	{
-		SCORE_SUV = 0,
-		SCORE_DEAD,
-		SCORE_ALL,
-		SCORE_MAX
-	};
-
 public:
 
 	// メンバ関数
@@ -41,19 +30,13 @@ public:
 	void Update(void);
 	void Draw(void);
 
-	// メンバ関数(取得)
-	static void SetSuv(int nValue) { m_nSuvNum = nValue; }
-	static void SetDead(int nValue) { m_nDeadNum = nValue; }
-
 private:
 
-	CFileLoad *m_pFileLoad;		// ファイル読み込みのポインタ
+	CFileLoad *m_pFileLoad;	// ファイル読み込みのポインタ
 	CMeshDome *m_pMeshSky;		// 空用
-	CScore *m_apScore[SCORE_MAX];
-	CScore *m_apNum[SCORE_ALL];
-	int m_nTimer;
-	static int m_nSuvNum;
-	static int m_nDeadNum;
+	CScore *m_pScore;			// スコア
+	int m_nTimer;				// 遷移タイマー
+	static int m_nScore;		// 今回のスコア
 };
 
 #endif

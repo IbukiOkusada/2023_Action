@@ -154,7 +154,7 @@ void CRenderer::Update(void)
 	CTaskManager::GetInstance()->Update();
 
 #if _DEBUG	// デバッグ時
-	CInputKeyboard *pKey = CManager::GetInputKeyboard();
+	CInputKeyboard *pKey = CManager::GetInstance()->GetInputKeyboard();
 
 	if (pKey->GetTrigger(DIK_F2) == true)
 	{
@@ -169,7 +169,7 @@ void CRenderer::Update(void)
 //===================================================
 void CRenderer::Draw(void)
 {
-	CDebugProc *pDebugProc = CManager::GetDebugProc();
+	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
 
 	// 画面クリア
 	m_pD3DDevice->Clear(
@@ -190,9 +190,9 @@ void CRenderer::Draw(void)
 
 #if _DEBUG	// デバッグ時
 
-		if (CManager::GetScene()->GetEditor() != NULL)
+		if (CManager::GetInstance()->GetScene()->GetEditor() != NULL)
 		{
-			CManager::GetScene()->GetEditor()->Draw();
+			CManager::GetInstance()->GetScene()->GetEditor()->Draw();
 		}
 
 #endif

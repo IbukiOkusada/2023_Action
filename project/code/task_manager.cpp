@@ -7,6 +7,8 @@
 #include "task_manager.h"
 #include "task.h"
 
+CTaskManager *CTaskManager::m_pInstance = NULL;
+
 //==========================================================
 // コンストラクタ
 //==========================================================
@@ -169,4 +171,17 @@ void CTaskManager::ListIn(CTask *pTask)
 		m_pTop = pTask;	// 自分自身が先頭になる
 		m_pCur = pTask;	// 自分自身が最後尾になる
 	}
+}
+
+//===============================================
+// インスタンスの取得
+//===============================================
+CTaskManager* CTaskManager::GetInstance()
+{
+	if (m_pInstance == NULL)
+	{
+		m_pInstance = new CTaskManager;
+	}
+
+	return m_pInstance;
 }

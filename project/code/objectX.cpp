@@ -52,7 +52,7 @@ CObjectX::~CObjectX()
 //==========================================================
 HRESULT CObjectX::Init(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスへのポインタを取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタを取得
 
 	//各種変数の初期化
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -124,9 +124,9 @@ void CObjectX::Draw(void)
 {
 	//Update();
 
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスへのポインタを取得
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
-	CXFile *pModelFile = CManager::GetModelFile();	// Xファイル情報のポインタ
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタを取得
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
+	CXFile *pModelFile = CManager::GetInstance()->GetModelFile();	// Xファイル情報のポインタ
 	CXFile::FileData *pFileData = pModelFile->SetAddress(m_nIdxModel);
 	D3DXMATRIX mtxRot, mtxTrans;			//計算用マトリックス
 	D3DMATERIAL9 matDef;					//現在のマテリアル保存用
@@ -188,7 +188,7 @@ void CObjectX::Draw(void)
 CObjectX *CObjectX::Create(D3DXVECTOR3 pos,D3DXVECTOR3 rot, const char *pFileName, const int nPriority)
 {
 	CObjectX *pObjectX = NULL;
-	CXFile *pModelFile = CManager::GetModelFile();
+	CXFile *pModelFile = CManager::GetInstance()->GetModelFile();
 
 	// オブジェクトXの生成
 	pObjectX = new CObjectX(nPriority);
@@ -275,7 +275,7 @@ void CObjectX::SetRotation(const D3DXVECTOR3 rot)
 bool CObjectX::Collision(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, float fRefMulti)
 {
 	CObjectX *pObj = m_pTop;	// 先頭取得
-	CXFile *pFile = CManager::GetModelFile();
+	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 	bool bLand = true;	// 着地したか否か
 
 	while (pObj != NULL)
@@ -367,7 +367,7 @@ void CObjectX::SetRotSize(D3DXVECTOR3 &SetMax, D3DXVECTOR3 &SetMin, D3DXVECTOR3 
 //==========================================================
 bool CObjectX::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, const float fRefMulti)
 {
-	CXFile *pFile = CManager::GetModelFile();
+	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 	bool bLand = false;	// 着地したか否か
 	D3DXVECTOR3 vtxObjMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 vtxObjMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);

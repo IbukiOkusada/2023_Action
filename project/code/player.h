@@ -24,6 +24,7 @@ class CMeshOrbit;
 class CObject3D;
 class CCar;
 class CObjectX;
+class CShadow;
 
 //==========================================================
 // プレイヤーのクラス定義(派生クラス)
@@ -83,6 +84,11 @@ private:	// 自分だけがアクセス可能
 	float m_fRotDiff;		// 目的の角度
 	float m_fRotDest;		// 角度計算
 	float m_fStepCoolTime;	// ステップクールタイム
+	D3DXMATRIX m_mtxRot;	// 回転マトリックス
+	D3DXQUATERNION m_quat;	// クォータニオン
+	D3DXVECTOR3 m_vecAxis;	// 回転軸
+	float m_fValueRot;	// 回転角
+	CShadow *m_pShadow;	// 影のポインタ
 };
 
 #endif

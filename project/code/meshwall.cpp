@@ -155,7 +155,7 @@ CMeshWall *CMeshWall::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, float
 	const char *pFileName, const int nWidth, const int nHeight, const int nPriority )
 {
 	CMeshWall *pMeshWall = NULL;	// メッシュフィールドのポインタ
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 
 	// メモリの確保
 	pMeshWall = new CMeshWall;

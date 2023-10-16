@@ -47,11 +47,11 @@ HRESULT CGimmickFish::Init(void)
 	}
 
 	// 読み込み確認
-	CXFile *pFile = CManager::GetModelFile();
+	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 	BindFile(pFile->Regist("data\\MODEL\\30msphere.x"));
 
 	// スローを覚える
-	m_pSlow = CManager::GetSlow();
+	m_pSlow = CManager::GetInstance()->GetSlow();
 
 	m_state = STATE_WAIT;
 	m_fStateCounter = WAIT_COUNTER;
@@ -128,9 +128,9 @@ CGimmickFish *CGimmickFish::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fTim
 //==========================================================
 void CGimmickFish::Controller(void)
 {
-	m_fStateCounter -= CManager::GetSlow()->Get();
+	m_fStateCounter -= CManager::GetInstance()->GetSlow()->Get();
 	D3DXVECTOR3 pos = GetPosition();
-	pos += m_move * CManager::GetSlow()->Get();
+	pos += m_move * CManager::GetInstance()->GetSlow()->Get();
 	SetPosition(pos);
 
 	// 状態ごとに更新
@@ -187,7 +187,7 @@ void CGimmickFish::Controller(void)
 		}
 	}
 
-	CManager::GetDebugProc()->Print("カウント [ %f ], 状態 [ %d ]\n", m_fStateCounter, m_state);
+	CManager::GetInstance()->GetDebugProc()->Print("カウント [ %f ], 状態 [ %d ]\n", m_fStateCounter, m_state);
 }
 
 //==========================================================
@@ -200,7 +200,7 @@ bool CGimmickFish::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 		return false;
 	}
 
-	CXFile *pFile = CManager::GetModelFile();
+	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 	bool bLand = false;	// 着地したか否か
 	D3DXVECTOR3 vtxObjMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 vtxObjMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);

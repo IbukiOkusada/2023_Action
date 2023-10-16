@@ -37,7 +37,7 @@ HRESULT CObjectBillboard::Init(void)
 	LPDIRECT3DDEVICE9 pDevice;		//デバイスへのポインタ
 
 	//デバイスの取得
-	pDevice = CManager::GetRenderer()->GetDevice();
+	pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
 
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer(
@@ -84,8 +84,8 @@ void CObjectBillboard::Update(void)
 //==========================================================
 void CObjectBillboard::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスへのポインタを取得
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタを取得
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
 	D3DXMATRIX mtxView;		//ビューマトリックス取得用
 
@@ -134,8 +134,8 @@ void CObjectBillboard::Draw(void)
 //==========================================================
 void CObjectBillboard::RotFusionDraw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスへのポインタを取得
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタを取得
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
 	D3DXMATRIX mtxView;		//ビューマトリックス取得用
 
@@ -366,8 +366,8 @@ void CObjectBillboard::SetCol(D3DXCOLOR col)
 //==========================================================
 void CObjectBillboard::SetMtx(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスへのポインタを取得
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタを取得
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 	D3DXMATRIX mtxTrans;	//計算用マトリックス
 	D3DXMATRIX mtxView;		//ビューマトリックス取得用
 

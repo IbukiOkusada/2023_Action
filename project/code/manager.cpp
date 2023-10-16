@@ -26,26 +26,26 @@
 //===============================================
 // 静的メンバ変数
 //===============================================
-CRenderer *CManager::m_pRenderer = NULL;			// レンダラーのポインタ
-CInputKeyboard *CManager::m_pInputKeyboard = NULL;	// 入力デバイス(キーボード)へのポインタ
-CInputMouse *CManager::m_pInputMouse = NULL;		// 入力デバイス(マウス)のポインタ
-CInputPad *CManager::m_pInputPad = NULL;
-CDebugProc *CManager::m_pDebugProc = NULL;			// デバッグ表示のポインタ
-CSound *CManager::m_pSound = NULL;					// サウンドのポインタ
-CMultiCamera *CManager::m_pCamera = NULL;				// カメラのポインタ
-CLight *CManager::m_pLight = NULL;					// ライトのポインタ
-CTexture *CManager::m_pTexture = NULL;				// テクスチャのポインタ
-CXFile *CManager::m_pModelFile = NULL;				// Xファイル情報のポインタ
-CSlow *CManager::m_pSlow = NULL;					// スロー状態へのポインタ
-CScene *CManager::m_pScene = NULL;					// シーンのポインタ
-CFade *CManager::m_pFade = NULL;					// フェードへのポインタ
+CManager *CManager::      m_pManager = NULL;
 
 //===================================================
 // コンストラクタ
 //===================================================
 CManager::CManager()
 {
-	
+	m_pRenderer = NULL;			// レンダラーのポインタ
+	m_pInputKeyboard = NULL;	// 入力デバイス(キーボード)へのポインタ
+	m_pInputMouse = NULL;		// 入力デバイス(マウス)のポインタ
+	m_pInputPad = NULL;
+	m_pDebugProc = NULL;			// デバッグ表示のポインタ
+	m_pSound = NULL;					// サウンドのポインタ
+	m_pCamera = NULL;				// カメラのポインタ
+	m_pLight = NULL;					// ライトのポインタ
+	m_pTexture = NULL;				// テクスチャのポインタ
+	m_pModelFile = NULL;				// Xファイル情報のポインタ
+	m_pSlow = NULL;					// スロー状態へのポインタ
+	m_pScene = NULL;					// シーンのポインタ
+	m_pFade = NULL;					// フェードへのポインタ
 }
 
 //===================================================
@@ -463,6 +463,29 @@ CFade *CManager::GetFade(void)
 //===================================================
 // データ全初期化
 //===================================================
+CManager *CManager::GetInstance(void)
+{
+	if (m_pManager == NULL)
+	{
+		m_pManager = new CManager;
+	}
+
+	return m_pManager;
+}
+
+void CManager::Release(void)
+{
+	if (m_pManager != NULL)
+	{
+		m_pManager->Uninit();
+		delete m_pManager;
+		m_pManager = NULL;
+	}
+}
+
+//===================================================
+// データ全初期化
+//===================================================
 void CManager::DataReset(void)
 {
 	// タスクマネージャーの終了
@@ -635,21 +658,21 @@ void CScene::Uninit(void)
 void CScene::Update(void)
 {
 	// カメラの更新処理
-	if (CManager::GetCamera() != NULL)
+	if (CManager::GetInstance()->GetCamera() != NULL)
 	{
-		CManager::GetCamera()->Update();
+		CManager::GetInstance()->GetCamera()->Update();
 	}
 
 	// スローの更新処理
-	if (CManager::GetSlow() != NULL)
+	if (CManager::GetInstance()->GetSlow() != NULL)
 	{
-		CManager::GetSlow()->Update();
+		CManager::GetInstance()->GetSlow()->Update();
 	}
 
 	// レンダラーの更新処理
-	if (CManager::GetRenderer() != NULL)
+	if (CManager::GetInstance()->GetRenderer() != NULL)
 	{// 使用している場合
-		CManager::GetRenderer()->Update();
+		CManager::GetInstance()->GetRenderer()->Update();
 	}
 }
 
@@ -659,8 +682,8 @@ void CScene::Update(void)
 void CScene::Draw(void)
 {
 	// 描画処理
-	if (CManager::GetRenderer() != NULL)
+	if (CManager::GetInstance()->GetRenderer() != NULL)
 	{// 使用している場合
-		CManager::GetRenderer()->Draw();
+		CManager::GetInstance()->GetRenderer()->Draw();
 	}
 }

@@ -62,7 +62,7 @@ void CMeshCylinder::Draw(void)
 	LPDIRECT3DDEVICE9 pDevice;		//デバイスへのポインタ
 
 	//デバイスの取得
-	pDevice = CManager::GetRenderer()->GetDevice();
+	pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
 
 	//ライティングをオフにする
 	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
@@ -132,7 +132,7 @@ CMeshCylinder *CMeshCylinder::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 ro
 	float fLength, float fHeight, const int nPriority, const int nWidth, const int nHeight)
 {
 	CMeshCylinder *pMeshWall = NULL;	// メッシュフィールドのポインタ
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 
 	// メモリの確保
 	pMeshWall = new CMeshCylinder(3);
@@ -221,7 +221,7 @@ void CMeshSmake::Update(void)
 {
 	CMeshCylinder::Update();
 
-	m_col.a -= 0.005f * CManager::GetSlow()->Get();
+	m_col.a -= 0.005f * CManager::GetInstance()->GetSlow()->Get();
 
 	SetCol(m_col);
 	SetHeight(m_fHeight + 0.07f);
@@ -250,7 +250,7 @@ void CMeshSmake::Draw(void)
 	LPDIRECT3DDEVICE9 pDevice;		//デバイスへのポインタ
 
 	//デバイスの取得
-	pDevice = CManager::GetRenderer()->GetDevice();
+	pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
 
 	//アルファテストを有効にする
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
@@ -287,7 +287,7 @@ CMeshSmake *CMeshSmake::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot,
 	float fLength, float fHeight, const int nPriority, const int nWidth, const int nHeight)
 {
 	CMeshSmake *pMeshWall = NULL;	// メッシュフィールドのポインタ
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 
 	// メモリの確保
 	pMeshWall = new CMeshSmake(6);

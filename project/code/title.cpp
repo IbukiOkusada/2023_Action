@@ -44,7 +44,7 @@ CTitle::~CTitle()
 //===============================================
 HRESULT CTitle::Init(void)
 {
-	CManager::GetSound()->Play(CSound::LABEL_BGM_TITLE);
+	CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_TITLE);
 
 	return S_OK;
 }
@@ -62,18 +62,18 @@ void CTitle::Uninit(void)
 //===============================================
 void CTitle::Update(void)
 {
-	CInputPad *pInputPad = CManager::GetInputPad();
-	CInputKeyboard *pInputKey = CManager::GetInputKeyboard();
+	CInputPad *pInputPad = CManager::GetInstance()->GetInputPad();
+	CInputKeyboard *pInputKey = CManager::GetInstance()->GetInputKeyboard();
 
 	if (pInputKey->GetTrigger(DIK_RETURN) || pInputPad->GetTrigger(CInputPad::BUTTON_A, 0))
 	{
-		CManager::GetFade()->Set(CScene::MODE_TUTORIAL);
+		CManager::GetInstance()->GetFade()->Set(CScene::MODE_TUTORIAL);
 
 		if (m_bClick == false)
 		{
 			m_col.a = 1.0f;
 			m_bClick = true;
-			CManager::GetSound()->Play(CSound::LABEL_SE_CLICK);
+			CManager::GetInstance()->GetSound()->Play(CSound::LABEL_SE_CLICK);
 		}
 	}
 

@@ -62,7 +62,7 @@ HRESULT CRanking::Init(void)
 	// ランクイン確認
 	RankIn(&aScore[0], m_nScore);
 
-	CManager::GetSound()->Play(CSound::LABEL_BGM_RANKING);
+	CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_RANKING);
 
 	return S_OK;
 }
@@ -80,20 +80,20 @@ void CRanking::Uninit(void)
 //===============================================
 void CRanking::Update(void)
 {
-	CInputPad *pInputPad = CManager::GetInputPad();
+	CInputPad *pInputPad = CManager::GetInstance()->GetInputPad();
 
-	if (CManager::GetInputKeyboard()->GetTrigger(DIK_RETURN) || pInputPad->GetTrigger(CInputPad::BUTTON_A, 0))
+	if (CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_RETURN) || pInputPad->GetTrigger(CInputPad::BUTTON_A, 0))
 	{
-		CManager::GetFade()->Set(CScene::MODE_TITLE);
+		CManager::GetInstance()->GetFade()->Set(CScene::MODE_TITLE);
 	}
 
-	if (CManager::GetFade()->GetState() == CFade::STATE_NONE)
+	if (CManager::GetInstance()->GetFade()->GetState() == CFade::STATE_NONE)
 	{
 		m_nTimer++;
 
 		if (m_nTimer >= AUTOMOVE_TITLE)
 		{// タイトル自動遷移規定値
-			CManager::GetFade()->Set(CScene::MODE_TITLE);
+			CManager::GetInstance()->GetFade()->Set(CScene::MODE_TITLE);
 		}
 	}
 

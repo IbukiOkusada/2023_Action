@@ -89,8 +89,8 @@ void CMesh::Update(void)
 //==========================================================
 void CObjectMesh::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスへのポインタを取得
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタを取得
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
 
 	if (m_pVtxBuff != NULL)
@@ -150,7 +150,7 @@ void CObjectMesh::CreateVertex(void)
 	}
 
 	// デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
 
 	// 頂点バッファの生成
 	pDevice->CreateVertexBuffer(
@@ -173,7 +173,7 @@ void CObjectMesh::CreateIndex(void)
 	}
 
 	// デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスへのポインタ
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタ
 
 	// インデックスバッファの生成
 	pDevice->CreateIndexBuffer(sizeof(WORD) * m_nIndex,		// 必要なインデックス数
@@ -325,8 +325,8 @@ void CObjectMesh::SetRotation(const D3DXVECTOR3 rot)
 //==========================================================
 void CObjectMesh::NotMtxDraw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスへのポインタを取得
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタを取得
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 
 	if (m_pVtxBuff != NULL)
 	{
@@ -368,7 +368,7 @@ void CObjectMesh::NotMtxDraw(void)
 //==========================================================
 void CObjectMesh::SetSlowCol(void)
 {
-	CSlow *pSlow = CManager::GetSlow();
+	CSlow *pSlow = CManager::GetInstance()->GetSlow();
 
 	if (pSlow == NULL)
 	{

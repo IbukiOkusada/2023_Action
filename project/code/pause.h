@@ -39,7 +39,7 @@ private:	// 自分だけがアクセス可能な定義
 	struct SPolygon
 	{
 		CObject2D *pObject2D;	// 2Dオブジェクトへのポインタ
-		D3DXCOLOR col;			// 色
+		D3DXCOLOR col;		// 色
 	};
 
 public:		// 誰でもアクセス可能
@@ -69,6 +69,8 @@ private:	// 自分だけがアクセス可能
 	bool m_bState;					// 状態かどうか
 	bool m_bSelect;					// 選択したかどうか
 	float m_fMoveCol_a;				// 透明度の変化量
+	int m_nStartDeltaTime;	// 計測開始タイマー
+	int m_nPauseTimer;	// ポーズタイマー数
 };
 
 #endif

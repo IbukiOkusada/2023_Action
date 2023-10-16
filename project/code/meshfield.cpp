@@ -245,7 +245,7 @@ CMeshField *CMeshField::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot,
 	float fWidth, float fHeight, const char *pFileName, const int nWidth, const int nHeight, const int nPriority)
 {
 	CMeshField *pMeshField = NULL;	// メッシュフィールドのポインタ
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 
 	// メモリの確保
 	pMeshField = new CMeshField;
@@ -557,14 +557,14 @@ float CMeshField::GetHeight(D3DXVECTOR3 pos)
 //==========================================================
 void CMeshField::Edit(float *pLength, float *pSpeed)
 {
-	CPlayer *pPlayer = CManager::GetScene()->GetPlayer();
+	CPlayer *pPlayer = CManager::GetInstance()->GetScene()->GetPlayer();
 
 	if (pPlayer == NULL)
 	{
 		return;
 	}
 
-	CInputKeyboard *pInputKey = CManager::GetInputKeyboard();
+	CInputKeyboard *pInputKey = CManager::GetInstance()->GetInputKeyboard();
 	D3DXVECTOR3 pos =D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// リセット
@@ -725,12 +725,12 @@ void CMeshField::Edit(float *pLength, float *pSpeed)
 	SetVtx();
 
 	// デバッグ表示
-	CManager::GetDebugProc()->Print("\n-------------------------------------------------------\n");
-	CManager::GetDebugProc()->Print("メッシュフィールド起伏操作方法 ---------------\n");
-	CManager::GetDebugProc()->Print("リセット【F6】: 保存【F7】: 選択範囲【 %f 】: 範囲操作【 5, 6 】\n", *pLength);
-	CManager::GetDebugProc()->Print(" 頂点上昇 【 U, J 】: 速度変更【 Y, H 】[ %f ] : 頂点数-> 縦[ %d ], 横[ %d ]\n", *pSpeed, GetNumHeight(), GetNumWidth());
-	CManager::GetDebugProc()->Print(" 幅  【 I, K 】[ %f ]\n", m_fWidth);
-	CManager::GetDebugProc()->Print(" 高さ【 T, H 】[ %f ]\n", m_fHeight);
+	CManager::GetInstance()->GetDebugProc()->Print("\n-------------------------------------------------------\n");
+	CManager::GetInstance()->GetDebugProc()->Print("メッシュフィールド起伏操作方法 ---------------\n");
+	CManager::GetInstance()->GetDebugProc()->Print("リセット【F6】: 保存【F7】: 選択範囲【 %f 】: 範囲操作【 5, 6 】\n", *pLength);
+	CManager::GetInstance()->GetDebugProc()->Print(" 頂点上昇 【 U, J 】: 速度変更【 Y, H 】[ %f ] : 頂点数-> 縦[ %d ], 横[ %d ]\n", *pSpeed, GetNumHeight(), GetNumWidth());
+	CManager::GetInstance()->GetDebugProc()->Print(" 幅  【 I, K 】[ %f ]\n", m_fWidth);
+	CManager::GetInstance()->GetDebugProc()->Print(" 高さ【 T, H 】[ %f ]\n", m_fHeight);
 }
 
 //==========================================================

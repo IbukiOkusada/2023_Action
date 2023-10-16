@@ -108,7 +108,7 @@ void CEffect::Uninit(void)
 //===============================================
 void CEffect::Update(void)
 {
-	m_Info.fLife -= CManager::GetSlow()->Get();
+	m_Info.fLife -= CManager::GetInstance()->GetSlow()->Get();
 	CMeshField *pMesh = CGame::GetMeshField();
 	D3DXVECTOR3 nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	float fHeight = CMeshField::GetHeight(GetPosition());
@@ -123,7 +123,7 @@ void CEffect::Update(void)
 	{// まだある場合
 		D3DXVECTOR3 pos = GetPosition();	// 座標
 
-		pos += m_Info.move * CManager::GetSlow()->Get();
+		pos += m_Info.move * CManager::GetInstance()->GetSlow()->Get();
 
 		// 座標
 		SetPosition(pos);
@@ -131,38 +131,38 @@ void CEffect::Update(void)
 		switch (m_Info.Type)
 		{
 		case TYPE_NONE:
-			m_Info.col.a -= 0.05f * CManager::GetSlow()->Get();
-			m_Info.fRadius += 0.1f * CManager::GetSlow()->Get();
+			m_Info.col.a -= 0.05f * CManager::GetInstance()->GetSlow()->Get();
+			m_Info.fRadius += 0.1f * CManager::GetInstance()->GetSlow()->Get();
 			break;
 
 		case TYPE_BULLET:
-			m_Info.col.a -= 0.05f * CManager::GetSlow()->Get();
-			m_Info.fRadius += 0.1f * CManager::GetSlow()->Get();
+			m_Info.col.a -= 0.05f * CManager::GetInstance()->GetSlow()->Get();
+			m_Info.fRadius += 0.1f * CManager::GetInstance()->GetSlow()->Get();
 			break;
 
 		case TYPE_DUST:
-			m_Info.col.a -= 0.01f * CManager::GetSlow()->Get();
-			m_Info.fRadius -= 0.1f * CManager::GetSlow()->Get();
+			m_Info.col.a -= 0.01f * CManager::GetInstance()->GetSlow()->Get();
+			m_Info.fRadius -= 0.1f * CManager::GetInstance()->GetSlow()->Get();
 
-			m_Info.move -= m_Info.move * 0.035f * CManager::GetSlow()->Get();
+			m_Info.move -= m_Info.move * 0.035f * CManager::GetInstance()->GetSlow()->Get();
 
 			break;
 		case TYPE_EXPLOSION:
-			m_Info.col.a -= 0.01f * CManager::GetSlow()->Get();
-			m_Info.move.y += 0.01f * CManager::GetSlow()->Get();
+			m_Info.col.a -= 0.01f * CManager::GetInstance()->GetSlow()->Get();
+			m_Info.move.y += 0.01f * CManager::GetInstance()->GetSlow()->Get();
 			break; 
 
 		case TYPE_SHWBULLET:
-			m_Info.col.a -= 0.01f * CManager::GetSlow()->Get();
+			m_Info.col.a -= 0.01f * CManager::GetInstance()->GetSlow()->Get();
 			m_Info.fRadius -= (rand() % 100 - 50) * 0.01f;
-			m_Info.move.y += -0.1f * CManager::GetSlow()->Get();
+			m_Info.move.y += -0.1f * CManager::GetInstance()->GetSlow()->Get();
 
 			break;
 
 		case TYPE_SHWREF:
-			m_Info.col.a -= 0.01f * CManager::GetSlow()->Get();
+			m_Info.col.a -= 0.01f * CManager::GetInstance()->GetSlow()->Get();
 			m_Info.fRadius -= (rand() % 100 - 50) * 0.01f;
-			m_Info.move.y += -0.1f * CManager::GetSlow()->Get();
+			m_Info.move.y += -0.1f * CManager::GetInstance()->GetSlow()->Get();
 
 			if (GetPosition().y < fHeight)
 			{
@@ -172,43 +172,43 @@ void CEffect::Update(void)
 			break;
 
 		case TYPE_SWEAT:
-			m_Info.col.a -= 0.04f * CManager::GetSlow()->Get();
-			m_Info.fRadius -= 0.005f * CManager::GetSlow()->Get();
-			//m_Info.move.y += -0.1f * CManager::GetSlow()->Get();
+			m_Info.col.a -= 0.04f * CManager::GetInstance()->GetSlow()->Get();
+			m_Info.fRadius -= 0.005f * CManager::GetInstance()->GetSlow()->Get();
+			//m_Info.move.y += -0.1f * CManager::GetInstance()->GetSlow()->Get();
 			break;
 
 		case TYPE_HEAT:
-			m_Info.col.a -= 0.01f * CManager::GetSlow()->Get();
+			m_Info.col.a -= 0.01f * CManager::GetInstance()->GetSlow()->Get();
 			m_Info.fRadius -= (rand() % 100 - 50) * 0.01f;
-			//m_Info.move.y += -0.1f * CManager::GetSlow()->Get();
+			//m_Info.move.y += -0.1f * CManager::GetInstance()->GetSlow()->Get();
 			break;
 
 		case TYPE_SWAP:
 
-			m_Info.col.a -= 0.05f * CManager::GetSlow()->Get();
-			m_Info.move.x -= m_Info.move.x * 0.5f * CManager::GetSlow()->Get();
-			m_Info.move.z -= m_Info.move.z * 0.5f * CManager::GetSlow()->Get();
-			m_Info.move.y -= m_Info.move.y * 0.05f * CManager::GetSlow()->Get();
+			m_Info.col.a -= 0.05f * CManager::GetInstance()->GetSlow()->Get();
+			m_Info.move.x -= m_Info.move.x * 0.5f * CManager::GetInstance()->GetSlow()->Get();
+			m_Info.move.z -= m_Info.move.z * 0.5f * CManager::GetInstance()->GetSlow()->Get();
+			m_Info.move.y -= m_Info.move.y * 0.05f * CManager::GetInstance()->GetSlow()->Get();
 
 			break;
 		case CEffect::TYPE_BALEXPLOSION:	// 爆発
 
-			m_Info.col.a -= 0.01f * CManager::GetSlow()->Get();
-			m_Info.fRadius -= 1.2f * CManager::GetSlow()->Get();
+			m_Info.col.a -= 0.01f * CManager::GetInstance()->GetSlow()->Get();
+			m_Info.fRadius -= 1.2f * CManager::GetInstance()->GetSlow()->Get();
 
 			break;
 
 		case CEffect::TYPE_SMAKE:	// 爆発
 
-			m_Info.col.a -= 0.035f * CManager::GetSlow()->Get();
-			m_Info.move.y -= m_Info.move.y * 0.005f * CManager::GetSlow()->Get();
+			m_Info.col.a -= 0.035f * CManager::GetInstance()->GetSlow()->Get();
+			m_Info.move.y -= m_Info.move.y * 0.005f * CManager::GetInstance()->GetSlow()->Get();
 
 			break;
 
 		case CEffect::TYPE_HEATHAZE:	// 爆発
 
-			m_Info.col.a -= 0.0001f * CManager::GetSlow()->Get();
-			m_Info.fRadius -= (rand() % 100 - 50) * 0.01f * CManager::GetSlow()->Get();
+			m_Info.col.a -= 0.0001f * CManager::GetInstance()->GetSlow()->Get();
+			m_Info.fRadius -= (rand() % 100 - 50) * 0.01f * CManager::GetInstance()->GetSlow()->Get();
 			m_Info.move.x += (rand() % 100 - 50) * 0.01f;
 			m_Info.move.z += (rand() % 100 - 50) * 0.01f;
 
@@ -216,8 +216,8 @@ void CEffect::Update(void)
 
 		case CEffect::TYPE_SLOWOK:	// 爆発
 
-			m_Info.col.a -= 0.0001f * CManager::GetSlow()->Get();
-			m_Info.fRadius -= (rand() % 100 - 50) * 0.05f * CManager::GetSlow()->Get();
+			m_Info.col.a -= 0.0001f * CManager::GetInstance()->GetSlow()->Get();
+			m_Info.fRadius -= (rand() % 100 - 50) * 0.05f * CManager::GetInstance()->GetSlow()->Get();
 			m_Info.move.x += (rand() % 100 - 50) * 0.01f;
 			m_Info.move.z += (rand() % 100 - 50) * 0.01f;
 
@@ -248,7 +248,7 @@ void CEffect::Draw(void)
 	LPDIRECT3DDEVICE9 pDevice;		//デバイスへのポインタ
 
 	//デバイスの取得
-	pDevice = CManager::GetRenderer()->GetDevice();
+	pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
 
 	//ライティングをオフにする
 	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
@@ -293,7 +293,7 @@ void CEffect::Draw(void)
 CEffect *CEffect::Create(D3DXVECTOR3 pos, TYPE type)
 {
 	CEffect *pEffect = NULL;
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 
 	// エフェクトの生成
 	pEffect = new CEffect(7);
@@ -339,7 +339,7 @@ CEffect *CEffect::Create(D3DXVECTOR3 pos, TYPE type)
 CEffect *CEffect::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXCOLOR col, float fRadius, float fLife, TYPE type)
 {
 	CEffect *pEffect = NULL;
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 
 	// エフェクトの生成
 	pEffect = new CEffect();

@@ -409,7 +409,7 @@ void CParticle::Set(D3DXVECTOR3 Defpos, D3DXVECTOR3 Defmove, CEffect::TYPE type)
 		fLife = 300.0f;
 
 		CEffect *pEffect = CEffect::Create(Defpos + move, move, col, fRadius, fLife, type);
-		pEffect->BindTexture(CManager::GetTexture()->Regist(CTexture::GetFileName(CTexture::TYPE_HEATHAZE)));
+		pEffect->BindTexture(CManager::GetInstance()->GetTexture()->Regist(CTexture::GetFileName(CTexture::TYPE_HEATHAZE)));
 
 		break;
 	}

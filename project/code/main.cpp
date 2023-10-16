@@ -24,12 +24,11 @@ int g_nCountFPS = 0;		//FPSカウンタ
 //===========================================================
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine, int nCmdShow)
 {
+	CManager *pManager = NULL;
 	DWORD dwCurrentTime;	//現在時刻
 	DWORD dwExecLastTime;	//最後に処理した時刻
 	DWORD dwFrameCount;		//フレームカウント
 	DWORD dwFPSLastTime;	//最後にFPSを計測した時刻
-
-	CManager *pManager = NULL;	// マネージャークラスのポインタ
 
 	WNDCLASSEX wcex =
 	{
@@ -78,11 +77,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 		NULL							//ウインドウ作成データ
 	);
 
-	// マネージャーのインスタンスの生成
-	pManager = new CManager;
-
 	// マネージャーの初期化処理
-	if (FAILED(pManager->Init(hInstance, hWnd, TRUE)))
+	if (FAILED(CManager::GetInstance()->Init(hInstance, hWnd, TRUE)))
 	{// 失敗した場合
 		return -1;
 	}
@@ -136,14 +132,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 			{//60分の1秒経過
 				dwExecLastTime = dwCurrentTime;	//処理開始の時刻[現在時刻]を保存
 
-				if (pManager != NULL)
+				if (CManager::GetInstance() != NULL)
 				{// 生成できた場合
 
 					// 更新処理
-					pManager->Update();
+					CManager::GetInstance()->Update();
 
 					// 描画処理
-					pManager->Draw();
+					CManager::GetInstance()->Draw();
 				}
 
 				dwFrameCount++;	//フレームカウントを加算
@@ -152,13 +148,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine
 	}
 
 	// 終了処理
-	if (pManager != NULL)
+	if (CManager::GetInstance() != NULL)
 	{// 使用している場合
 		// 終了処理
-		pManager->Uninit();
-
-		delete pManager;	// メモリの開放
-		pManager = NULL;	// 使用していない状態にする
+		CManager::Release();
 	}
 
 	//ウインドウクラスの登録を解除

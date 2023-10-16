@@ -40,7 +40,7 @@ CGimmickRotate::~CGimmickRotate()
 //==========================================================
 HRESULT CGimmickRotate::Init(void)
 {
-	CXFile *pFile = CManager::GetModelFile();
+	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 	BindFile(pFile->Regist("data\\MODEL\\1mcube.x"));
 	m_fSize = SETSIZE;
 	m_RotateSpeed = D3DXVECTOR3(0.0f, 0.01f, 0.0f);
@@ -149,7 +149,7 @@ CGimmickRotate *CGimmickRotate::Create(void)
 bool CGimmickRotate::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, const float fRefMulti)
 {
 
-	CXFile *pFile = CManager::GetModelFile();
+	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 	bool bLand = false;	// ’…’n‚µ‚½‚©”Û‚©
 	D3DXVECTOR3 vtxObjMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 vtxObjMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);

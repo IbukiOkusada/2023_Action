@@ -40,11 +40,11 @@ HRESULT CGimmickMove::Init(void)
 	}
 
 	// 読み込み確認
-	CXFile *pFile = CManager::GetModelFile();
+	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 	BindFile(pFile->Regist("data\\MODEL\\5mcube.x"));
 
 	// スローを覚える
-	m_pSlow = CManager::GetSlow();
+	m_pSlow = CManager::GetInstance()->GetSlow();
 
 	return S_OK;
 }
@@ -149,7 +149,7 @@ void CGimmickMove::Controller(void)
 //==========================================================
 bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, const float fRefMulti)
 {
-	CXFile *pFile = CManager::GetModelFile();
+	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 	bool bLand = false;	// 着地したか否か
 	D3DXVECTOR3 vtxObjMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 vtxObjMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);

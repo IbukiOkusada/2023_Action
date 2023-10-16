@@ -25,6 +25,7 @@
 #include "gimmick_move.h"
 #include "gimmick_rotate.h"
 #include "gimmick_fish.h"
+#include "time.h"
 
 //===============================================
 // マクロ定義
@@ -112,15 +113,17 @@ HRESULT CGame::Init(void)
 		m_pPause = CPause::Create();
 	}
 
-	CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, -150.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
+	m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, -150.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
+	m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
+	m_pTime->Set(400 * 100);
 	
 	// ギミック設置
 	GimmickSet();
 
 	// スポットライトをオン
-	CManager::GetLight()->EnablePointLight(true);
+	CManager::GetInstance()->GetLight()->EnablePointLight(true);
 
-	CManager::GetSound()->Play(CSound::LABEL_BGM_GAME);
+	CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_GAME);
 
 	return S_OK;
 }
@@ -160,7 +163,7 @@ void CGame::Update(void)
 		{
 			if (m_pPause->GetSelect() == true)
 			{
-				CManager::GetFade()->Update();
+				CManager::GetInstance()->GetFade()->Update();
 			}
 			return;
 		}
@@ -180,9 +183,17 @@ void CGame::Update(void)
 
 #endif
 
-	if (CManager::GetInputKeyboard()->GetTrigger(DIK_RETURN))
+	if (CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_RETURN))
 	{
-		CManager::GetFade()->Set(CScene::MODE_RESULT);
+		CManager::GetInstance()->GetFade()->Set(CScene::MODE_RESULT);
+	}
+
+	if (m_pPlayer != NULL)
+	{
+		if (m_pPlayer->GetPosition().x < -12000.0f)
+		{
+			CManager::GetInstance()->GetFade()->Set(CScene::MODE_RESULT);
+		}
 	}
 
 	// 更新処理

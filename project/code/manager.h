@@ -92,41 +92,44 @@ public:	// 誰でもアクセス可能
 	void Draw(void);
 
 	// 静的メンバ関数
-	static CRenderer *GetRenderer(void);
-	static CInputKeyboard *GetInputKeyboard(void);
-	static CInputMouse *GetInputMouse(void);
-	static CInputPad *GetInputPad(void);
-	static CDebugProc *GetDebugProc(void);
-	static CSound *GetSound(void);
-	static CCamera *GetCamera(void);
-	static CLight *GetLight(void);
-	static CTexture *GetTexture(void);
-	static CXFile *GetModelFile(void);
-	static CSlow *GetSlow(void);
-	static CFade *GetFade(void);
-	static void SetMode(CScene::MODE mode);
-	static CScene::MODE GetMode(void) { return m_pScene->GetMode(); }
-	static CScene *GetScene(void) { return m_pScene; }
+	CRenderer *GetRenderer(void);
+	CInputKeyboard *GetInputKeyboard(void);
+	CInputMouse *GetInputMouse(void);
+	CInputPad *GetInputPad(void);
+	CDebugProc *GetDebugProc(void);
+	CSound *GetSound(void);
+	CCamera *GetCamera(void);
+	CLight *GetLight(void);
+	CTexture *GetTexture(void);
+	CXFile *GetModelFile(void);
+	CSlow *GetSlow(void);
+	CFade *GetFade(void);
+	void SetMode(CScene::MODE mode);
+	CScene::MODE GetMode(void) { return m_pScene->GetMode(); }
+	CScene *GetScene(void) { return m_pScene; }
+	static CManager *GetInstance(void);
+	static void Release(void);
 
 private:	// 自分だけがアクセス可能
 
 	// メンバ関数
-	static void DataReset(void);
+	void DataReset(void);
 
 	// 静的メンバ変数
-	static CRenderer *m_pRenderer;	// レンダラーのポインタ
-	static CInputKeyboard *m_pInputKeyboard;	// キーボードのポインタ
-	static CInputMouse *m_pInputMouse;	// マウスのポインタ
-	static CInputPad *m_pInputPad;	// パッドのポインタ
-	static CDebugProc *m_pDebugProc;	// デバッグ表示のポインタ
-	static CMultiCamera *m_pCamera;		// カメラのポインタ
-	static CLight *m_pLight;		// ライトのポインタ
-	static CTexture *m_pTexture;	// テクスチャのポインタ
-	static CXFile *m_pModelFile;	// Xファイルのポインタ
-	static CSound *m_pSound;		// サウンドのポインタ
-	static CSlow *m_pSlow;			// スローのポインタ
-	static CScene *m_pScene;		// シーンのポインタ
-	static CFade *m_pFade;			// フェードのポインタ
+	CRenderer *m_pRenderer;	// レンダラーのポインタ
+	CInputKeyboard *m_pInputKeyboard;	// キーボードのポインタ
+	CInputMouse *m_pInputMouse;	// マウスのポインタ
+	CInputPad *m_pInputPad;	// パッドのポインタ
+	CDebugProc *m_pDebugProc;	// デバッグ表示のポインタ
+	CMultiCamera *m_pCamera;		// カメラのポインタ
+	CLight *m_pLight;		// ライトのポインタ
+	CTexture *m_pTexture;	// テクスチャのポインタ
+	CXFile *m_pModelFile;	// Xファイルのポインタ
+	CSound *m_pSound;		// サウンドのポインタ
+	CSlow *m_pSlow;			// スローのポインタ
+	CScene *m_pScene;		// シーンのポインタ
+	CFade *m_pFade;			// フェードのポインタ
+	static CManager *m_pManager;	// マネージャーのポインタ
 };
 
 

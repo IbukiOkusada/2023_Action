@@ -30,7 +30,7 @@ CLight::~CLight()
 //==========================================================
 HRESULT CLight::Init(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		// デバイスへのポインタを取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		// デバイスへのポインタを取得
 	D3DXVECTOR3 vecDir;		// 設定変更用ベクトル
 
 	for (int nCntLight = 0; nCntLight < NUM_LIGHT; nCntLight++)
@@ -105,7 +105,7 @@ void CLight::Update(void)
 //==========================================================
 void CLight::SetLight(float fDiff)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		// デバイスへのポインタを取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		// デバイスへのポインタを取得
 
 	for (int nCntLight = 0; nCntLight < NUM_LIGHT - 1; nCntLight++)
 	{
@@ -171,7 +171,7 @@ void CLight::SetLight(float fDiff)
 //==========================================================
 void CLight::EnablePointLight(bool bEnable)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		// デバイスへのポインタを取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		// デバイスへのポインタを取得
 
 	// ライトを指定された状態にする
 	pDevice->LightEnable(NUM_LIGHT - 1, bEnable);
@@ -182,7 +182,7 @@ void CLight::EnablePointLight(bool bEnable)
 //==========================================================
 void CLight::SetPositonPointLight(D3DXVECTOR3 pos)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		// デバイスへのポインタを取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		// デバイスへのポインタを取得
 
 	// ライトの種類を設定
 	m_aLight[NUM_LIGHT - 1].Type = D3DLIGHT_POINT;

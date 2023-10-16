@@ -10,6 +10,7 @@
 #include "texture.h"
 #include "manager.h"
 #include "camera.h"
+#include "time.h"
 
 //マクロ定義
 #define BUTTONWIDTH		(120.0f)		//ポーズ画面ボタン幅
@@ -50,6 +51,8 @@ CPause::CPause()
 		m_aMenu[nCnt].pObject2D = NULL;
 	}
 	
+	m_nStartDeltaTime = 0;
+	m_nPauseTimer = 0;
 }
 
 //===============================================
@@ -70,7 +73,7 @@ HRESULT CPause::Init(void)
 
 	if (m_pBg != NULL)
 	{
-		m_pBg->BindTexture(CManager::GetTexture()->Regist(m_apTexPass[TYPE_BG]));
+		m_pBg->BindTexture(CManager::GetInstance()->GetTexture()->Regist(m_apTexPass[TYPE_BG]));
 		m_pBg->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f));
 		m_pBg->SetSize(BGSIZE, BGSIZE);
 		m_pBg->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
@@ -88,7 +91,7 @@ HRESULT CPause::Init(void)
 		if (m_aMenu[nCnt].pObject2D != NULL)
 		{// 生成された
 			// テクスチャの設定
-			m_aMenu[nCnt].pObject2D->BindTexture(CManager::GetTexture()->Regist(m_apTexPass[nCnt]));
+			m_aMenu[nCnt].pObject2D->BindTexture(CManager::GetInstance()->GetTexture()->Regist(m_apTexPass[nCnt]));
 			m_aMenu[nCnt].pObject2D->SetPosition(D3DXVECTOR3(BUTTONX, BUTTONY + nCnt * BUTTONSPACE, 0.0f));
 			m_aMenu[nCnt].pObject2D->SetSize(BUTTONWIDTH, BUTTONHEIGHT);
 			m_aMenu[nCnt].pObject2D->SetType(CObject::TYPE_PAUSE);
@@ -118,11 +121,11 @@ void CPause::Uninit(void)
 //===============================================
 void CPause::Update(void)
 {
-	CInputKeyboard *pInputKey = CManager::GetInputKeyboard();
-	CInputPad *pInputPad = CManager::GetInputPad();
-	CFade *pFade = CManager::GetFade();
+	CInputKeyboard *pInputKey = CManager::GetInstance()->GetInputKeyboard();
+	CInputPad *pInputPad = CManager::GetInstance()->GetInputPad();
+	CFade *pFade = CManager::GetInstance()->GetFade();
 
-	if (m_bSelect == true || CManager::GetFade()->GetState() != CFade::STATE_NONE)
+	if (m_bSelect == true || CManager::GetInstance()->GetFade()->GetState() != CFade::STATE_NONE)
 	{// 押された状態の場合
 		return;
 	}
@@ -136,6 +139,11 @@ void CPause::Update(void)
 		if (m_bState == false)
 		{
 			type = CObject::TYPE_PAUSE;
+
+			if (CManager::GetInstance()->GetScene()->GetTime() != NULL)
+			{
+				CManager::GetInstance()->GetScene()->GetTime()->SetPauseTimer((int)((timeGetTime() - m_nStartDeltaTime) * 0.1f) + CManager::GetInstance()->GetScene()->GetTime()->GetPauseTimer());
+			}
 		}
 
 		if (m_pBg != NULL)
@@ -155,10 +163,11 @@ void CPause::Update(void)
 
 	if (m_bState == false)
 	{
+		m_nStartDeltaTime = timeGetTime();
 		return;
 	}
 
-	CManager::GetCamera()->MouseCamera();
+	CManager::GetInstance()->GetCamera()->MouseCamera();
 
 	m_aMenu[m_SelectMenu].col.a += m_fMoveCol_a;
 
@@ -189,6 +198,11 @@ void CPause::Update(void)
 		{
 		case MENU_CONTINUE:
 			m_bState = false;
+
+			if (CManager::GetInstance()->GetScene()->GetTime() != NULL)
+			{
+				CManager::GetInstance()->GetScene()->GetTime()->SetPauseTimer((int)((timeGetTime() - m_nStartDeltaTime) * 0.1f) + CManager::GetInstance()->GetScene()->GetTime()->GetPauseTimer());
+			}
 			break;
 		case MENU_RETRY:
 			//SetFadeMode(FADEMODE_NORMAL);

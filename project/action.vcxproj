@@ -194,11 +194,13 @@
     <ClCompile Include="code\renderer.cpp" />
     <ClCompile Include="code\result.cpp" />
     <ClCompile Include="code\sample\sample.cpp" />
+    <ClCompile Include="code\shadow.cpp" />
     <ClCompile Include="code\slow.cpp" />
     <ClCompile Include="code\sound.cpp" />
     <ClCompile Include="code\task.cpp" />
     <ClCompile Include="code\task_manager.cpp" />
     <ClCompile Include="code\texture.cpp" />
+    <ClCompile Include="code\time.cpp" />
     <ClCompile Include="code\title.cpp" />
     <ClCompile Include="code\tutorial.cpp" />
     <ClCompile Include="code\Xfile.cpp" />
@@ -240,11 +242,13 @@
     <ClInclude Include="code\renderer.h" />
     <ClInclude Include="code\result.h" />
     <ClInclude Include="code\sample\sample.h" />
+    <ClInclude Include="code\shadow.h" />
     <ClInclude Include="code\slow.h" />
     <ClInclude Include="code\sound.h" />
     <ClInclude Include="code\task.h" />
     <ClInclude Include="code\task_manager.h" />
     <ClInclude Include="code\texture.h" />
+    <ClInclude Include="code\time.h" />
     <ClInclude Include="code\title.h" />
     <ClInclude Include="code\tutorial.h" />
     <ClInclude Include="code\Xfile.h" />

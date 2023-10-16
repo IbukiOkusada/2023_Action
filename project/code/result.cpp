@@ -15,11 +15,8 @@
 #include "ranking.h"
 #include "sound.h"
 
-//===============================================
-// 静的メンバ変数
-//===============================================
-int CResult::m_nSuvNum = 0;
-int CResult::m_nDeadNum = 0;
+// マクロ定義
+#define MOVE_TIMER	(900)
 
 //===============================================
 // コンストラクタ
@@ -43,7 +40,7 @@ CResult::~CResult()
 //===============================================
 HRESULT CResult::Init(void)
 {
-	CManager::GetSound()->Play(CSound::LABEL_BGM_RESULT);
+	CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_RESULT);
 
 	return S_OK;
 }
@@ -61,9 +58,11 @@ void CResult::Uninit(void)
 //===============================================
 void CResult::Update(void)
 {
-	if (CManager::GetInputKeyboard()->GetTrigger(DIK_RETURN))
+	m_nTimer++;
+
+	if (CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_RETURN) || m_nTimer > MOVE_TIMER)
 	{
-		CManager::GetFade()->Set(CScene::MODE_RANKING);
+		CManager::GetInstance()->GetFade()->Set(CScene::MODE_TITLE);
 	}
 
 	CScene::Update();

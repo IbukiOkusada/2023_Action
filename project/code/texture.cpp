@@ -61,7 +61,7 @@ HRESULT CTexture::Load(void)
 	LPDIRECT3DDEVICE9 pDevice;		//デバイスへのポインタ
 
 	//デバイスの取得
-	pDevice = CManager::GetRenderer()->GetDevice();
+	pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
 
 	// 総数分読み込み
 	for (int nCntTex = 0; nCntTex < TYPE_MAX; nCntTex++)
@@ -106,7 +106,7 @@ void CTexture::Unload(void)
 //===============================================
 int CTexture::Regist(const char* pFileName)
 {
-	CRenderer *pRenderer = CManager::GetRenderer();
+	CRenderer *pRenderer = CManager::GetInstance()->GetRenderer();
 	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();		//デバイスへのポインタを取得
 	int nIdx = -1;	// テクスチャ番号
 
@@ -118,12 +118,14 @@ int CTexture::Regist(const char* pFileName)
 			strcpy(&m_aFile[nCntTex].aName[0], pFileName);
 
 			// テクスチャの読み込み
-			D3DXCreateTextureFromFile(pDevice,
+			if (SUCCEEDED(D3DXCreateTextureFromFile(pDevice,
 				&m_aFile[nCntTex].aName[0],
-				&m_aFile[nCntTex].pTexture);
+				&m_aFile[nCntTex].pTexture)))
+			{
+				m_nNumAll++;	// 総数をカウントアップ
+				nIdx = nCntTex;	// テクスチャ番号を設定
+			}
 
-			m_nNumAll++;	// 総数をカウントアップ
-			nIdx = nCntTex;	// テクスチャ番号を設定
 			break;
 		}
 		else

@@ -42,8 +42,8 @@ CObject3D::~CObject3D()
 //==========================================================
 HRESULT CObject3D::Init(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスへのポインタを取得
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタを取得
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 
 	// テクスチャの割り当て
 	m_nIdxTexture = pTexture->Regist(TEXTUREFILE_DATA);
@@ -148,8 +148,8 @@ void CObject3D::Update(void)
 //==========================================================
 void CObject3D::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスへのポインタを取得
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタを取得
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
 
@@ -425,8 +425,8 @@ void CObject3D::SetCol(D3DXCOLOR col)
 //==========================================================
 void CObject3D::SetMtx(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスへのポインタを取得
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタを取得
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
 

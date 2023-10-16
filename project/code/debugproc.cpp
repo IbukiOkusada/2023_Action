@@ -62,7 +62,7 @@ void CDebugProc::Init(void)
 	LPDIRECT3DDEVICE9 pDevice;		//デバイスへのポインタ
 
 	//デバイスの取得
-	pDevice = CManager::GetRenderer()->GetDevice();
+	pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
 
 	//デバッグ表示用フォントの生成
 	D3DXCreateFont(pDevice, 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, "Terminal", &m_pFont);
@@ -94,7 +94,7 @@ void CDebugProc::Uninit(void)
 //==========================================================
 void CDebugProc::Update(void)
 {
-	CInputKeyboard *pInputKeyboard = CManager::GetInputKeyboard();	// キーボードのポインタ
+	CInputKeyboard *pInputKeyboard = CManager::GetInstance()->GetInputKeyboard();	// キーボードのポインタ
 
 	if(pInputKeyboard->GetTrigger(DIK_F1) == true)
 	{//F1キーが押されたとき
@@ -102,7 +102,7 @@ void CDebugProc::Update(void)
 	}
 
 	Print("FPS : %d\n", GetFPS());
-	Print("現在のモード [ %s ] : [Enter]で遷移\n", m_apMode[CManager::GetMode()]);
+	Print("現在のモード [ %s ] : [Enter]で遷移\n", m_apMode[CManager::GetInstance()->GetMode()]);
 	Print("オブジェクトの総数 : %d\n", CObject::GetNumAll());
 	Print("アイテムの総数 : %d\n", CObject::GetItemNumAll());
 	Print("優先順位別(%d個分) ↓\n", NUM_PRIORITY);
@@ -117,22 +117,22 @@ void CDebugProc::Update(void)
 	}
 
 	Print("\n");
-	Print("テクスチャの読み込み総数(%d) \n", CManager::GetTexture()->GetNumAll());
-	Print("モデルの読み込み総数    (%d) \n", CManager::GetModelFile()->GetNumAll());
+	Print("テクスチャの読み込み総数(%d) \n", CManager::GetInstance()->GetTexture()->GetNumAll());
+	Print("モデルの読み込み総数    (%d) \n", CManager::GetInstance()->GetModelFile()->GetNumAll());
 
 	{
-		D3DXVECTOR3 CamPosV = CManager::GetCamera()->GetPositionV();
-		CManager::GetDebugProc()->Print("カメラ 視点 : [%f, %f, %f]\n", CamPosV.x, CamPosV.y, CamPosV.z);
+		D3DXVECTOR3 CamPosV = CManager::GetInstance()->GetCamera()->GetPositionV();
+		CManager::GetInstance()->GetDebugProc()->Print("カメラ 視点 : [%f, %f, %f]\n", CamPosV.x, CamPosV.y, CamPosV.z);
 	}
 
 	{
-		D3DXVECTOR3 CamPosR = CManager::GetCamera()->GetPositionR();
-		CManager::GetDebugProc()->Print("       注視点 : [%f, %f, %f]\n", CamPosR.x, CamPosR.y, CamPosR.z);
+		D3DXVECTOR3 CamPosR = CManager::GetInstance()->GetCamera()->GetPositionR();
+		CManager::GetInstance()->GetDebugProc()->Print("       注視点 : [%f, %f, %f]\n", CamPosR.x, CamPosR.y, CamPosR.z);
 	}
 
 	{
-		D3DXVECTOR3 CamRot = CManager::GetCamera()->GetRotation();
-		CManager::GetDebugProc()->Print("       向き : [%f, %f, %f]\n", CamRot.x, CamRot.y, CamRot.z);
+		D3DXVECTOR3 CamRot = CManager::GetInstance()->GetCamera()->GetRotation();
+		CManager::GetInstance()->GetDebugProc()->Print("       向き : [%f, %f, %f]\n", CamRot.x, CamRot.y, CamRot.z);
 	}
 }
 

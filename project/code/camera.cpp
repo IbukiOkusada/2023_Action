@@ -80,7 +80,7 @@ void CCamera::Uninit(void)
 //==========================================================
 void CCamera::Update(void)
 {
-	//if (CManager::GetEditor()->GetUse() == false)
+	//if (CManager::GetInstance()->GetEditor()->GetUse() == false)
 	{
 		//マウスでの視点移動
 	}
@@ -107,7 +107,7 @@ void CCamera::Update(void)
 	//	}
 	//	else
 	//	{
-	//		if (CManager::GetMode() == CScene::MODE_TUTORIAL)
+	//		if (CManager::GetInstance()->GetMode() == CScene::MODE_TUTORIAL)
 	//		{
 	//			//視点の移動
 	//			MoveV();
@@ -130,7 +130,7 @@ void CCamera::Update(void)
 //==========================================================
 void CCamera::SetCamera(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスへのポインタを取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタを取得
 
 	//プロジェクションマトリクスの初期化
 	D3DXMatrixIdentity(&m_mtxProjection);
@@ -169,7 +169,7 @@ void CCamera::SetCamera(void)
 //==========================================================
 void CCamera::MoveVR(void)
 {
-	CInputKeyboard *pKey = CManager::GetInputKeyboard();
+	CInputKeyboard *pKey = CManager::GetInstance()->GetInputKeyboard();
 
 	//視点注視点の同時移動
 	if (pKey->GetPress(DIK_A) == true)
@@ -237,8 +237,8 @@ void CCamera::MoveVR(void)
 //==========================================================
 void CCamera::MoveV(void)
 {
-	CInputKeyboard *pKey = CManager::GetInputKeyboard();
-	CInputPad *pInputPad = CManager::GetInputPad();	// キーボードのポインタ
+	CInputKeyboard *pKey = CManager::GetInstance()->GetInputKeyboard();
+	CInputPad *pInputPad = CManager::GetInstance()->GetInputPad();	// キーボードのポインタ
 	float fMultiSlow = 1.0f;
 
 	//x軸の移動
@@ -353,7 +353,7 @@ void CCamera::MoveV(void)
 //==========================================================
 void CCamera::MoveR(void)
 {
-	CInputKeyboard *pKey = CManager::GetInputKeyboard();
+	CInputKeyboard *pKey = CManager::GetInstance()->GetInputKeyboard();
 
 	//x軸の移動
 	if (pKey->GetPress(DIK_Q) == true && pKey->GetPress(DIK_E) != true)
@@ -429,7 +429,7 @@ void CCamera::SetR(void)
 //==========================================================
 void CCamera::MouseCamera(void)
 {
-	CInputMouse *pMouse = CManager::GetInputMouse();
+	CInputMouse *pMouse = CManager::GetInstance()->GetInputMouse();
 
 	//if (pMouse->GetPress(CInputMouse::BUTTON_LBUTTON) == true && pMouse->GetPress(CInputMouse::BUTTON_RBUTTON) == true)
 	//{//左右同時に押されているとき
@@ -570,7 +570,7 @@ void CCamera::Setting(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot)
 //==========================================================
 void CCamera::Edit(void)
 {
-	CInputMouse *pMouse = CManager::GetInputMouse();
+	CInputMouse *pMouse = CManager::GetInstance()->GetInputMouse();
 	if (pMouse->GetPress(CInputMouse::BUTTON_LBUTTON) == true && pMouse->GetPress(CInputMouse::BUTTON_RBUTTON) == true)
 	{//左右同時に押されているとき
 		m_posV.x += cosf(m_rot.y + (-D3DX_PI * 0.5f)) * (pMouse->GetCousorMove().x * MOUSE_MOVESPEED) + -cosf(m_rot.y) * (pMouse->GetCousorMove().y * MOUSE_MOVESPEED);
@@ -739,8 +739,8 @@ void CCamera::Slow(void)
 //==========================================================
 void CCamera::SlowShw(void)
 {
-	CInputKeyboard *pKey = CManager::GetInputKeyboard();
-	CInputPad *pInputPad = CManager::GetInputPad();	// キーボードのポインタ
+	CInputKeyboard *pKey = CManager::GetInstance()->GetInputKeyboard();
+	CInputPad *pInputPad = CManager::GetInstance()->GetInputPad();	// キーボードのポインタ
 	float fMultiSlow = SLOW_CAMERAROT;
 
 	// 差分を求める
@@ -920,7 +920,7 @@ void CMultiCamera::Update(void)
 //==========================================================
 void CMultiCamera::SetCamera(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスへのポインタを取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタを取得
 	D3DXMATRIX mtxView = GetMtxView(), mtxProjection = GetMtxProjection();
 
 	//ビューポートの設定
@@ -1000,7 +1000,7 @@ void CMapCamera::Update(void)
 void CMapCamera::SetCamera(void)
 {
 	CMultiCamera::SetCamera();
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスへのポインタを取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタを取得
 
 	// 床の描画
 	CMeshField *pMesh = CMeshField::GetTop();	// 先頭を取得

@@ -64,7 +64,7 @@ CTutorial::~CTutorial()
 HRESULT CTutorial::Init(void)
 {
 
-	CManager::GetSound()->Play(CSound::LABEL_BGM_TUTORIAL);
+	CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_TUTORIAL);
 
 	return S_OK;
 }
@@ -82,12 +82,12 @@ void CTutorial::Uninit(void)
 //===============================================
 void CTutorial::Update(void)
 {
-	CInputPad *pInputPad = CManager::GetInputPad();
-	CInputKeyboard *pInputKey = CManager::GetInputKeyboard();
+	CInputPad *pInputPad = CManager::GetInstance()->GetInputPad();
+	CInputKeyboard *pInputKey = CManager::GetInstance()->GetInputKeyboard();
 
 	if (pInputKey->GetTrigger(DIK_RETURN) || pInputPad->GetTrigger(CInputPad::BUTTON_A, 0) || pInputPad->GetTrigger(CInputPad::BUTTON_START, 0))
 	{
-		CManager::GetFade()->Set(CScene::MODE_GAME);
+		CManager::GetInstance()->GetFade()->Set(CScene::MODE_GAME);
 	}
 
 	// XVˆ—

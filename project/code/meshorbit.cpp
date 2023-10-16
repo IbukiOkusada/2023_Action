@@ -88,7 +88,7 @@ void CMeshOrbit::Uninit(void)
 //==========================================================
 void CMeshOrbit::Update(void)
 {
-	m_fTimer += CManager::GetSlow()->Get();
+	m_fTimer += CManager::GetInstance()->GetSlow()->Get();
 
 	if (m_fTimer >= 1)
 	{
@@ -104,7 +104,7 @@ void CMeshOrbit::Update(void)
 void CMeshOrbit::Draw(void)
 {
 	//デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//デバイスへのポインタ
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタ
 
 	//ライティングをオフにする
 	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
@@ -128,7 +128,7 @@ void CMeshOrbit::Draw(void)
 CMeshOrbit *CMeshOrbit::Create(D3DXMATRIX *pMtx, D3DXVECTOR3 UpSet, D3DXVECTOR3 DownSet, TYPE type)
 {
 	CMeshOrbit *pMeshOrbit = NULL;	// メッシュフィールドのポインタ
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 
 	// メモリの確保
 	pMeshOrbit = new CMeshOrbit;

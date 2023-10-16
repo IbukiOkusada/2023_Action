@@ -97,7 +97,7 @@ HRESULT CObject2D::Init(void)
 	LPDIRECT3DDEVICE9 pDevice;		//デバイスへのポインタ
 
 	//デバイスの取得
-	pDevice = CManager::GetRenderer()->GetDevice();
+	pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
 
 	// テクスチャの読み込み(割り当てるのでいらない)
 	/*D3DXCreateTextureFromFile(pDevice, 
@@ -138,7 +138,7 @@ HRESULT CObject2D::Init(const char *pFileName)
 	LPDIRECT3DDEVICE9 pDevice;		//デバイスへのポインタ
 
 	//デバイスの取得
-	pDevice = CManager::GetRenderer()->GetDevice();
+	pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
 
 	// テクスチャの読み込み(割り当てるのでいらない)
 	/*D3DXCreateTextureFromFile(pDevice,
@@ -202,10 +202,10 @@ void CObject2D::Update(void)
 void CObject2D::Draw(void)
 {
 	LPDIRECT3DDEVICE9 pDevice;		//デバイスへのポインタ
-	CTexture *pTexture = CManager::GetTexture();
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();
 
 	//デバイスの取得
-	pDevice = CManager::GetRenderer()->GetDevice();
+	pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
 
 	//頂点バッファをデータストリームに設定
 	pDevice->SetStreamSource(

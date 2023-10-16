@@ -57,8 +57,8 @@ private:	// 自分だけがアクセス可能
 	static CObjectX *m_pCur;	// 最後尾のオブジェクトへのポインタ
 	CObjectX *m_pPrev;	// 前のオブジェクトへのポインタ
 	CObjectX *m_pNext;	// 次のオブジェクトへのポインタ
-	D3DXVECTOR3 m_pos;		//位置
-	D3DXVECTOR3 m_rot;		//向き
+	D3DXVECTOR3 m_pos;	// 位置
+	D3DXVECTOR3 m_rot;	// 向き
 	D3DXMATRIX m_mtxWorld;	//ワールドマトリックス
 	int m_nIdxModel;		// モデル番号
 };

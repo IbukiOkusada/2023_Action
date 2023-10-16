@@ -232,7 +232,7 @@ void CFileLoad::LoadModelNum(FILE *pFile)
 void CFileLoad::LoadTexFile(FILE *pFile)
 {
 	char aStr[4];	//余分な文章読み込み用
-	CTexture *pTexture = CManager::GetTexture();
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();
 
 	fscanf(pFile, "%s", &aStr[0]);	//(=)読み込み
 
@@ -257,7 +257,7 @@ void CFileLoad::LoadTexFile(FILE *pFile)
 void CFileLoad::LoadModelFile(FILE *pFile)
 {
 	char aStr[4];	//余分な文章読み込み用
-	CXFile *pModel = CManager::GetModelFile();
+	CXFile *pModel = CManager::GetInstance()->GetModelFile();
 
 	fscanf(pFile, "%s", &aStr[0]);	//(=)読み込み
 
@@ -455,7 +455,7 @@ void CFileLoad::LoadMeshFieldData(FILE *pFile)
 		pMesh->SetTexMove(move);
 	}
 
-	if (CGame::GetMeshField() == NULL && CManager::GetMode() == CScene::MODE_GAME)
+	if (CGame::GetMeshField() == NULL && CManager::GetInstance()->GetMode() == CScene::MODE_GAME)
 	{
 		CGame::SetMesh(pMesh);
 	}
@@ -590,14 +590,14 @@ int CFileLoad::GetModelNum(const char *pFileName)
 void CFileLoad::LoadVtxMaxData(FILE *pFile, int nIdx)
 {
 	char aStr[256];	//余分な文章読み込み用
-	D3DXVECTOR3 VtxMax = CManager::GetModelFile()->GetMax(nIdx);
+	D3DXVECTOR3 VtxMax = CManager::GetInstance()->GetModelFile()->GetMax(nIdx);
 
 	fscanf(pFile, "%s", &aStr[0]);	//(=)読み込み
 	fscanf(pFile, "%f", &VtxMax.x);	//x座標読み込み
 	fscanf(pFile, "%f", &VtxMax.y);	//y座標読み込み
 	fscanf(pFile, "%f", &VtxMax.z);	//z座標読み込み
 
-	CManager::GetModelFile()->SetSizeVtxMax(nIdx, VtxMax);
+	CManager::GetInstance()->GetModelFile()->SetSizeVtxMax(nIdx, VtxMax);
 }
 
 //==========================================================
@@ -606,12 +606,12 @@ void CFileLoad::LoadVtxMaxData(FILE *pFile, int nIdx)
 void CFileLoad::LoadVtxMinData(FILE *pFile, int nIdx)
 {
 	char aStr[256];	//余分な文章読み込み用
-	D3DXVECTOR3 VtxMin = CManager::GetModelFile()->GetMin(nIdx);
+	D3DXVECTOR3 VtxMin = CManager::GetInstance()->GetModelFile()->GetMin(nIdx);
 
 	fscanf(pFile, "%s", &aStr[0]);	//(=)読み込み
 	fscanf(pFile, "%f", &VtxMin.x);	//x座標読み込み
 	fscanf(pFile, "%f", &VtxMin.y);	//y座標読み込み
 	fscanf(pFile, "%f", &VtxMin.z);	//z座標読み込み
 
-	CManager::GetModelFile()->SetSizeVtxMin(nIdx, VtxMin);
+	CManager::GetInstance()->GetModelFile()->SetSizeVtxMin(nIdx, VtxMin);
 }

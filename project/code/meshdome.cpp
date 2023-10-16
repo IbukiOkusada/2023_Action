@@ -64,7 +64,7 @@ void CMeshDome::Draw(void)
 	LPDIRECT3DDEVICE9 pDevice;		//デバイスへのポインタ
 
 	//デバイスの取得
-	pDevice = CManager::GetRenderer()->GetDevice();
+	pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
 
 	//ライティングをオフにする
 	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
@@ -150,7 +150,7 @@ CMeshDome *CMeshDome::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot,
 	float fLength, float fHeight, const int nPriority, const int nWidth, const int nHeight)
 {
 	CMeshDome *pMeshWall = NULL;	// メッシュフィールドのポインタ
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 
 													// メモリの確保
 	pMeshWall = new CMeshDome;

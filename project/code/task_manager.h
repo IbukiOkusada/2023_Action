@@ -27,17 +27,7 @@ public:
 	void ListIn(CTask *pTask);
 
 	// シングルトン
-	static CTaskManager* GetInstance()
-	{
-		static CTaskManager *pInstance = NULL;
-
-		if (pInstance == NULL)
-		{
-			pInstance = new CTaskManager;
-		}
-
-		return pInstance;
-	}
+	static CTaskManager* GetInstance(void);
 
 private:	// 自分だけがアクセス可能
 
@@ -49,6 +39,7 @@ private:	// 自分だけがアクセス可能
 	// メンバ変数
 	CTask *m_pTop;	// 先頭のオブジェクトへのポインタ
 	CTask *m_pCur;	// 最後尾のオブジェクトへのポインタ
+	static CTaskManager *m_pInstance;
 };
 
 #endif

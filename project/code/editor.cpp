@@ -65,12 +65,12 @@ CEditor::~CEditor()
 //==========================================================
 void CEditor::Init(void)
 {
-	if (CManager::GetScene()->GetFileLoad() == NULL)
+	if (CManager::GetInstance()->GetScene()->GetFileLoad() == NULL)
 	{
 		return;
 	}
 
-	m_Object.nIdxModel = CManager::GetModelFile()->Regist(CManager::GetScene()->GetFileLoad()->GetModelFileName(m_nIdx));
+	m_Object.nIdxModel = CManager::GetInstance()->GetModelFile()->Regist(CManager::GetInstance()->GetScene()->GetFileLoad()->GetModelFileName(m_nIdx));
 }
 
 //==========================================================
@@ -86,14 +86,14 @@ void CEditor::Uninit(void)
 //==========================================================
 void CEditor::Update(void)
 {
-	if (CManager::GetScene()->GetFileLoad() == NULL)
+	if (CManager::GetInstance()->GetScene()->GetFileLoad() == NULL)
 	{
 		return;
 	}
 
-	CCamera *pCamera = CManager::GetCamera();
-	CInputKeyboard *pInputKey = CManager::GetInputKeyboard();
-	CPlayer *pPlayer = CManager::GetScene()->GetPlayer();
+	CCamera *pCamera = CManager::GetInstance()->GetCamera();
+	CInputKeyboard *pInputKey = CManager::GetInstance()->GetInputKeyboard();
+	CPlayer *pPlayer = CManager::GetInstance()->GetScene()->GetPlayer();
 	D3DXVECTOR3 pos = m_Object.pos;
 	D3DXVECTOR3 rot = m_Object.rot;
 	D3DXVECTOR3 CamRot = pCamera->GetRotation();	// ƒJƒƒ‰‚ÌŠp“x
@@ -138,7 +138,7 @@ void CEditor::Update(void)
 		m_bMesh = m_bMesh ? false : true;
 	}
 
-	CManager::GetDebugProc()->Print("ƒGƒfƒBƒ^[[ F3 ] : ƒƒbƒVƒ…‘€ì[ F4 ]\n");
+	CManager::GetInstance()->GetDebugProc()->Print("ƒGƒfƒBƒ^[[ F3 ] : ƒƒbƒVƒ…‘€ì[ F4 ]\n");
 
 	if (m_bUse == false)
 	{// Žg—p’†‚Å‚Í‚È‚¢ê‡
@@ -229,19 +229,19 @@ void CEditor::Update(void)
 	//Ý’u
 	if (pInputKey->GetTrigger(DIK_RETURN) == true)
 	{
-		CObjectX::Create(pos, rot, CManager::GetScene()->GetFileLoad()->GetModelFileName(m_nIdx));
+		CObjectX::Create(pos, rot, CManager::GetInstance()->GetScene()->GetFileLoad()->GetModelFileName(m_nIdx));
 	}
 
 	//Ý’u•¨•ÏX
 	if (pInputKey->GetTrigger(DIK_LSHIFT) == true)
 	{
-		m_nIdx = (m_nIdx + 1) % CManager::GetScene()->GetFileLoad()->GetModelNumAll();
-		m_Object.nIdxModel = CManager::GetModelFile()->Regist(CManager::GetScene()->GetFileLoad()->GetModelFileName(m_nIdx));
+		m_nIdx = (m_nIdx + 1) % CManager::GetInstance()->GetScene()->GetFileLoad()->GetModelNumAll();
+		m_Object.nIdxModel = CManager::GetInstance()->GetModelFile()->Regist(CManager::GetInstance()->GetScene()->GetFileLoad()->GetModelFileName(m_nIdx));
 	}
 	else if (pInputKey->GetTrigger(DIK_LCONTROL) == true)
 	{
-		m_nIdx = (m_nIdx - 1 + CManager::GetScene()->GetFileLoad()->GetModelNumAll()) % CManager::GetScene()->GetFileLoad()->GetModelNumAll();
-		m_Object.nIdxModel = CManager::GetModelFile()->Regist(CManager::GetScene()->GetFileLoad()->GetModelFileName(m_nIdx));
+		m_nIdx = (m_nIdx - 1 + CManager::GetInstance()->GetScene()->GetFileLoad()->GetModelNumAll()) % CManager::GetInstance()->GetScene()->GetFileLoad()->GetModelNumAll();
+		m_Object.nIdxModel = CManager::GetInstance()->GetModelFile()->Regist(CManager::GetInstance()->GetScene()->GetFileLoad()->GetModelFileName(m_nIdx));
 	}
 
 	//‰ñ“]
@@ -317,12 +317,12 @@ void CEditor::Update(void)
 	m_Object.pos = pos;
 	m_Object.rot = rot;
 
-	CManager::GetDebugProc()->Print("\n-------------------------------------------------------\n");
-	CManager::GetDebugProc()->Print("ƒGƒfƒBƒbƒg‘€ì•û–@ ---------------\n");
-	CManager::GetDebugProc()->Print("”z’uyENTERz: ˆÚ“® yª,«,©,¨z: ‰ñ“]yP, Iz: ˆÚ“®•û–@•ÏXyF4z\n");
-	CManager::GetDebugProc()->Print("•Û‘¶yF9z\n");
-	CManager::GetDebugProc()->Print("”z’u•¨•ÏXyLSHIFT, LCTRLz: ‚‚³ˆÚ“®yRSHIFT, RCTRL\nˆÚ“®—Ê•ÏXy9, 0z: íœ”ÍˆÍ•ÏXy7, 8z\n");
-	CManager::GetDebugProc()->Print("À•Wy%f, %f, %fz: Œü‚«y%fz : ˆÚ“®—Êy%fz\n", pos.x, pos.y, pos.z, rot.y, m_fSpeed);
+	CManager::GetInstance()->GetDebugProc()->Print("\n-------------------------------------------------------\n");
+	CManager::GetInstance()->GetDebugProc()->Print("ƒGƒfƒBƒbƒg‘€ì•û–@ ---------------\n");
+	CManager::GetInstance()->GetDebugProc()->Print("”z’uyENTERz: ˆÚ“® yª,«,©,¨z: ‰ñ“]yP, Iz: ˆÚ“®•û–@•ÏXyF4z\n");
+	CManager::GetInstance()->GetDebugProc()->Print("•Û‘¶yF9z\n");
+	CManager::GetInstance()->GetDebugProc()->Print("”z’u•¨•ÏXyLSHIFT, LCTRLz: ‚‚³ˆÚ“®yRSHIFT, RCTRL\nˆÚ“®—Ê•ÏXy9, 0z: íœ”ÍˆÍ•ÏXy7, 8z\n");
+	CManager::GetInstance()->GetDebugProc()->Print("À•Wy%f, %f, %fz: Œü‚«y%fz : ˆÚ“®—Êy%fz\n", pos.x, pos.y, pos.z, rot.y, m_fSpeed);
 
 }
 
@@ -331,9 +331,9 @@ void CEditor::Update(void)
 //==========================================================
 void CEditor::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();		//ƒfƒoƒCƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ðŽæ“¾
-	CTexture *pTexture = CManager::GetTexture();	// ƒeƒNƒXƒ`ƒƒ‚Ö‚Ìƒ|ƒCƒ“ƒ^
-	CXFile *pModelFile = CManager::GetModelFile();	// Xƒtƒ@ƒCƒ‹î•ñ‚Ìƒ|ƒCƒ“ƒ^
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//ƒfƒoƒCƒX‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ðŽæ“¾
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// ƒeƒNƒXƒ`ƒƒ‚Ö‚Ìƒ|ƒCƒ“ƒ^
+	CXFile *pModelFile = CManager::GetInstance()->GetModelFile();	// Xƒtƒ@ƒCƒ‹î•ñ‚Ìƒ|ƒCƒ“ƒ^
 	CXFile::FileData *pFileData = pModelFile->SetAddress(m_Object.nIdxModel);
 	D3DXMATRIX mtxRot, mtxTrans;			//ŒvŽZ—pƒ}ƒgƒŠƒbƒNƒX
 	D3DMATERIAL9 matDef;					//Œ»Ý‚Ìƒ}ƒeƒŠƒAƒ‹•Û‘¶—p
@@ -438,8 +438,8 @@ void CEditor::Save(void)
 			}
 
 			// ƒtƒ@ƒCƒ‹“Ç‚Ýž‚Ýƒ‚ƒfƒ‹‚Ì”Ô†Žæ“¾
-			char *pChar = CManager::GetModelFile()->GetFileName(nType);
-			nType = CManager::GetScene()->GetFileLoad()->GetModelNum(pChar);
+			char *pChar = CManager::GetInstance()->GetModelFile()->GetFileName(nType);
+			nType = CManager::GetInstance()->GetScene()->GetFileLoad()->GetModelNum(pChar);
 
 			if (nType == -1)
 			{

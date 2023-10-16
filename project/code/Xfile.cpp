@@ -95,8 +95,8 @@ int CXFile::Regist(const char *pFileName)
 //==========================================================
 HRESULT CXFile::FileLoad(int nIdx)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();;		//デバイスへのポインタ
-	CTexture *pTexture = CManager::GetTexture();	// テクスチャへのポインタ
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();;		//デバイスへのポインタ
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 	D3DXMATERIAL *pMat;	//マテリアルデータへのポインタ
 	int nNumVtx;		//頂点数
 	DWORD dwSizeFVF;	//頂点フォーマットのサイズ
