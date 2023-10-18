@@ -44,8 +44,9 @@
 #define START_LIFE	(4)	// 初期体力
 #define DAMAGE_INTERVAL	(10.0f)
 #define DAMAGE_APPEAR	(110.0f)
-#define DEATH_INTERVAL	(180.0f)
+#define DEATH_INTERVAL	(120.0f)
 #define DASH_INTERVAL	(60.0f)
+#define SPAWN_INTERVAL	(60.0f)
 
 //===============================================
 // コンストラクタ
@@ -227,6 +228,13 @@ void CPlayer::Update(void)
 
 	if (m_nLife <= 0)
 	{
+		for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
+		{
+			if (nullptr != m_ppBillBoard[nCnt]) {
+				m_ppBillBoard[nCnt]->SetPosition(D3DXVECTOR3(m_Info.pos.x, m_Info.pos.y + 50.0f + 10.0f * nCnt, m_Info.pos.z));
+			}
+		}
+
 		return;
 	}
 
@@ -312,10 +320,10 @@ void CPlayer::Controller(void)
 	D3DXVECTOR3 pos = GetPosition();	// 座標を取得
 	D3DXVECTOR3 rot = GetRotation();	// 向きを取得
 	CInputKeyboard *pInputKey = CManager::GetInstance()->GetInputKeyboard();	// キーボードのポインタ
-	CInputMouse *pInputMouse = CManager::GetInstance()->GetInputMouse();
-	CInputPad *pInputPad = CManager::GetInstance()->GetInputPad();
-	CCamera *pCamera = CManager::GetInstance()->GetCamera();		// カメラのポインタ
-	D3DXVECTOR3 CamRot = pCamera->GetRotation();	// カメラの角度
+	CInputMouse *pInputMouse = CManager::GetInstance()->GetInputMouse();		// マウス
+	CInputPad *pInputPad = CManager::GetInstance()->GetInputPad();				// パッド
+	CCamera *pCamera = CManager::GetInstance()->GetCamera();					// カメラのポインタ
+	D3DXVECTOR3 CamRot = pCamera->GetRotation();								// カメラの角度
 	bool bDamage = false;
 	m_fRotMove = rot.y;	//現在の向きを取得
 
@@ -429,7 +437,7 @@ void CPlayer::Move(void)
 
 	if (pInputKey->GetTrigger(DIK_K) || pInputPad->GetTrigger(CInputPad::BUTTON_RIGHTBUTTON, 0))
 	{
-		if (m_fStepCoolTime <= 0.0f)
+		if (m_fStepCoolTime <= 0.0f && m_Info.state != STATE_DAMAGE)
 		{
 			m_fStepCoolTime = STEP_COOLTIME;
 			m_Info.move.x = -sinf(m_Info.rot.y) * STEP_SPEED;
@@ -654,27 +662,73 @@ void CPlayer::StateSet(void)
 	case STATE_DEATH:
 
 		CManager::GetInstance()->GetDebugProc()->Print("状態 : [死亡]\n");
-		m_Info.fStateCounter -= CManager::GetInstance()->GetSlow()->Get();
+
+		if (m_ppBillBoard != NULL)
+		{
+			m_ppBillBoard[m_nLife]->SetSize(m_ppBillBoard[m_nLife]->GetWidth() + 50.0f, m_ppBillBoard[m_nLife]->GetHeight() + 50.0f);
+		}
+
+		{
+			float fOld = m_Info.fStateCounter;
+			m_Info.fStateCounter -= CManager::GetInstance()->GetSlow()->Get();
+			if (m_Info.fStateCounter <= DEATH_INTERVAL * 0.95f && fOld >= DEATH_INTERVAL * 0.95f)
+			{
+				if (m_ppBillBoard != NULL)
+				{
+					m_ppBillBoard[m_nLife]->SetDraw(false);
+				}
+			}
+		}
 
 		if (m_Info.fStateCounter <= 0.0f)
 		{
-			m_Info.fStateCounter = 0.0f;
-			m_Info.state = STATE_APPEAR;
-			m_nLife = START_LIFE;
-			m_pObject->SetDraw();
+			m_Info.fStateCounter = SPAWN_INTERVAL;
+			m_Info.state = STATE_SPAWN;
 			m_pShadow->SetDraw();
+			m_pShadow->SetpVtx(0.0f, 0.0f);
 			m_Info.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			m_Info.pos.y = -600.0f;
+			SetPosition(m_Info.pos);
 
 			for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
 			{
 				if (nullptr != m_ppBillBoard[nCnt])
 				{
 					m_ppBillBoard[nCnt]->SetDraw(true);
-					m_ppBillBoard[nCnt]->SetSize(60.0f + nCnt * 15.0f, 60.0f + nCnt * 15.0f);
+					m_ppBillBoard[nCnt]->SetSize(0.0f, 0.0f);
 				}
 			}
 		}
 
+		break;
+
+	case STATE_SPAWN:
+	{
+		m_Info.fStateCounter -= CManager::GetInstance()->GetSlow()->Get();
+
+		m_Info.pos.y += 10.0f;
+		SetPosition(m_Info.pos);
+
+		for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
+		{
+			if (nullptr != m_ppBillBoard[nCnt])
+			{
+				m_ppBillBoard[nCnt]->SetSize(m_ppBillBoard[nCnt]->GetWidth() + 1.0f + nCnt * 0.25f, m_ppBillBoard[nCnt]->GetHeight() + 1.0f + nCnt * 0.25f);
+			}
+		}
+
+		m_pShadow->SetpVtx(m_pShadow->GetWidth() + 1.0f + START_LIFE * 0.25f, m_pShadow->GetHeight() + 1.0f + START_LIFE * 0.25f);
+		m_pShadow->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, (float)((float)(SPAWN_INTERVAL - m_Info.fStateCounter) / (float)SPAWN_INTERVAL)));
+
+		if (m_Info.fStateCounter <= 0.0f)
+		{
+			m_pObject->SetDraw();
+			m_Info.fStateCounter = 0.0f;
+			m_Info.state = STATE_APPEAR;
+			m_nLife = START_LIFE;
+			m_Info.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		}
+	}
 		break;
 	}
 }

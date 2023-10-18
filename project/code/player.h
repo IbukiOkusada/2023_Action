@@ -41,6 +41,7 @@ private:	// 自分だけがアクセス可能な定義
 		STATE_NORMAL,		// 通常状態
 		STATE_DAMAGE,		// ダメージ状態
 		STATE_DEATH,		// 死亡状態
+		STATE_SPAWN,		// 復活中状態
 		STATE_MAX
 	};
 

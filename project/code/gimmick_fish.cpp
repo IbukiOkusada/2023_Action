@@ -96,8 +96,6 @@ void CGimmickFish::Update(void)
 	{
 		m_pCharacter->Update();
 	}
-
-	CManager::GetInstance()->GetDebugProc()->Print("À•W [ %f, %f, %f]\n", GetMtxWorld()->_41, GetMtxWorld()->_42, GetMtxWorld()->_43);
 }
 
 //==========================================================
@@ -168,7 +166,15 @@ void CGimmickFish::Controller(void)
 			m_state = STATE_ATKEND;
 			m_fStateCounter = ATK_ENDCOUNTER;
 			m_move = D3DXVECTOR3(0.0f, -2.0f, 0.0f);
-			m_pCharacter->GetMotion()->BlendSet(MOTION_AFTERGRAW);
+			if (m_bEat)
+			{
+				m_pCharacter->GetMotion()->BlendSet(MOTION_AFTERGRAW);
+			}
+			else
+			{
+				m_pCharacter->GetMotion()->BlendSet(MOTION_NEUTRAL);
+			}
+			m_bEat = false;
 
 			break;
 
@@ -230,6 +236,7 @@ bool CGimmickFish::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 
 	if (fLength < COLSIZE)
 	{
+		m_bEat = true;
 		bLand = true;
 	}
 
