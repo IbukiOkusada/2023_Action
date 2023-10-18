@@ -8,17 +8,19 @@
 #include "manager.h"
 #include "slow.h"
 #include "Xfile.h"
+#include "objectX.h"
 
 // マクロ定義
 
 //==========================================================
 // コンストラクタ
 //==========================================================
-CGimmickMove::CGimmickMove(int nPriOrity) : CObjectX(nPriOrity)
+CGimmickMove::CGimmickMove()
 {
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fNowMoveTimer = 0.0f;
 	m_fNumMoveTimer = 0.0f;
+	m_pObject = NULL;
 }
 
 //==========================================================
@@ -34,14 +36,12 @@ CGimmickMove::~CGimmickMove()
 //==========================================================
 HRESULT CGimmickMove::Init(void)
 {
-	if (CObjectX::Init() == E_FAIL)
-	{
-		return E_FAIL;
-	}
 
 	// 読み込み確認
-	CXFile *pFile = CManager::GetInstance()->GetModelFile();
-	BindFile(pFile->Regist("data\\MODEL\\5mcube.x"));
+	if(m_pObject == NULL)
+	{
+		m_pObject = CObjectX::Create(GetPosition(), GetRotation(), "data\\MODEL\\5mcube.x", 3);
+	}
 
 	// スローを覚える
 	m_pSlow = CManager::GetInstance()->GetSlow();
@@ -54,7 +54,13 @@ HRESULT CGimmickMove::Init(void)
 //==========================================================
 void CGimmickMove::Uninit(void)
 {
-	CObjectX::Uninit();
+	if (m_pObject != NULL)
+	{
+		m_pObject->Uninit();
+		m_pObject = NULL;
+	}
+
+	ListOut();
 
 	Release();
 }
@@ -68,6 +74,8 @@ void CGimmickMove::Update(void)
 
 	// 操作関連
 	Controller();
+
+	SetMtxWorld();
 }
 
 //==========================================================
@@ -75,7 +83,7 @@ void CGimmickMove::Update(void)
 //==========================================================
 void CGimmickMove::Draw(void)
 {
-	CObjectX::Draw();
+
 }
 
 //==========================================================
@@ -94,6 +102,9 @@ CGimmickMove *CGimmickMove::Create(void)
 	return pObjectMove;
 }
 
+//==========================================================
+// 生成
+//==========================================================
 CGimmickMove *CGimmickMove::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fTimer)
 {
 	CGimmickMove *pObjectMove = new CGimmickMove;
@@ -142,6 +153,12 @@ void CGimmickMove::Controller(void)
 		m_move *= -1.0f;
 		m_fNowMoveTimer = m_fNumMoveTimer;
 	}
+
+	if(m_pObject != NULL)
+	{
+		m_pObject->SetPosition(GetPosition());
+		m_pObject->SetRotation(GetRotation());
+	}
 }
 
 //==========================================================
@@ -156,11 +173,16 @@ bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 	D3DXVECTOR3 ObjPos = GetPosition();
 	D3DXVECTOR3 ObjRot = GetRotation();
 
+	if (m_pObject == NULL)
+	{
+		return bLand;
+	}
+
 	// 向きを反映
-	SetRotSize(vtxObjMax,
+	m_pObject->SetRotSize(vtxObjMax,
 		vtxObjMin,
-		pFile->GetMax(GetIdx()),
-		pFile->GetMin(GetIdx()),
+		pFile->GetMax(m_pObject->GetIdx()),
+		pFile->GetMin(m_pObject->GetIdx()),
 		ObjRot.y);
 
 	if (pos.y + vtxMax.y > ObjPos.y + vtxObjMin.y
@@ -171,6 +193,7 @@ bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 			&& pos.z + vtxMax.z > ObjPos.z + vtxObjMin.z
 			&& pos.z + vtxMin.z < ObjPos.z + vtxObjMax.z)
 		{//右から左にめり込んだ
+			bLand = true;
 			move.x *= -1.0f;
 			//move.x *= fRefMulti;
 			pos.x = ObjPos.x + vtxObjMax.x - vtxMin.x + 0.1f + m_move.x;
@@ -181,6 +204,7 @@ bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 			&& pos.z + vtxMin.z < ObjPos.z + vtxObjMax.z)
 		{//左から右にめり込んだ
 		 //位置を戻す
+			bLand = true;
 			move.x *= -1.0f;
 			//move.x *= fRefMulti;
 			pos.x = ObjPos.x + vtxObjMin.x - vtxMax.x - 0.1f + m_move.x;
@@ -192,6 +216,7 @@ bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 			&& pos.x + vtxMin.x < ObjPos.x + vtxObjMax.x)
 		{//奥から手前にめり込んだ
 			//位置を戻す
+			bLand = true;
 			move.z *= -1.0f;
 			//move.z *= fRefMulti;
 			pos.z = ObjPos.z + vtxObjMax.z - vtxMin.z + 0.1f + m_move.z;
@@ -203,6 +228,7 @@ bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 			&& pos.x + vtxMin.x < ObjPos.x + vtxObjMax.x)
 		{//手前から奥にめり込んだt
 		 //位置を戻す
+			bLand = true;
 			move.z *= -1.0f;
 			//move.z *= fRefMulti;
 			pos.z = ObjPos.z + vtxObjMin.z - vtxMax.z - 0.1f + m_move.z;

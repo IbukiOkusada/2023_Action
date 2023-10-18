@@ -18,7 +18,7 @@ class CSample : public CObject
 public:	// 誰でもアクセス可能
 
 		//CSample();	// コンストラクタ
-	CSample(int nPriOrity = 3);	// コンストラクタ(オーバーロード)
+	CSample(int nPriOrity = 0);	// コンストラクタ(オーバーロード)
 	~CSample();	// デストラクタ
 
 				// メンバ関数

@@ -17,7 +17,7 @@
 //==========================================================
 // コンストラクタ
 //==========================================================
-CGimmickRotate::CGimmickRotate(int nPriOrity) : CObjectX(nPriOrity)
+CGimmickRotate::CGimmickRotate()
 {
 	for (int nCnt = 0; nCnt < NUM_ROTATEBOX; nCnt++)
 	{
@@ -40,21 +40,18 @@ CGimmickRotate::~CGimmickRotate()
 //==========================================================
 HRESULT CGimmickRotate::Init(void)
 {
-	CXFile *pFile = CManager::GetInstance()->GetModelFile();
-	BindFile(pFile->Regist("data\\MODEL\\1mcube.x"));
 	m_fSize = SETSIZE;
 	m_RotateSpeed = D3DXVECTOR3(0.0f, 0.01f, 0.0f);
 
 	for (int nCnt = 0; nCnt < NUM_ROTATEBOX; nCnt++)
 	{
 		m_aObj[nCnt].s_pModel = CModel::Create(FILENAME);
-		m_aObj[nCnt].s_pModel->SetParent(GetMtx());
+		m_aObj[nCnt].s_pModel->SetParent(GetMtxWorld());
 		m_aObj[nCnt].s_pModel->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 
 			((-SETSIZE * (int)(NUM_ROTATEBOX * 0.5f)))
 			+ (SETSIZE * nCnt) 
 			+ (SETSIZE * ((1 - NUM_ROTATEBOX % 2) * 0.5f))));
 	}
-
 	return S_OK;
 }
 
@@ -68,12 +65,11 @@ void CGimmickRotate::Uninit(void)
 		if (m_aObj[nCnt].s_pModel != NULL)
 		{
 			m_aObj[nCnt].s_pModel->Uninit();
-			delete m_aObj[nCnt].s_pModel;
 			m_aObj[nCnt].s_pModel = NULL;
 		}
 	}
 
-	CObjectX::Uninit();
+	ListOut();
 
 	// 廃棄
 	Release();
@@ -108,23 +104,8 @@ void CGimmickRotate::Update(void)
 			m_aObj[nCnt].s_posOld.z = m_aObj[nCnt].s_pModel->GetMtxWorld()->_43;
 		}
 	}
-}
 
-//==========================================================
-// 描画処理
-//==========================================================
-void CGimmickRotate::Draw(void)
-{
-	// 描画
-	CObjectX::Draw();
-
-	for (int nCnt = 0; nCnt < NUM_ROTATEBOX; nCnt++)
-	{
-		if (m_aObj[nCnt].s_pModel != NULL)
-		{
-			m_aObj[nCnt].s_pModel->Draw();
-		}
-	}
+	SetMtxWorld();
 }
 
 //==========================================================
@@ -168,76 +149,6 @@ bool CGimmickRotate::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXV
 		}
 	}
 
-	// 向きを反映
-	SetRotSize(vtxObjMax,
-		vtxObjMin,
-		pFile->GetMax(GetIdx()),
-		pFile->GetMin(GetIdx()),
-		ObjRot.y);
-
-	if (pos.y + vtxMax.y > ObjPos.y + vtxObjMin.y
-		&& pos.y + vtxMin.y <= ObjPos.y + vtxObjMax.y)
-	{//プレイヤーとモデルが同じ高さにある
-		if (posOld.x + vtxMin.x >= ObjPos.x + vtxObjMax.x
-			&& pos.x + vtxMin.x < ObjPos.x + vtxObjMax.x
-			&& pos.z + vtxMax.z > ObjPos.z + vtxObjMin.z
-			&& pos.z + vtxMin.z < ObjPos.z + vtxObjMax.z)
-		{//右から左にめり込んだ
-			move.x *= -1.0f;
-			move.x *= fRefMulti;
-			pos.x = ObjPos.x + vtxObjMax.x - vtxMin.x + 0.1f + move.x;
-		}
-		else if (posOld.x + vtxMax.x <= ObjPos.x + vtxObjMin.x
-			&& pos.x + vtxMax.x > ObjPos.x + vtxObjMin.x
-			&& pos.z + vtxMax.z > ObjPos.z + vtxObjMin.z
-			&& pos.z + vtxMin.z < ObjPos.z + vtxObjMax.z)
-		{//左から右にめり込んだ
-		 //位置を戻す
-			move.x *= -1.0f;
-			move.x *= fRefMulti;
-			pos.x = ObjPos.x + vtxObjMin.x - vtxMax.x - 0.1f + move.x;
-			//move.x = 0.0f;
-		}
-		else if (posOld.z + vtxMin.z >= ObjPos.z + vtxObjMax.z
-			&& pos.z + vtxMin.z < ObjPos.z + vtxObjMax.z
-			&& pos.x + vtxMax.x > ObjPos.x + vtxObjMin.x
-			&& pos.x + vtxMin.x < ObjPos.x + vtxObjMax.x)
-		{//奥から手前にめり込んだ
-		 //位置を戻す
-			move.z *= -1.0f;
-			move.z *= fRefMulti;
-			pos.z = ObjPos.z + vtxObjMax.z - vtxMin.z + 0.1f + move.z;
-			//move.z = 0.0f;
-		}
-		else if (posOld.z + vtxMax.z <= ObjPos.z + vtxObjMin.z
-			&& pos.z + vtxMax.z > ObjPos.z + vtxObjMin.z
-			&& pos.x + vtxMax.x > ObjPos.x + vtxObjMin.x
-			&& pos.x + vtxMin.x < ObjPos.x + vtxObjMax.x)
-		{//手前から奥にめり込んだt
-		 //位置を戻す
-			move.z *= -1.0f;
-			move.z *= fRefMulti;
-			pos.z = ObjPos.z + vtxObjMin.z - vtxMax.z - 0.1f + move.z;
-			//move.z = 0.0f;
-		}
-	}
-
-	if (pos.x + vtxMax.x > ObjPos.x + vtxObjMin.x
-		&& pos.x + vtxMin.x < ObjPos.x + vtxObjMax.x
-		&& pos.z + vtxMax.z > ObjPos.z + vtxObjMin.z
-		&& pos.z + vtxMin.z < ObjPos.z + vtxObjMax.z)
-	{//範囲内にある
-	 //上からの判定
-		if (posOld.y + vtxMin.y >= ObjPos.y + vtxObjMax.y
-			&& pos.y + vtxMin.y < ObjPos.y + vtxObjMax.y)
-		{//上からめり込んだ
-		 //上にのせる
-			pos.y = ObjPos.y + vtxObjMax.y - vtxMin.y;
-			move.y = 0.0f;
-			bLand = true;
-		}
-	}
-
 	// 回転している子供との判定
 	for (int nCnt = 0; nCnt < NUM_ROTATEBOX; nCnt++)
 	{
@@ -263,6 +174,8 @@ bool CGimmickRotate::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXV
 		{// 触れていない
 			continue;
 		}
+
+		bLand = true;
 
 		// 触れているのでめり込みを直す
 		D3DXVECTOR3 vec = D3DXVECTOR3(pos.x - ObjPos.x, pos.y - ObjPos.y, pos.z - ObjPos.z);

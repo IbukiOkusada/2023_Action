@@ -33,14 +33,26 @@ class CPlayer : public CTask
 {
 private:	// 自分だけがアクセス可能な定義
 
+	// 状態列挙型
+	enum STATE
+	{
+		STATE_APPEAR = 0,	// 出現状態
+		STATE_NORMAL,		// 通常状態
+		STATE_DAMAGE,		// ダメージ状態
+		STATE_DEATH,		// 死亡状態
+		STATE_MAX
+	};
+
 	// 情報構造体
 	typedef struct
 	{
 		D3DXVECTOR3 pos;		// 位置
 		D3DXVECTOR3 rot;		// 向き
 		D3DXVECTOR3 move;		// 移動量
-		D3DXVECTOR3 posOld;		// 設定位置
+		D3DXVECTOR3 posOld;	// 設定位置
 		D3DXMATRIX mtxWorld;	// ワールドマトリックス
+		STATE state;			// 状態
+		float fStateCounter;	// 状態管理カウンター
 	}SInfo;
 
 public:	// 誰でもアクセス可能
@@ -71,6 +83,7 @@ public:	// 誰でもアクセス可能
 private:	// 自分だけがアクセス可能
 
 	// メンバ関数
+	void StateSet(void);
 	void Controller(void);
 	void Move(void);
 	void Rotation(void);
@@ -89,6 +102,7 @@ private:	// 自分だけがアクセス可能
 	D3DXVECTOR3 m_vecAxis;	// 回転軸
 	float m_fValueRot;	// 回転角
 	CShadow *m_pShadow;	// 影のポインタ
+	int m_nLife;			// 体力
 };
 
 #endif

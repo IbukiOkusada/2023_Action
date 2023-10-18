@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="code\billboard.cpp" />
     <ClCompile Include="code\camera.cpp" />
+    <ClCompile Include="code\character.cpp" />
     <ClCompile Include="code\debugproc.cpp" />
     <ClCompile Include="code\editor.cpp" />
     <ClCompile Include="code\effect.cpp" />
@@ -175,6 +176,7 @@
     <ClCompile Include="code\meshorbit.cpp" />
     <ClCompile Include="code\meshwall.cpp" />
     <ClCompile Include="code\model.cpp" />
+    <ClCompile Include="code\motion.cpp" />
     <ClCompile Include="code\number.cpp" />
     <ClCompile Include="code\object.cpp" />
     <ClCompile Include="code\object2D.cpp" />
@@ -204,10 +206,12 @@
     <ClCompile Include="code\title.cpp" />
     <ClCompile Include="code\tutorial.cpp" />
     <ClCompile Include="code\Xfile.cpp" />
+    <ClCompile Include="code\gimmick.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\billboard.h" />
     <ClInclude Include="code\camera.h" />
+    <ClInclude Include="code\character.h" />
     <ClInclude Include="code\debugproc.h" />
     <ClInclude Include="code\editor.h" />
     <ClInclude Include="code\effect.h" />
@@ -226,6 +230,7 @@
     <ClInclude Include="code\meshorbit.h" />
     <ClInclude Include="code\meshwall.h" />
     <ClInclude Include="code\model.h" />
+    <ClInclude Include="code\motion.h" />
     <ClInclude Include="code\number.h" />
     <ClInclude Include="code\object.h" />
     <ClInclude Include="code\object2D.h" />
@@ -252,6 +257,7 @@
     <ClInclude Include="code\title.h" />
     <ClInclude Include="code\tutorial.h" />
     <ClInclude Include="code\Xfile.h" />
+    <ClInclude Include="code\gimmick.h" />
     <ClInclude Include="mesh_water.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -23,6 +23,7 @@
 #include "objectX.h"
 #include "sound.h"
 #include "shadow.h"
+#include "gimmick.h"
 
 //===============================================
 // マクロ定義
@@ -38,6 +39,8 @@
 #define STEP_SPEED	(50.0f)
 #define STEP_COOLTIME	(180.0f)
 #define STEP_INER	(0.115f)
+#define START_LIFE	(4)	// 初期体力
+#define DAMAGE_INTERVAL	(120.0f)
 
 //===============================================
 // コンストラクタ
@@ -64,6 +67,7 @@ CPlayer::CPlayer(const D3DXVECTOR3 pos)
 	m_fRotDest = 0.0f;
 	m_pObject = NULL;
 	m_pShadow = NULL;
+	m_nLife = 0;
 }
 
 //===============================================
@@ -81,6 +85,7 @@ CPlayer::CPlayer(int nPriOrity)
 	m_fRotDest = 0.0f;
 	m_pObject = NULL;
 	m_pShadow = NULL;
+	m_nLife = 0;
 }
 
 //===============================================
@@ -111,6 +116,9 @@ HRESULT CPlayer::Init(void)
 		m_pShadow = CShadow::Create(m_Info.pos, 50.0f, 50.0f);
 	}
 
+	m_Info.state = STATE_APPEAR;
+	m_nLife = START_LIFE;
+
 	return S_OK;
 }
 
@@ -134,6 +142,8 @@ HRESULT CPlayer::Init(const char *pBodyName, const char *pLegName)
 		m_pShadow = CShadow::Create(m_Info.pos, 50.0f, 50.0f);
 	}
 
+	m_nLife = START_LIFE;
+
 	return S_OK;
 }
 
@@ -148,6 +158,12 @@ void CPlayer::Uninit(void)
 		m_pObject = NULL;
 	}
 
+	if (m_pShadow != NULL)
+	{
+		m_pShadow->Uninit();
+		m_pShadow = NULL;
+	}
+
 	// 廃棄
 	Release();
 }
@@ -160,6 +176,11 @@ void CPlayer::Update(void)
 	// 前回の座標を取得
 	m_Info.posOld = GetPosition();
 
+	if (m_nLife <= 0)
+	{
+		return;
+	}
+
 	// プレイヤー操作
 	Controller();
 
@@ -171,11 +192,19 @@ void CPlayer::Update(void)
 
 	CManager::GetInstance()->GetDebugProc()->Print("向き [%f, %f, %f]", GetRotation().x, GetRotation().y, GetRotation().z);
 	CManager::GetInstance()->GetDebugProc()->Print("位置 [%f, %f, %f]", GetPosition().x, GetPosition().y, GetPosition().z);
+	CManager::GetInstance()->GetDebugProc()->Print("体力 [ %d ]\n", m_nLife);
 
 	// 回転軸の設定
 
 	// パーティクル
 	//Particle();
+
+	if (m_nLife <= 0 && m_Info.state == STATE_NORMAL)
+	{
+		m_pObject->SetDraw(false);
+		m_pShadow->SetDraw(false);
+		m_Info.state = STATE_DEATH;
+	}
 }
 
 //===============================================
@@ -230,6 +259,7 @@ void CPlayer::Controller(void)
 	CInputPad *pInputPad = CManager::GetInstance()->GetInputPad();
 	CCamera *pCamera = CManager::GetInstance()->GetCamera();		// カメラのポインタ
 	D3DXVECTOR3 CamRot = pCamera->GetRotation();	// カメラの角度
+	bool bDamage = false;
 	m_fRotMove = rot.y;	//現在の向きを取得
 
 	// 操作処理
@@ -264,7 +294,31 @@ void CPlayer::Controller(void)
 		CXFile *pFile = CManager::GetInstance()->GetModelFile();
 		D3DXVECTOR3 vtxMax = pFile->GetMax(m_pObject->GetIdx());
 		D3DXVECTOR3 vtxMin = pFile->GetMin(m_pObject->GetIdx());
-		CObjectX::Collision(pos, m_Info.posOld, m_Info.move, vtxMin, vtxMax, 0.3f);
+
+		// ギミック
+		if (CGimmick::Collision(pos, m_Info.posOld, m_Info.move, vtxMin, vtxMax, 0.3f))
+		{
+			bDamage = true;
+			CManager::GetInstance()->GetDebugProc()->Print("***ギミックと当たったよ***\n");
+		}
+
+		// 壁
+		if (CObjectX::Collision(pos, m_Info.posOld, m_Info.move, vtxMin, vtxMax, 0.3f))
+		{
+			bDamage = true;
+			CManager::GetInstance()->GetDebugProc()->Print("***壁と当たったよ***\n");
+		}
+	}
+
+	// ダメージ確認
+	if (m_Info.state == STATE_NORMAL)
+	{
+		if (bDamage)
+		{
+			m_nLife--;
+			m_Info.fStateCounter = DAMAGE_INTERVAL;
+			m_Info.state = STATE_DAMAGE;
+		}
 	}
 
 	// 壁との当たり判定
@@ -475,5 +529,31 @@ void CPlayer::Adjust(void)
 		{
 			break;
 		}
+	}
+}
+
+//===============================================
+// 状態管理
+//===============================================
+void CPlayer::StateSet(void)
+{
+	switch (m_Info.state)
+	{
+	case STATE_APPEAR:
+
+		break;
+
+	case STATE_NORMAL:
+
+		break;
+
+	case STATE_DAMAGE:
+
+		break;
+
+	case STATE_DEATH:
+
+		if(m_Info.fStateCounter)
+		break;
 	}
 }

@@ -276,7 +276,7 @@ bool CObjectX::Collision(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &mov
 {
 	CObjectX *pObj = m_pTop;	// 先頭取得
 	CXFile *pFile = CManager::GetInstance()->GetModelFile();
-	bool bLand = true;	// 着地したか否か
+	bool bLand = false;	// 着地したか否か
 
 	while (pObj != NULL)
 	{
@@ -285,7 +285,7 @@ bool CObjectX::Collision(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &mov
 		D3DXVECTOR3 vtxObjMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		if (pObj->CollisionCheck(pos, posOld, move, vtxMin, vtxMax, fRefMulti))
 		{
-			bLand = false;
+			bLand = true;
 		}
 
 		pObj = pObjNext;
@@ -387,6 +387,7 @@ bool CObjectX::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3
 			&& pos.z + vtxMax.z > m_pos.z + vtxObjMin.z
 			&& pos.z + vtxMin.z < m_pos.z + vtxObjMax.z)
 		{//右から左にめり込んだ
+			bLand = true;
 			move.x *= -1.0f;
 			move.x *= fRefMulti;
 			pos.x = m_pos.x + vtxObjMax.x - vtxMin.x + 0.1f + move.x;
@@ -397,6 +398,7 @@ bool CObjectX::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3
 			&& pos.z + vtxMin.z < m_pos.z + vtxObjMax.z)
 		{//左から右にめり込んだ
 		 //位置を戻す
+			bLand = true;
 			move.x *= -1.0f;
 			move.x *= fRefMulti;
 			pos.x = m_pos.x + vtxObjMin.x - vtxMax.x - 0.1f + move.x;
@@ -408,6 +410,7 @@ bool CObjectX::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3
 			&& pos.x + vtxMin.x < m_pos.x + vtxObjMax.x)
 		{//奥から手前にめり込んだ
 		 //位置を戻す
+			bLand = true;
 			move.z *= -1.0f;
 			move.z *= fRefMulti;
 			pos.z = m_pos.z + vtxObjMax.z - vtxMin.z + 0.1f + move.z;
@@ -419,6 +422,7 @@ bool CObjectX::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3
 			&& pos.x + vtxMin.x < m_pos.x + vtxObjMax.x)
 		{//手前から奥にめり込んだt
 		 //位置を戻す
+			bLand = true;
 			move.z *= -1.0f;
 			move.z *= fRefMulti;
 			pos.z = m_pos.z + vtxObjMin.z - vtxMax.z - 0.1f + move.z;

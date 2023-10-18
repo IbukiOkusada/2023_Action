@@ -7,20 +7,20 @@
 #ifndef _GIMMICK_MOVE_H_		// このマクロが定義されていない場合
 #define _GIMMICK_MOVE_H_		// 二重インクルード防止用マクロを定義
 
-#include "objectX.h"
+#include "gimmick.h"
 
 // 前方宣言
 class CSlow;
+class CObjectX;
 
 //==========================================================
 // 移動オブジェクトのクラス定義
 //==========================================================
-class CGimmickMove : public CObjectX
+class CGimmickMove : public CGimmick
 {
 public:	// 誰でもアクセス可能
 
-	//CGimmickMove();	// コンストラクタ
-	CGimmickMove(int nPriOrity = 3);	// コンストラクタ(オーバーロード)
+	CGimmickMove();	// コンストラクタ
 	~CGimmickMove();	// デストラクタ
 
 	// メンバ関数
@@ -50,6 +50,7 @@ private:	// 自分だけがアクセス可能
 	// メンバ変数
 	D3DXVECTOR3 m_move;	// 移動量
 	D3DXVECTOR3 m_posOld;
+	CObjectX *m_pObject;
 	float m_fNowMoveTimer;
 	float m_fNumMoveTimer;
 	CSlow *m_pSlow;		// スロー

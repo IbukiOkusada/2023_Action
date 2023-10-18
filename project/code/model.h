@@ -8,11 +8,12 @@
 #define _MODEL_H_	// 二重インクルード防止用マクロを定義
 
 #include "main.h"
+#include "object.h"
 
 //**********************************************************
 // 階層構造モデルクラス
 //**********************************************************
-class CModel
+class CModel : public CObject
 {
 public:	// 誰でもアクセス可能
 
@@ -20,6 +21,7 @@ public:	// 誰でもアクセス可能
 	~CModel();	// デストラクタ
 
 	// メンバ関数
+	HRESULT Init(void);
 	HRESULT Init(const char *pFileName);
 	void Uninit(void);
 	void Update(void);

@@ -7,7 +7,7 @@
 #ifndef _GIMMICK_ROTATE_H_		// このマクロが定義されていない場合
 #define _GIMMICK_ROTATE_H_		// 二重インクルード防止用マクロを定義
 
-#include "objectX.h"
+#include "gimmick.h"
 
 // 前方宣言
 class CModel;
@@ -18,7 +18,7 @@ class CModel;
 //==========================================================
 // サンプルのクラス定義
 //==========================================================
-class CGimmickRotate : public CObjectX
+class CGimmickRotate : public CGimmick
 {
 private:
 
@@ -31,8 +31,8 @@ private:
 
 public:	// 誰でもアクセス可能
 
-	//CGimmickRotate();	// コンストラクタ
-	CGimmickRotate(int nPriOrity = 3);	// コンストラクタ(オーバーロード)
+	CGimmickRotate();	// コンストラクタ
+	//CGimmickRotate(int nPriOrity = 0);	// コンストラクタ(オーバーロード)
 	~CGimmickRotate();	// デストラクタ
 
 	// メンバ関数

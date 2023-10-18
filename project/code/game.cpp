@@ -115,7 +115,7 @@ HRESULT CGame::Init(void)
 
 	m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, -150.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
 	m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
-	m_pTime->Set(400 * 100);
+	m_pTime->Set(90 * 100);
 	
 	// ギミック設置
 	GimmickSet();
@@ -318,11 +318,11 @@ void CGame::GimmickSet(void)
 
 	// 魚
 	CGimmickFish *pFish = CGimmickFish::Create();
-	pFish->SetPosition(D3DXVECTOR3(-500.0f, -600.0f, -400.0f));
+	pFish->SetPosition(D3DXVECTOR3(-500.0f, -750.0f, -400.0f));
 
 	pFish = CGimmickFish::Create();
-	pFish->SetPosition(D3DXVECTOR3(-3950.0f, -600.0f, -650.0f));
+	pFish->SetPosition(D3DXVECTOR3(-3950.0f, -750.0f, -650.0f));
 
 	pFish = CGimmickFish::Create();
-	pFish->SetPosition(D3DXVECTOR3(-8800.0f, -600.0f, -1750.0f));
+	pFish->SetPosition(D3DXVECTOR3(-8800.0f, -750.0f, -1750.0f));
 }

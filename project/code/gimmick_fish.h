@@ -7,18 +7,20 @@
 #ifndef _GIMMICK_Fish_H_		// このマクロが定義されていない場合
 #define _GIMMICK_Fish_H_		// 二重インクルード防止用マクロを定義
 
-#include "objectX.h"
+#include "gimmick.h"
 
 // 前方宣言
 class CSlow;
+class CCharacter;
 
 //==========================================================
 // 移動オブジェクトのクラス定義
 //==========================================================
-class CGimmickFish : public CObjectX
+class CGimmickFish : public CGimmick
 {
 private:	// 自分だけがアクセス可能な定義
 
+	// 状態列挙型
 	enum STATE
 	{
 		STATE_NONE = 0,	// 何もしていない
@@ -29,17 +31,25 @@ private:	// 自分だけがアクセス可能な定義
 		STATE_WAIT,		// 待機
 	};
 
+	// モーション列挙型
+	enum MOTION
+	{
+		MOTION_NEUTRAL = 0,	// 待機モーション
+		MOTION_JUMP,			// ジャンプモーション
+		MOTION_BITE,			// 噛みつきモーション
+		MOTION_AFTERGRAW,		// 噛みつき後余韻モーション
+		MOTION_MAX
+	};
+
 public:	// 誰でもアクセス可能
 
-	//CGimmickFish();	// コンストラクタ
-	CGimmickFish(int nPriOrity = 3);	// コンストラクタ(オーバーロード)
+	CGimmickFish();	// コンストラクタ
 	~CGimmickFish();	// デストラクタ
 
 	// メンバ関数
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
-	void Draw(void);
 	static CGimmickFish *Create(void);
 	static CGimmickFish *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fTimer);
 
@@ -61,11 +71,12 @@ private:	// 自分だけがアクセス可能
 
 	// メンバ変数
 	D3DXVECTOR3 m_move;	// 移動量
-	D3DXVECTOR3 m_posOld;	
+	D3DXVECTOR3 m_posOld;
 	float m_fNowFishTimer;
 	float m_fNumFishTimer;
 	float m_fStateCounter;	// 状態管理カウンター
 	CSlow *m_pSlow;		// スロー
+	CCharacter *m_pCharacter;	// 階層構造クラスのポインタ
 	STATE m_state;	// 状態
 };
 
