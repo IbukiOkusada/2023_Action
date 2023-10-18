@@ -24,6 +24,8 @@
 #include "sound.h"
 #include "shadow.h"
 #include "gimmick.h"
+#include <assert.h>
+#include "billboard.h"
 
 //===============================================
 // マクロ定義
@@ -38,9 +40,12 @@
 #define INER	(0.003f)	// 慣性
 #define STEP_SPEED	(50.0f)
 #define STEP_COOLTIME	(180.0f)
-#define STEP_INER	(0.115f)
+#define STEP_INER	(0.05f)
 #define START_LIFE	(4)	// 初期体力
-#define DAMAGE_INTERVAL	(120.0f)
+#define DAMAGE_INTERVAL	(10.0f)
+#define DAMAGE_APPEAR	(110.0f)
+#define DEATH_INTERVAL	(180.0f)
+#define DASH_INTERVAL	(60.0f)
 
 //===============================================
 // コンストラクタ
@@ -86,6 +91,7 @@ CPlayer::CPlayer(int nPriOrity)
 	m_pObject = NULL;
 	m_pShadow = NULL;
 	m_nLife = 0;
+	m_ppBillBoard = NULL;
 }
 
 //===============================================
@@ -93,7 +99,15 @@ CPlayer::CPlayer(int nPriOrity)
 //===============================================
 CPlayer::~CPlayer()
 {
+	if (m_pShadow != nullptr)
+	{
+		assert(false);
+	}
 
+	if (m_pObject != nullptr)
+	{
+		assert(false);
+	}
 }
 
 //===============================================
@@ -101,7 +115,7 @@ CPlayer::~CPlayer()
 //===============================================
 HRESULT CPlayer::Init(void)
 {
-	if (m_pObject == NULL)
+	if (nullptr == m_pObject)
 	{
 		m_pObject = CObjectX::Create(GetPosition(), GetRotation(), "data\\MODEL\\triangle.x");
 		m_pObject->SetType(CObject::TYPE_PLAYER);
@@ -111,7 +125,7 @@ HRESULT CPlayer::Init(void)
 	D3DXMatrixIdentity(&m_mtxRot);
 
 	// 影の生成
-	if (m_pShadow == NULL)
+	if (nullptr == m_pShadow)
 	{
 		m_pShadow = CShadow::Create(m_Info.pos, 50.0f, 50.0f);
 	}
@@ -127,22 +141,42 @@ HRESULT CPlayer::Init(void)
 //===============================================
 HRESULT CPlayer::Init(const char *pBodyName, const char *pLegName)
 {
-	if (m_pObject == NULL)
+	if (nullptr == m_pObject)
 	{
 		m_pObject = CObjectX::Create(GetPosition(), GetRotation(), "data\\MODEL\\triangle.x");
 		m_pObject->SetType(CObject::TYPE_PLAYER);
 	}
 
+	m_nLife = START_LIFE;
+
 	//ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxRot);
 
-	// 影の生成
-	if (m_pShadow == NULL)
+	if(m_ppBillBoard == nullptr)
 	{
-		m_pShadow = CShadow::Create(m_Info.pos, 50.0f, 50.0f);
+		m_ppBillBoard = new CObjectBillboard*[START_LIFE];
+
+		for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
+		{
+			m_ppBillBoard[nCnt] = nullptr;
+
+			if (nullptr == m_ppBillBoard[nCnt])
+			{
+				m_ppBillBoard[nCnt] = CObjectBillboard::Create(m_Info.pos, 5);
+				m_ppBillBoard[nCnt]->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\balloon.png"));
+				m_ppBillBoard[nCnt]->SetSize(60.0f + nCnt * 15.0f, 60.0f + nCnt * 15.0f);
+			}
+		}
 	}
 
-	m_nLife = START_LIFE;
+	// 影の生成
+	if (nullptr == m_pShadow)
+	{
+		m_pShadow = CShadow::Create(m_Info.pos, 50.0f, 50.0f);
+		m_pShadow->SetpVtx(m_ppBillBoard[m_nLife - 1]->GetWidth(), m_ppBillBoard[m_nLife - 1]->GetHeight());
+	}
+
+	m_pObject->SetDraw();
 
 	return S_OK;
 }
@@ -152,16 +186,29 @@ HRESULT CPlayer::Init(const char *pBodyName, const char *pLegName)
 //===============================================
 void CPlayer::Uninit(void)
 {
-	if (m_pObject != NULL)
-	{
+	if (nullptr != m_pObject){
 		m_pObject->Uninit();
 		m_pObject = NULL;
 	}
 
-	if (m_pShadow != NULL)
-	{
+	if (nullptr != m_pShadow){
 		m_pShadow->Uninit();
 		m_pShadow = NULL;
+	}
+
+	if (m_ppBillBoard != NULL)
+	{
+		for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
+		{
+			if (nullptr != m_ppBillBoard[nCnt])
+			{
+				m_ppBillBoard[nCnt]->Uninit();
+				m_ppBillBoard[nCnt] = NULL;
+			}
+		}
+
+		delete[] m_ppBillBoard;	// ポインタの開放
+		m_ppBillBoard = NULL;	// 使用していない状態にする
 	}
 
 	// 廃棄
@@ -175,6 +222,8 @@ void CPlayer::Update(void)
 {
 	// 前回の座標を取得
 	m_Info.posOld = GetPosition();
+
+	StateSet();
 
 	if (m_nLife <= 0)
 	{
@@ -199,11 +248,19 @@ void CPlayer::Update(void)
 	// パーティクル
 	//Particle();
 
-	if (m_nLife <= 0 && m_Info.state == STATE_NORMAL)
+	if (m_nLife <= 0)
 	{
 		m_pObject->SetDraw(false);
 		m_pShadow->SetDraw(false);
 		m_Info.state = STATE_DEATH;
+		m_Info.fStateCounter = DEATH_INTERVAL;
+	}
+
+	for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
+	{
+		if (nullptr != m_ppBillBoard[nCnt]){
+			m_ppBillBoard[nCnt]->SetPosition(D3DXVECTOR3(m_Info.pos.x, m_Info.pos.y + 50.0f + 10.0f * nCnt, m_Info.pos.z));
+		}
 	}
 }
 
@@ -218,7 +275,7 @@ CPlayer *CPlayer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 move, con
 	// オブジェクト2Dの生成
 	pPlayer = new CPlayer(nPriority);
 
-	if (pPlayer != NULL)
+	if (nullptr != pPlayer)
 	{// 生成できた場合
 		// 初期化処理
 		pPlayer->Init(pBodyName, pLegName);
@@ -289,11 +346,16 @@ void CPlayer::Controller(void)
 	Adjust();
 
 	// オブジェクトとの当たり判定
-	if (m_pObject != NULL)
+	if (nullptr != m_pObject)
 	{
 		CXFile *pFile = CManager::GetInstance()->GetModelFile();
 		D3DXVECTOR3 vtxMax = pFile->GetMax(m_pObject->GetIdx());
 		D3DXVECTOR3 vtxMin = pFile->GetMin(m_pObject->GetIdx());
+
+		if (m_ppBillBoard != nullptr){
+			vtxMax = D3DXVECTOR3(m_ppBillBoard[m_nLife - 1]->GetWidth() * 0.7f, m_ppBillBoard[m_nLife - 1]->GetHeight(), m_ppBillBoard[m_nLife - 1]->GetHeight() * 0.7f);
+			vtxMin = vtxMax * -1.0f;
+		}
 
 		// ギミック
 		if (CGimmick::Collision(pos, m_Info.posOld, m_Info.move, vtxMin, vtxMax, 0.3f))
@@ -330,13 +392,13 @@ void CPlayer::Controller(void)
 
 	m_Info.pos = pos;
 
-	if (m_pObject != NULL){
+	if (nullptr != m_pObject){
 		m_pObject->SetPosition(m_Info.pos);
 		m_pObject->SetRotation(m_Info.rot);
 	}
 
 	// 影の設定
-	if (m_pShadow != NULL) {
+	if (nullptr != m_pShadow) {
 		m_pShadow->SetPosition(D3DXVECTOR3(pos.x, fHeight + 1.0f, pos.z));
 	}
 
@@ -356,12 +418,12 @@ void CPlayer::Move(void)
 	float fSpeed = MOVE;	// 移動量
 
 	// 入力装置確認
-	if (pInputKey == NULL){
+	if (nullptr == pInputKey){
 		return;
 	}
 
 	// 入力装置確認
-	if (pInputPad == NULL){
+	if (nullptr == pInputPad){
 		return;
 	}
 
@@ -370,8 +432,10 @@ void CPlayer::Move(void)
 		if (m_fStepCoolTime <= 0.0f)
 		{
 			m_fStepCoolTime = STEP_COOLTIME;
-			m_Info.move.x += -sinf(m_Info.rot.y) * STEP_SPEED;
-			m_Info.move.z += -cosf(m_Info.rot.y) * STEP_SPEED;
+			m_Info.move.x = -sinf(m_Info.rot.y) * STEP_SPEED;
+			m_Info.move.z = -cosf(m_Info.rot.y) * STEP_SPEED;
+			m_Info.state = STATE_APPEAR;
+			m_Info.fStateCounter = DASH_INTERVAL;
 		}
 	}
 
@@ -393,7 +457,7 @@ void CPlayer::Rotation(void)
 	CInputPad *pInputPad = CManager::GetInstance()->GetInputPad();
 
 	// 入力装置確認
-	if (pInputPad == NULL){
+	if (nullptr == pInputPad){
 		return;
 	}
 
@@ -421,7 +485,7 @@ void CPlayer::KeyBoardRotation(void)
 {
 	CInputKeyboard *pInputKey = CManager::GetInstance()->GetInputKeyboard();	// キーボードのポインタ
 
-	if (pInputKey == NULL){
+	if (nullptr == pInputKey){
 		return;
 	}
 
@@ -541,19 +605,76 @@ void CPlayer::StateSet(void)
 	{
 	case STATE_APPEAR:
 
+		CManager::GetInstance()->GetDebugProc()->Print("状態 : [無敵]\n");
+		m_Info.fStateCounter -= CManager::GetInstance()->GetSlow()->Get();
+		if (m_Info.fStateCounter <= 0.0f)
+		{
+			m_Info.fStateCounter = 0.0f;
+			m_Info.state = STATE_NORMAL;
+		}
+
 		break;
 
 	case STATE_NORMAL:
+
+		CManager::GetInstance()->GetDebugProc()->Print("状態 : [通常]\n");
 
 		break;
 
 	case STATE_DAMAGE:
 
+		CManager::GetInstance()->GetDebugProc()->Print("状態 : [ダメージ]\n");
+
+		if (m_ppBillBoard != NULL)
+		{
+			m_ppBillBoard[m_nLife]->SetSize(m_ppBillBoard[m_nLife]->GetWidth() + 11.0f, m_ppBillBoard[m_nLife]->GetHeight() + 11.0f);
+		}
+
+		m_Info.fStateCounter -= CManager::GetInstance()->GetSlow()->Get();
+		if (m_Info.fStateCounter <= 0.0f)
+		{
+			m_Info.fStateCounter = DAMAGE_APPEAR;
+			m_Info.state = STATE_APPEAR;
+
+			if (m_ppBillBoard != NULL)
+			{
+				m_ppBillBoard[m_nLife]->SetDraw(false);
+			}
+
+			if (m_pShadow != nullptr)
+			{
+				m_pShadow->SetpVtx(m_ppBillBoard[m_nLife - 1]->GetWidth(), m_ppBillBoard[m_nLife - 1]->GetHeight());
+				m_pShadow->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, (float)((float)m_nLife / (float)START_LIFE)));
+
+			}
+		}
+
 		break;
 
 	case STATE_DEATH:
 
-		if(m_Info.fStateCounter)
+		CManager::GetInstance()->GetDebugProc()->Print("状態 : [死亡]\n");
+		m_Info.fStateCounter -= CManager::GetInstance()->GetSlow()->Get();
+
+		if (m_Info.fStateCounter <= 0.0f)
+		{
+			m_Info.fStateCounter = 0.0f;
+			m_Info.state = STATE_APPEAR;
+			m_nLife = START_LIFE;
+			m_pObject->SetDraw();
+			m_pShadow->SetDraw();
+			m_Info.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+			for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
+			{
+				if (nullptr != m_ppBillBoard[nCnt])
+				{
+					m_ppBillBoard[nCnt]->SetDraw(true);
+					m_ppBillBoard[nCnt]->SetSize(60.0f + nCnt * 15.0f, 60.0f + nCnt * 15.0f);
+				}
+			}
+		}
+
 		break;
 	}
 }

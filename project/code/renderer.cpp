@@ -20,6 +20,10 @@ CRenderer::CRenderer()
 	// 値のクリア
 	m_pD3D = NULL;			//Direct3Dオブジェクトのポインタ
 	m_pD3DDevice = NULL;	//Direct3Dデバイスへのポインタ
+	pTexture = NULL;
+	pTexture = NULL;
+	m_pRenderTextureSurface = NULL;
+	m_pZSurface = NULL;
 }
 
 //===================================================
@@ -114,6 +118,13 @@ HRESULT CRenderer::Init(HWND hWnd, BOOL bWindow)
 	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
 	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
 
+	//
+	D3DXCreateTexture(m_pD3DDevice, SCREEN_WIDTH, SCREEN_HEIGHT, 1, D3DUSAGE_RENDERTARGET, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &pTexture);
+	pTexture->GetSurfaceLevel(0, &(m_pRenderTextureSurface));
+	m_pD3DDevice->CreateDepthStencilSurface(SCREEN_WIDTH, SCREEN_HEIGHT, D3DFMT_D16, D3DMULTISAMPLE_NONE, 0, false, &m_pZSurface, nullptr);
+	m_pD3DDevice->GetRenderTarget(0, &m_pOrgSurface);
+	m_pD3DDevice->GetDepthStencilSurface(&m_pOrgZBuffer);
+
 	return S_OK;
 }
 
@@ -140,6 +151,24 @@ void CRenderer::Uninit(void)
 	{
 		m_pD3D->Release();
 		m_pD3D = NULL;
+	}
+
+	if (pTexture != NULL)
+	{
+		pTexture->Release();
+		pTexture = NULL;
+	}
+
+	if (m_pRenderTextureSurface != NULL)
+	{
+		m_pRenderTextureSurface->Release();
+		m_pRenderTextureSurface = NULL;
+	}
+
+	if (m_pZSurface != NULL)
+	{
+		m_pZSurface->Release();
+		m_pZSurface = NULL;
 	}
 }
 
@@ -171,6 +200,9 @@ void CRenderer::Draw(void)
 {
 	CDebugProc *pDebugProc = CManager::GetInstance()->GetDebugProc();
 
+	//m_pD3DDevice->SetRenderTarget(0, m_pRenderTextureSurface);
+	//m_pD3DDevice->SetDepthStencilSurface(m_pZSurface);
+
 	// 画面クリア
 	m_pD3DDevice->Clear(
 		0,
@@ -187,15 +219,16 @@ void CRenderer::Draw(void)
 		// オブジェクトの描画
 		CObject::DrawAll();
 
+		// 描画終了
+		m_pD3DDevice->EndScene();
+	}
 
-#if _DEBUG	// デバッグ時
+	m_pD3DDevice->SetRenderTarget(0, m_pOrgSurface);
+	m_pD3DDevice->SetDepthStencilSurface(m_pOrgZBuffer);
 
-		if (CManager::GetInstance()->GetScene()->GetEditor() != NULL)
-		{
-			CManager::GetInstance()->GetScene()->GetEditor()->Draw();
-		}
-
-#endif
+	// 描画開始
+	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
+	{// 描画が成功した場合
 
 		// デバッグ表示
 		if (pDebugProc != NULL)

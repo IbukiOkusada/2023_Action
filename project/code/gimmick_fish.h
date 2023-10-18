@@ -74,6 +74,7 @@ private:	// 自分だけがアクセス可能
 	D3DXVECTOR3 m_posOld;
 	float m_fNowFishTimer;
 	float m_fNumFishTimer;
+	bool m_bEat;			// 食べたかどうか
 	float m_fStateCounter;	// 状態管理カウンター
 	CSlow *m_pSlow;		// スロー
 	CCharacter *m_pCharacter;	// 階層構造クラスのポインタ

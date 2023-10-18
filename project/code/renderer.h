@@ -33,6 +33,11 @@ private:	// 自分だけがアクセス可能
 	LPDIRECT3D9 m_pD3D;				//Direct3Dオブジェクトのポインタ
 	LPDIRECT3DDEVICE9 m_pD3DDevice;	//Direct3Dデバイスへのポインタ
 	bool m_bWire;					// ワイヤーフレームにするか否か
+	LPDIRECT3DTEXTURE9 pTexture;
+	LPDIRECT3DSURFACE9 m_pRenderTextureSurface;
+	LPDIRECT3DSURFACE9 m_pZSurface;
+	LPDIRECT3DSURFACE9 m_pOrgSurface;
+	LPDIRECT3DSURFACE9 m_pOrgZBuffer;
 };
 
 #endif

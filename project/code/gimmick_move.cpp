@@ -41,6 +41,7 @@ HRESULT CGimmickMove::Init(void)
 	if(m_pObject == NULL)
 	{
 		m_pObject = CObjectX::Create(GetPosition(), GetRotation(), "data\\MODEL\\5mcube.x", 3);
+		m_pObject->ListOut();
 	}
 
 	// ƒXƒ[‚ğŠo‚¦‚é

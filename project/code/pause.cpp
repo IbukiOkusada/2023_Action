@@ -167,8 +167,9 @@ void CPause::Update(void)
 		return;
 	}
 
+#ifdef _DEBUG
 	CManager::GetInstance()->GetCamera()->MouseCamera();
-
+#endif
 	m_aMenu[m_SelectMenu].col.a += m_fMoveCol_a;
 
 	if (m_aMenu[m_SelectMenu].col.a >= 1.0f || m_aMenu[m_SelectMenu].col.a <= 0.3f)

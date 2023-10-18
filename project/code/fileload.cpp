@@ -198,7 +198,7 @@ void CFileLoad::LoadTexNum(FILE *pFile)
 
 	if (m_nTexNumAll > 0)
 	{// 読み込む場合
-		if (m_pTextureFile == NULL)
+		if (nullptr == m_pTextureFile)
 		{// 使用していない場合
 			m_pTextureFile = new File[m_nTexNumAll];
 			memset(m_pTextureFile, NULL, sizeof(File) * m_nTexNumAll);
@@ -218,7 +218,7 @@ void CFileLoad::LoadModelNum(FILE *pFile)
 
 	if (m_nModelNumAll > 0)
 	{// 読み込む場合
-		if (m_pModelFile == NULL)
+		if (nullptr == m_pModelFile)
 		{// 使用していない場合
 			m_pModelFile = new File[m_nModelNumAll];
 			memset(m_pModelFile, NULL, sizeof(File) * m_nModelNumAll);
@@ -543,7 +543,7 @@ int CFileLoad::GetTextureNum(const char *pFileName)
 	// 読み込まれているか確認
 	for (int nCnt = 0; nCnt < m_nTexNumAll; nCnt++)
 	{
-		if (m_pTextureFile == NULL)
+		if (nullptr == m_pTextureFile)
 		{// 使われていない場合
 			continue;
 		}
@@ -568,7 +568,7 @@ int CFileLoad::GetModelNum(const char *pFileName)
 	// 読み込まれているか確認
 	for (int nCnt = 0; nCnt < m_nModelNumAll; nCnt++)
 	{
-		if (m_pModelFile == NULL)
+		if (nullptr == m_pModelFile)
 		{// 使われていない場合
 			continue;
 		}
@@ -614,4 +614,9 @@ void CFileLoad::LoadVtxMinData(FILE *pFile, int nIdx)
 	fscanf(pFile, "%f", &VtxMin.z);	//z座標読み込み
 
 	CManager::GetInstance()->GetModelFile()->SetSizeVtxMin(nIdx, VtxMin);
+}
+
+void LoadGimmickData(FILE *pFile, int nIdx)
+{
+
 }

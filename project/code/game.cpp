@@ -89,7 +89,7 @@ CGame::~CGame()
 HRESULT CGame::Init(void)
 {
 	// 外部ファイル読み込みの生成
-	if (m_pFileLoad == NULL)
+	if (nullptr == m_pFileLoad)
 	{// 使用していない場合
 		m_pFileLoad = new CFileLoad;
 
@@ -101,14 +101,14 @@ HRESULT CGame::Init(void)
 	}
 
 	// エディターの生成
-	if (m_pEditor == NULL)
+	if (nullptr == m_pEditor)
 	{
 		m_pEditor = new CEditor;
 		m_pEditor->Init();
 	}
 
 	// ポーズの生成
-	if (m_pPause == NULL)
+	if (nullptr == m_pPause)
 	{
 		m_pPause = CPause::Create();
 	}
@@ -146,6 +146,13 @@ void CGame::Uninit(void)
 		m_pPause->Uninit();
 		delete m_pPause;
 		m_pPause = NULL;
+	}
+
+	if (m_pTime != NULL)
+	{
+		m_pTime->Uninit();
+		delete m_pTime;
+		m_pTime = NULL;
 	}
 }
 
@@ -186,6 +193,11 @@ void CGame::Update(void)
 	if (CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_RETURN))
 	{
 		CManager::GetInstance()->GetFade()->Set(CScene::MODE_RESULT);
+	}
+
+	if (m_pTime != NULL)
+	{
+		m_pTime->Update();
 	}
 
 	if (m_pPlayer != NULL)

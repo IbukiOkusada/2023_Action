@@ -25,6 +25,7 @@ class CObject3D;
 class CCar;
 class CObjectX;
 class CShadow;
+class CMeshBalloon;
 
 //==========================================================
 // プレイヤーのクラス定義(派生クラス)
@@ -91,6 +92,7 @@ private:	// 自分だけがアクセス可能
 	void KeyBoardRotation(void);
 
 	// メンバ変数
+	CObjectBillboard **m_ppBillBoard;
 	SInfo m_Info;			// 自分自身の情報
 	CObjectX *m_pObject;	// 描画オブジェクト
 	float m_fRotMove;		// 現在の角度

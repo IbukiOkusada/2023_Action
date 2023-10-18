@@ -30,6 +30,7 @@ CGimmickFish::CGimmickFish()
 	m_fNumFishTimer = 0.0f;
 	m_state = STATE_NONE;
 	m_pCharacter = NULL;
+	m_bEat = false;
 }
 
 //==========================================================

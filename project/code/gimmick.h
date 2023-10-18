@@ -58,8 +58,8 @@ private:	// 自分だけがアクセス可能
 	// メンバ変数
 	static CGimmick *m_pTop;	// 先頭のオブジェクトへのポインタ
 	static CGimmick *m_pCur;	// 最後尾のオブジェクトへのポインタ
-	CGimmick *m_pPrev;	// 前のオブジェクトへのポインタ
-	CGimmick *m_pNext;	// 次のオブジェクトへのポインタ
+	CGimmick *m_pPrev;		// 前のオブジェクトへのポインタ
+	CGimmick *m_pNext;		// 次のオブジェクトへのポインタ
 	TYPE m_type;	// 種類
 	D3DXVECTOR3 m_pos;	// 位置
 	D3DXVECTOR3 m_rot;	// 向き

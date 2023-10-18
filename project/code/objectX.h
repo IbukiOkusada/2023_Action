@@ -44,6 +44,7 @@ public:	// 誰でもアクセス可能
 	CObject2D *GetObject2D(void) { return NULL; }
 	virtual D3DXMATRIX *GetMtx(void) { return &m_mtxWorld; }
 	int GetIdx(void) { return m_nIdxModel; }
+	void ListOut(void);
 	int GetModelType(void) { return m_nIdxModel; }
 
 private:	// 自分だけがアクセス可能
