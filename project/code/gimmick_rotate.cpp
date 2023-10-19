@@ -127,7 +127,7 @@ CGimmickRotate *CGimmickRotate::Create(void)
 //==========================================================
 // 個別判定チェック
 //==========================================================
-bool CGimmickRotate::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, const float fRefMulti)
+bool CGimmickRotate::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, int &nDamage, const float fRefMulti)
 {
 
 	CXFile *pFile = CManager::GetInstance()->GetModelFile();

@@ -4,7 +4,7 @@
 // Author : Ibuki Okusada
 //
 //==========================================================
-#include "gimmick_move.h"
+#include "gimmick_button.h"
 #include "manager.h"
 #include "slow.h"
 #include "Xfile.h"
@@ -15,18 +15,19 @@
 //==========================================================
 // コンストラクタ
 //==========================================================
-CGimmickMove::CGimmickMove()
+CGimmickButton::CGimmickButton()
 {
-	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_fNowMoveTimer = 0.0f;
-	m_fNumMoveTimer = 0.0f;
 	m_pObject = NULL;
+	m_type = TYPE_MAX;
+	m_nId = -1;
+	m_bPress = false;
+	m_bPressOld = false;
 }
 
 //==========================================================
 // デストラクタ
 //==========================================================
-CGimmickMove::~CGimmickMove()
+CGimmickButton::~CGimmickButton()
 {
 
 }
@@ -34,18 +35,14 @@ CGimmickMove::~CGimmickMove()
 //==========================================================
 // 初期化処理
 //==========================================================
-HRESULT CGimmickMove::Init(void)
+HRESULT CGimmickButton::Init(void)
 {
-
 	// 読み込み確認
-	if(m_pObject == NULL)
+	if (m_pObject == NULL)
 	{
-		m_pObject = CObjectX::Create(GetPosition(), GetRotation(), "data\\MODEL\\5mcube.x", 3);
+		m_pObject = CObjectX::Create(GetPosition(), GetRotation(), "data\\MODEL\\button.x", 3);
 		m_pObject->ListOut();
 	}
-
-	// スローを覚える
-	m_pSlow = CManager::GetInstance()->GetSlow();
 
 	return S_OK;
 }
@@ -53,7 +50,7 @@ HRESULT CGimmickMove::Init(void)
 //==========================================================
 // 終了処理
 //==========================================================
-void CGimmickMove::Uninit(void)
+void CGimmickButton::Uninit(void)
 {
 	if (m_pObject != NULL)
 	{
@@ -69,93 +66,63 @@ void CGimmickMove::Uninit(void)
 //==========================================================
 // 更新処理
 //==========================================================
-void CGimmickMove::Update(void)
+void CGimmickButton::Update(void)
 {
-	m_posOld = GetPosition();
-
 	// 操作関連
 	Controller();
 
 	SetMtxWorld();
-}
 
-//==========================================================
-// 描画処理
-//==========================================================
-void CGimmickMove::Draw(void)
-{
-
+	m_bPressOld = m_bPress;
 }
 
 //==========================================================
 // 生成
 //==========================================================
-CGimmickMove *CGimmickMove::Create(void)
+CGimmickButton *CGimmickButton::Create(void)
 {
-	CGimmickMove *pObjectMove = new CGimmickMove;
+	CGimmickButton *pObjectButton = new CGimmickButton;
 
-	if (pObjectMove != NULL)
+	if (pObjectButton != NULL)
 	{
 		// 初期化処理
-		pObjectMove->Init();
+		pObjectButton->Init();
 	}
 
-	return pObjectMove;
-}
-
-//==========================================================
-// 生成
-//==========================================================
-CGimmickMove *CGimmickMove::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fTimer)
-{
-	CGimmickMove *pObjectMove = new CGimmickMove;
-
-	if (pObjectMove != NULL)
-	{
-		// 初期化処理
-		pObjectMove->Init();
-
-		// 設定
-		pObjectMove->SetPosition(pos);
-		pObjectMove->SetMove(move);
-		pObjectMove->SetNumTimer(fTimer);
-		pObjectMove->SetNowTimer(fTimer);
-	}
-
-	return pObjectMove;
+	return pObjectButton;
 }
 
 //==========================================================
 // 操作関連
 //==========================================================
-void CGimmickMove::Controller(void)
+void CGimmickButton::Controller(void)
 {
-	// 座標更新
-	D3DXVECTOR3 pos = GetPosition();
-	float m_fSlowMulti = 1.0f;	// スロー倍率
-
-	if (!m_pSlow)
+	if (m_bPress)
 	{
-		m_fSlowMulti = m_pSlow->Get();
+		D3DXVECTOR3 pos = GetPosition();
+		D3DXVECTOR3 posDiff = m_GoalPos - pos;
+
+		pos += posDiff * 0.01f;
+		SetPosition(pos);
+
+		if (!m_bPressOld)
+		{
+			switch (m_type)
+			{
+			case TYPE_REVERSE:
+				AirReverse();
+				break;
+
+			case TYPE_DOOR:
+				DoorOpen(m_nId);
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
-	pos += m_move;
-	SetPosition(pos);
-
-	if (m_fNumMoveTimer == 0.0f)
-	{// 往復しない
-		return;
-	}
-
-	m_fNowMoveTimer -= m_fSlowMulti;
-
-	if (m_fNowMoveTimer <= 0.0f)
-	{
-		m_move *= -1.0f;
-		m_fNowMoveTimer = m_fNumMoveTimer;
-	}
-
-	if(m_pObject != NULL)
+	if (m_pObject != nullptr)
 	{
 		m_pObject->SetPosition(GetPosition());
 		m_pObject->SetRotation(GetRotation());
@@ -165,7 +132,7 @@ void CGimmickMove::Controller(void)
 //==========================================================
 // 個別判定チェック
 //==========================================================
-bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, int &nDamage, const float fRefMulti)
+bool CGimmickButton::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, int &nDamage, const float fRefMulti)
 {
 	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 	bool bLand = false;	// 着地したか否か
@@ -189,51 +156,44 @@ bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 	if (pos.y + vtxMax.y > ObjPos.y + vtxObjMin.y
 		&& pos.y + vtxMin.y <= ObjPos.y + vtxObjMax.y)
 	{//プレイヤーとモデルが同じ高さにある
-		if (posOld.x + vtxMin.x >= m_posOld.x + vtxObjMax.x
+		if (posOld.x + vtxMin.x >= ObjPos.x + vtxObjMax.x
 			&& pos.x + vtxMin.x < ObjPos.x + vtxObjMax.x
 			&& pos.z + vtxMax.z > ObjPos.z + vtxObjMin.z
 			&& pos.z + vtxMin.z < ObjPos.z + vtxObjMax.z)
 		{//右から左にめり込んだ
-			bLand = true;
-			move.x *= -1.0f;
-			//move.x *= fRefMulti;
-			pos.x = ObjPos.x + vtxObjMax.x - vtxMin.x + 0.1f + m_move.x;
+			move.x *= -0.5f;
+			pos.x = ObjPos.x + vtxObjMax.x - vtxMin.x + 0.1f;
+			m_bPress = true;
 		}
-		else if (posOld.x + vtxMax.x <= m_posOld.x + vtxObjMin.x
+		else if (posOld.x + vtxMax.x <= ObjPos.x + vtxObjMin.x
 			&& pos.x + vtxMax.x > ObjPos.x + vtxObjMin.x
 			&& pos.z + vtxMax.z > ObjPos.z + vtxObjMin.z
 			&& pos.z + vtxMin.z < ObjPos.z + vtxObjMax.z)
 		{//左から右にめり込んだ
 		 //位置を戻す
-			bLand = true;
-			move.x *= -1.0f;
-			//move.x *= fRefMulti;
-			pos.x = ObjPos.x + vtxObjMin.x - vtxMax.x - 0.1f + m_move.x;
-			//move.x = 0.0f;
+			move.x *= -0.5f;
+			pos.x = ObjPos.x + vtxObjMin.x - vtxMax.x - 0.1f;
+			m_bPress = true;
 		}
-		else if (posOld.z + vtxMin.z >= m_posOld.z + vtxObjMax.z
+		else if (posOld.z + vtxMin.z >= ObjPos.z + vtxObjMax.z
 			&& pos.z + vtxMin.z < ObjPos.z + vtxObjMax.z
 			&& pos.x + vtxMax.x > ObjPos.x + vtxObjMin.x
 			&& pos.x + vtxMin.x < ObjPos.x + vtxObjMax.x)
 		{//奥から手前にめり込んだ
-			//位置を戻す
-			bLand = true;
-			move.z *= -1.0f;
-			//move.z *= fRefMulti;
-			pos.z = ObjPos.z + vtxObjMax.z - vtxMin.z + 0.1f + m_move.z;
-			//move.z = 0.0f;
+		 //位置を戻す
+			move.z *= -0.5f;
+			pos.z = ObjPos.z + vtxObjMax.z - vtxMin.z + 0.1f;
+			m_bPress = true;
 		}
-		else if (posOld.z + vtxMax.z <= m_posOld.z + vtxObjMin.z
+		else if (posOld.z + vtxMax.z <= ObjPos.z + vtxObjMin.z
 			&& pos.z + vtxMax.z > ObjPos.z + vtxObjMin.z
 			&& pos.x + vtxMax.x > ObjPos.x + vtxObjMin.x
 			&& pos.x + vtxMin.x < ObjPos.x + vtxObjMax.x)
 		{//手前から奥にめり込んだt
 		 //位置を戻す
-			bLand = true;
-			move.z *= -1.0f;
-			//move.z *= fRefMulti;
-			pos.z = ObjPos.z + vtxObjMin.z - vtxMax.z - 0.1f + m_move.z;
-			//move.z = 0.0f;
+			move.z *= -0.5f;
+			pos.z = ObjPos.z + vtxObjMin.z - vtxMax.z - 0.1f;
+			m_bPress = true;
 		}
 	}
 
@@ -242,14 +202,14 @@ bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 		&& pos.z + vtxMax.z > ObjPos.z + vtxObjMin.z
 		&& pos.z + vtxMin.z < ObjPos.z + vtxObjMax.z)
 	{//範囲内にある
-	 //上からの判定
+		//上からの判定
 		if (posOld.y + vtxMin.y >= ObjPos.y + vtxObjMax.y
 			&& pos.y + vtxMin.y < ObjPos.y + vtxObjMax.y)
 		{//上からめり込んだ
 		 //上にのせる
 			pos.y = ObjPos.y + vtxObjMax.y - vtxMin.y;
 			move.y = 0.0f;
-			bLand = true;
+			m_bPress = true;
 		}
 	}
 

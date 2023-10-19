@@ -26,6 +26,10 @@
 #include "gimmick_rotate.h"
 #include "gimmick_fish.h"
 #include "time.h"
+#include "meshdome.h"
+#include "gimmick_button.h"
+#include "gimmick_air.h"
+#include "gimmick_door.h"
 
 //===============================================
 // マクロ定義
@@ -116,6 +120,8 @@ HRESULT CGame::Init(void)
 	m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, -150.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
 	m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
 	m_pTime->Set(90 * 100);
+
+	m_pMeshDome = CMeshDome::Create(D3DXVECTOR3(-8000.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 10000.0f, 10.0f, 3, 10, 10);
 	
 	// ギミック設置
 	GimmickSet();
@@ -200,13 +206,13 @@ void CGame::Update(void)
 		m_pTime->Update();
 	}
 
-	/*if (m_pPlayer != NULL)
+	if (m_pPlayer != NULL)
 	{
-		if (m_pPlayer->GetPosition().x < -12000.0f)
+		if (m_pPlayer->GetPosition().x < -15000.0f)
 		{
 			CManager::GetInstance()->GetFade()->Set(CScene::MODE_RESULT);
 		}
-	}*/
+	}
 
 	// 更新処理
 	CScene::Update();
@@ -337,4 +343,41 @@ void CGame::GimmickSet(void)
 
 	pFish = CGimmickFish::Create();
 	pFish->SetPosition(D3DXVECTOR3(-8800.0f, -750.0f, -1750.0f));
+
+	// ボタン配置
+	CGimmickButton *pButton = CGimmickButton::Create();
+	pButton->SetPosition(D3DXVECTOR3(-14640.0f, 0.0f, -2050.0f));
+	pButton->SetRotation(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+	pButton->SetGoalPos(D3DXVECTOR3(-14680.0f, 0.0f, -2050.0f));
+	pButton->SetType(CGimmickButton::TYPE_REVERSE);
+
+	pButton = CGimmickButton::Create();
+	pButton->SetPosition(D3DXVECTOR3(-14400.0f, 0.0f, 110.0f));
+	pButton->SetRotation(D3DXVECTOR3(0.0f, D3DX_PI * 0.0f, 0.0f));
+	pButton->SetGoalPos(D3DXVECTOR3(-14400.0f, 0.0f, 70.0f));
+	pButton->SetType(CGimmickButton::TYPE_DOOR);
+
+	// 風配置
+	CGimmickAir *pAir = CGimmickAir::Create();
+	pAir->SetPosition(D3DXVECTOR3(-13525.0f, 0.0f, -800.0f));
+	pAir->SetMove(D3DXVECTOR3(0.0f, 0.0f, -0.5f));
+	pAir->SetHeight(750.0f);
+	pAir->SetWidth(250.0f);
+
+	pAir = CGimmickAir::Create();
+	pAir->SetPosition(D3DXVECTOR3(-12800.0f, 0.0f, -1325.0f));
+	pAir->SetMove(D3DXVECTOR3(0.5f, 0.0f, 0.0f));
+	pAir->SetHeight(225.0f);
+	pAir->SetWidth(950.0f);
+
+	pAir = CGimmickAir::Create();
+	pAir->SetPosition(D3DXVECTOR3(-12800.0f, 0.0f, -275.0f));
+	pAir->SetMove(D3DXVECTOR3(-0.5f, 0.0f, 0.0f));
+	pAir->SetHeight(225.0f);
+	pAir->SetWidth(950.0f);
+
+	// ドア配置
+	CGimmickDoor *pDoor = CGimmickDoor::Create();
+	pDoor->SetPosition(D3DXVECTOR3(-13810.0f, 0.0f, -750.0f));
+	pDoor->SetRotation(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 }

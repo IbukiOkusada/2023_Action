@@ -244,3 +244,71 @@ void CModel::BindModelFile(int nIdx)
 {
 	m_nIdxModel = nIdx;
 }
+
+//==========================================================
+// 当たり判定
+//==========================================================
+void CModel::SetRotSize(D3DXVECTOR3 &SetMax, D3DXVECTOR3 &SetMin, D3DXVECTOR3 vtxMax, D3DXVECTOR3 vtxMin, float fRot)
+{
+	//向きによって変更する
+	if (fRot == 0.0f || fRot == -0.0f)
+	{//左向き
+	 //最大値反映
+		SetMax.x = vtxMax.x;	//x座標
+		SetMax.y = vtxMax.y;	//y座標
+		SetMax.z = vtxMax.z;	//z座標
+
+								//最小値反映
+		SetMin.x = vtxMin.x;	//x座標
+		SetMin.y = vtxMin.y;	//y座標
+		SetMin.z = vtxMin.z;	//z座標
+	}
+	if (fRot == D3DX_PI * 0.5f)
+	{//左向き
+	 //最大値反映
+		SetMax.x = vtxMax.z;	//x座標
+		SetMax.y = vtxMax.y;	//y座標
+		SetMax.z = -vtxMin.x;	//z座標
+
+								//最小値反映
+		SetMin.x = vtxMin.z;	//x座標
+		SetMin.y = vtxMin.y;	//y座標
+		SetMin.z = -vtxMax.x;	//z座標
+	}
+	else if (fRot == -D3DX_PI * 0.5f)
+	{//右向き
+	 //最大値反映
+		SetMax.x = -vtxMin.z;	//x座標
+		SetMax.y = vtxMax.y;	//y座標
+		SetMax.z = vtxMax.x;	//z座標
+
+								//最小値反映
+		SetMin.x = -vtxMax.z;	//x座標
+		SetMin.y = vtxMin.y;	//y座標
+		SetMin.z = vtxMin.x;	//z座標
+	}
+	else if (fRot == -D3DX_PI || fRot == D3DX_PI)
+	{//反転している場合
+	 //高さ以外の最大値を最小値にする
+		SetMax.x = -vtxMin.x;	//x座標
+		SetMax.y = vtxMax.y;	//y座標
+		SetMax.z = -vtxMin.z;	//z座標
+
+								//高さ以外の最小値を最大値にする
+		SetMin.x = -vtxMax.x;	//x座標
+		SetMin.y = vtxMin.y;	//y座標
+		SetMin.z = -vtxMax.z;	//z座標
+	}
+	else
+	{//それ以外の場合
+	 //最大値反映
+		SetMax.x = vtxMax.x;	//x座標
+		SetMax.y = vtxMax.y;	//y座標
+		SetMax.z = vtxMax.z;	//z座標
+
+								//最小値反映
+		SetMin.x = vtxMin.x;	//x座標
+		SetMin.y = vtxMin.y;	//y座標
+		SetMin.z = vtxMin.z;	//z座標
+	}
+}

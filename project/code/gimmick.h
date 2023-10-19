@@ -35,6 +35,8 @@ public:	// 誰でもアクセス可能
 	virtual HRESULT Init(void) = 0;
 	virtual void Uninit(void) = 0;
 	virtual void Update(void) = 0;
+	virtual void Reverse(void) { }
+	virtual void Open(int nId) { }
 
 	// メンバ関数
 	void SetPosition(const D3DXVECTOR3 pos) { m_pos = pos; }
@@ -43,7 +45,9 @@ public:	// 誰でもアクセス可能
 	D3DXVECTOR3 GetRotation(void) { return m_rot; }
 	void SetMtxWorld(void);
 	D3DXMATRIX *GetMtxWorld(void) { return &m_mtxWorld; }
-	static bool Collision(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, const float fRefMulti = 0.5f);
+	static bool Collision(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, int &nDamage, const float fRefMulti = 0.5f);
+	void AirReverse(void);
+	void DoorOpen(int nId);
 
 protected:
 
@@ -53,7 +57,7 @@ protected:
 
 private:	// 自分だけがアクセス可能
 
-	virtual bool CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, const float fRefMulti = 0.5f) = 0;
+	virtual bool CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, int &nDamage, const float fRefMulti = 0.5f) = 0;
 
 	// メンバ変数
 	static CGimmick *m_pTop;	// 先頭のオブジェクトへのポインタ

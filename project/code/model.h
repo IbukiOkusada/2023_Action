@@ -29,6 +29,7 @@ public:	// 誰でもアクセス可能
 	static CModel *Create(const char *pFileName);
 	void SetParent(D3DXMATRIX *pMtx);
 	void BindModelFile(int nIdx);
+	void SetRotSize(D3DXVECTOR3 &SetMax, D3DXVECTOR3 &SetMin, D3DXVECTOR3 vtxMax, D3DXVECTOR3 vtxMin, float fRot);
 
 	// メンバ関数(取得)
 	D3DXVECTOR3 GetPosition(void) { return m_pos; }
@@ -36,6 +37,7 @@ public:	// 誰でもアクセス可能
 	D3DXVECTOR3 GetCurrentPosition(void) { return m_CurPos; }
 	D3DXVECTOR3 GetCurrentRotation(void) { return m_CurRot; }
 	D3DXMATRIX *GetMtxWorld(void) { return &m_mtxWorld; }
+	int GetId(void) { return m_nIdxModel; }
 
 	// メンバ関数(設定)
 	void SetPosition(const D3DXVECTOR3 pos);

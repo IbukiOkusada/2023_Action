@@ -1,6 +1,6 @@
 //==========================================================
 //
-// サンプル [sample.cpp]
+// ギミック基底 [gimmick.cpp]
 // Author : Ibuki Okusada
 //
 //==========================================================
@@ -76,7 +76,7 @@ void CGimmick::SetMtxWorld(void)
 //==========================================================
 // 当たり判定
 //==========================================================
-bool CGimmick::Collision(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, const float fRefMulti)
+bool CGimmick::Collision(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, int &nDamage, const float fRefMulti)
 {
 	CGimmick *pObj = m_pTop;	// 先頭取得
 	CXFile *pFile = CManager::GetInstance()->GetModelFile();
@@ -87,7 +87,7 @@ bool CGimmick::Collision(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &mov
 		CGimmick *pObjNext = pObj->m_pNext;
 		D3DXVECTOR3 vtxObjMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		D3DXVECTOR3 vtxObjMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		if (pObj->CollisionCheck(pos, posOld, move, vtxMin, vtxMax, fRefMulti))
+		if (pObj->CollisionCheck(pos, posOld, move, vtxMin, vtxMax, nDamage, fRefMulti))
 		{
 			bLand = true;
 		}
@@ -140,5 +140,41 @@ void CGimmick::ListOut(void)
 		{
 			m_pPrev->m_pNext = m_pNext;	// 自身の前に次のポインタを覚えさせる
 		}
+	}
+}
+
+//==========================================================
+// 風反転
+//==========================================================
+void CGimmick::AirReverse(void)
+{
+	CGimmick *pObj = m_pTop;	// 先頭取得
+	CXFile *pFile = CManager::GetInstance()->GetModelFile();
+
+	while (pObj != NULL)
+	{
+		CGimmick *pObjNext = pObj->m_pNext;
+
+		pObj->Reverse();
+
+		pObj = pObjNext;
+	}
+}
+
+//==========================================================
+// 対応する扉を開ける
+//==========================================================
+void CGimmick::DoorOpen(int nId)
+{
+	CGimmick *pObj = m_pTop;	// 先頭取得
+	CXFile *pFile = CManager::GetInstance()->GetModelFile();
+
+	while (pObj != NULL)
+	{
+		CGimmick *pObjNext = pObj->m_pNext;
+
+		pObj->Open(nId);
+
+		pObj = pObjNext;
 	}
 }

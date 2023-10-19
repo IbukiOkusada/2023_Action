@@ -219,6 +219,15 @@ void CRenderer::Draw(void)
 		// オブジェクトの描画
 		CObject::DrawAll();
 
+#if _DEBUG	// デバッグ時
+
+		if (CManager::GetInstance()->GetScene()->GetEditor() != NULL)
+		{
+			CManager::GetInstance()->GetScene()->GetEditor()->Draw();
+		}
+
+#endif
+
 		// 描画終了
 		m_pD3DDevice->EndScene();
 	}

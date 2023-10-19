@@ -342,6 +342,7 @@ void CPlayer::Controller(void)
 	D3DXVECTOR3 CamRot = pCamera->GetRotation();								// カメラの角度
 	bool bDamage = false;
 	m_fRotMove = rot.y;	//現在の向きを取得
+	int nDamage = 0;
 
 	// 操作処理
 	{
@@ -382,7 +383,7 @@ void CPlayer::Controller(void)
 		}
 
 		// ギミック
-		if (CGimmick::Collision(pos, m_Info.posOld, m_Info.move, vtxMin, vtxMax, 0.3f))
+		if (CGimmick::Collision(pos, m_Info.posOld, m_Info.move, vtxMin, vtxMax, nDamage, 0.3f))
 		{
 			bDamage = true;
 			CManager::GetInstance()->GetDebugProc()->Print("***ギミックと当たったよ***\n");
@@ -399,12 +400,21 @@ void CPlayer::Controller(void)
 	// ダメージ確認
 	if (m_Info.state == STATE_NORMAL)
 	{
-		if (bDamage)
+		if (nDamage >= 0)
 		{
-			m_nLife--;
-			m_Info.fStateCounter = DAMAGE_INTERVAL;
-			m_Info.state = STATE_DAMAGE;
+			if (bDamage)
+			{
+				m_nLife--;
+				m_Info.fStateCounter = DAMAGE_INTERVAL;
+				m_Info.state = STATE_DAMAGE;
+			}
 		}
+	}
+
+	if (nDamage < 0)
+	{
+		m_Info.move.x += (0.0f - m_Info.move.x) * STEP_INER;	//x座標
+		m_Info.move.z += (0.0f - m_Info.move.z) * STEP_INER;	//x座標
 	}
 
 	// 壁との当たり判定
