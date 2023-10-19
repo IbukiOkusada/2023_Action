@@ -200,13 +200,13 @@ void CGame::Update(void)
 		m_pTime->Update();
 	}
 
-	if (m_pPlayer != NULL)
+	/*if (m_pPlayer != NULL)
 	{
 		if (m_pPlayer->GetPosition().x < -12000.0f)
 		{
 			CManager::GetInstance()->GetFade()->Set(CScene::MODE_RESULT);
 		}
-	}
+	}*/
 
 	// XVˆ—
 	CScene::Update();

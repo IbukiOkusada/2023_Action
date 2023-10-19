@@ -39,7 +39,7 @@
 #define HEIGHT	(80.0f)		// ‚‚³
 #define INER	(0.003f)	// Šµ«
 #define STEP_SPEED	(50.0f)
-#define STEP_COOLTIME	(180.0f)
+#define STEP_COOLTIME	(90.0f)
 #define STEP_INER	(0.05f)
 #define START_LIFE	(4)	// ‰Šú‘Ì—Í
 #define DAMAGE_INTERVAL	(10.0f)
@@ -164,6 +164,7 @@ HRESULT CPlayer::Init(const char *pBodyName, const char *pLegName)
 			if (nullptr == m_ppBillBoard[nCnt])
 			{
 				m_ppBillBoard[nCnt] = CObjectBillboard::Create(m_Info.pos, 5);
+				m_ppBillBoard[nCnt]->SetRotation(D3DXVECTOR3(0.0f, 0.0f, D3DXToRadian(rand() % 628 - 314)));
 				m_ppBillBoard[nCnt]->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\balloon.png"));
 				m_ppBillBoard[nCnt]->SetSize(60.0f + nCnt * 15.0f, 60.0f + nCnt * 15.0f);
 			}
@@ -267,7 +268,22 @@ void CPlayer::Update(void)
 	for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
 	{
 		if (nullptr != m_ppBillBoard[nCnt]){
+			D3DXVECTOR3 rot = m_ppBillBoard[nCnt]->GetRotation();
+
+			rot.z += 0.0025f * (1 - (nCnt % 2 * 2));
+
+			if (rot.z > D3DX_PI)
+			{
+				rot.z += -D3DX_PI * 2;
+			}
+			else if (rot.z < -D3DX_PI)
+			{
+				rot.z += D3DX_PI * 2;
+			}
+
+			m_ppBillBoard[nCnt]->SetRotation(rot);
 			m_ppBillBoard[nCnt]->SetPosition(D3DXVECTOR3(m_Info.pos.x, m_Info.pos.y + 50.0f + 10.0f * nCnt, m_Info.pos.z));
+			m_ppBillBoard[nCnt]->SetSize(m_ppBillBoard[nCnt]->GetWidth(), m_ppBillBoard[nCnt]->GetHeight());
 		}
 	}
 }
