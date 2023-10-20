@@ -47,7 +47,7 @@ HRESULT CGimmickDoor::Init(void)
 	{
 		m_aObject[nCnt].pModel = CModel::Create("data\\MODEL\\door.x");
 		m_aObject[nCnt].pModel->SetParent(GetMtxWorld());
-		m_aObject[nCnt].GoalPos = D3DXVECTOR3(300.0f + (-600.0f * nCnt), 0.0f, 0.0f);
+		m_aObject[nCnt].GoalPos = D3DXVECTOR3(400.0f + (-800.0f * nCnt), 0.0f, 0.0f);
 		m_aObject[nCnt].pModel->SetCurrentPosition(D3DXVECTOR3(150.0f + (-300.0f * nCnt), 0.0f, 0.0f));
 	}
 
@@ -150,7 +150,7 @@ void CGimmickDoor::Controller(void)
 			D3DXVECTOR3 posDiff = m_aObject[nCnt].GoalPos - 
 				pos;
 
-			pos += posDiff * 0.01f;
+			pos += posDiff * 0.04f;
 			m_aObject[nCnt].pModel->SetCurrentPosition(pos);
 		}
 	}

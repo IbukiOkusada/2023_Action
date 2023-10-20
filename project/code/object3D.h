@@ -17,7 +17,7 @@ class CObject3D : public CObject
 {
 public:	// 誰でもアクセス可能
 
-	CObject3D(int nPriority = 4);	// コンストラクタ
+	CObject3D(int nPriority = 5);	// コンストラクタ
 	~CObject3D();	// デストラクタ
 
 	// メンバ関数
@@ -27,6 +27,7 @@ public:	// 誰でもアクセス可能
 	void Draw(void);
 	static CObject3D *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot);
 	void SetpVtx(float fWidth, float fHeight);
+	void SetTextureVtx(float fWidth, float fHeight);
 	void BindTexture(int nIdx);
 
 	// メンバ関数(設定)

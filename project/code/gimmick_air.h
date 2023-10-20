@@ -10,7 +10,7 @@
 #include "gimmick.h"
 
 // 前方宣言
-class CObjectX;
+class CObject3D;
 
 //==========================================================
 // 風のクラス定義(派生クラス)
@@ -41,9 +41,10 @@ public:	// 誰でもアクセス可能
 	// メンバ関数(取得)
 
 	// メンバ関数(設定)
-	void SetMove(D3DXVECTOR3 move) { m_move = move; }
+	void SetMove(D3DXVECTOR3 move);
 	void SetWidth(float fWidth) { m_fWidth = fWidth; }
 	void SetHeight(float fHeight) { m_fHeight = fHeight; }
+	void SetRevease(bool bRevease) { m_bRevease = bRevease; }
 
 private:	// 自分だけがアクセス可能
 
@@ -52,8 +53,10 @@ private:	// 自分だけがアクセス可能
 	bool CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, int &nDamage, const float fRefMulti = 0.5f);
 
 	// メンバ変数
-	CObjectX *m_pObject;		// オブジェクトポインタ
+	CObject3D *m_pObject;		// オブジェクトポインタ
 	D3DXVECTOR3 m_move;
+	D3DXVECTOR2 m_moveTex;
+	D3DXVECTOR2 m_TexPos;
 	bool m_bRevease;			// 反転するか
 	float m_fWidth;			// 幅
 	float m_fHeight;			// 高さ

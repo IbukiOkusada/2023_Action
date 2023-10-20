@@ -7,9 +7,9 @@
 #include "gimmick_air.h"
 #include "manager.h"
 #include "slow.h"
-#include "Xfile.h"
-#include "objectX.h"
 #include "debugproc.h"
+#include "object3D.h"
+#include "texture.h"
 
 // マクロ定義
 
@@ -41,7 +41,7 @@ HRESULT CGimmickAir::Init(void)
 	// 読み込み確認
 	if (m_pObject == NULL)
 	{
-		
+		m_pObject = CObject3D::Create(GetPosition(), GetRotation());
 	}
 
 	return S_OK;
@@ -95,7 +95,34 @@ CGimmickAir *CGimmickAir::Create(void)
 //==========================================================
 void CGimmickAir::Controller(void)
 {
-	
+	if (m_pObject == nullptr)
+	{
+		return;
+	}
+
+	m_TexPos += m_moveTex;
+
+	if (m_TexPos.x > 1.0f)
+	{
+		m_TexPos.x += -1.0f;
+	}
+	else if (m_TexPos.x < -1.0f)
+	{
+		m_TexPos.x += 1.0f;
+	}
+	if (m_TexPos.y > 1.0f)
+	{
+		m_TexPos.y += -1.0f;
+	}
+	else if (m_TexPos.y < -1.0f)
+	{
+		m_TexPos.y += 1.0f;
+	}
+
+	// 更新
+	m_pObject->SetpVtx(m_fWidth, m_fHeight);
+	m_pObject->SetTextureVtx(m_TexPos.x, m_TexPos.y);
+	m_pObject->SetPosition(GetPosition());
 }
 
 //==========================================================
@@ -103,7 +130,6 @@ void CGimmickAir::Controller(void)
 //==========================================================
 bool CGimmickAir::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, int &nDamage, const float fRefMulti)
 {
-	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 	bool bLand = false;	// 着地したか否か
 	D3DXVECTOR3 vtxObjMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 vtxObjMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -124,9 +150,39 @@ bool CGimmickAir::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECT
 	return bLand;
 }
 
+//==========================================================
+// 反転
+//==========================================================
 void CGimmickAir::Reverse(void)
 {
 	if (!m_bRevease){
-		m_move *= -1.0f;
+		SetMove(m_move * -1.0f);
+	}
+}
+
+//==========================================================
+// 移動量設定
+//==========================================================
+void CGimmickAir::SetMove(D3DXVECTOR3 move)
+{
+	m_move = move;
+
+	if (m_pObject == nullptr)
+	{
+		return;
+	}
+
+	m_moveTex = D3DXVECTOR2(m_move.x * -0.005f, m_move.z * 0.005f);
+
+	D3DXVECTOR3 vec = m_move;
+	D3DXVec3Normalize(&vec, &vec);
+
+	if (vec.x != 0.0f)
+	{// 横の風
+		m_pObject->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\air_rightleft.png"));
+	}
+	else if (vec.z != 0.0f)
+	{// 縦の風
+		m_pObject->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\air_updown.png"));
 	}
 }

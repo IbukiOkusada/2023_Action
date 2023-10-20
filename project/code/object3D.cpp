@@ -421,6 +421,30 @@ void CObject3D::SetCol(D3DXCOLOR col)
 }
 
 //==========================================================
+// 色設定
+//==========================================================
+void CObject3D::SetTextureVtx(float fWidth, float fHeight)
+{
+	VERTEX_3D *pVtx;
+
+	//頂点バッファをロックし頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(
+		0,
+		0,
+		(void**)&pVtx,
+		0);
+
+	//テクスチャ座標の設定
+	pVtx[0].tex = D3DXVECTOR2(fWidth, fHeight);
+	pVtx[1].tex = D3DXVECTOR2(fWidth + 1.0f, fHeight);
+	pVtx[2].tex = D3DXVECTOR2(fWidth, fHeight + 1.0f);
+	pVtx[3].tex = D3DXVECTOR2(fWidth + 1.0f, fHeight + 1.0f);
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+}
+
+//==========================================================
 // マトリックス設定
 //==========================================================
 void CObject3D::SetMtx(void)

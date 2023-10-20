@@ -117,7 +117,7 @@ HRESULT CGame::Init(void)
 		m_pPause = CPause::Create();
 	}
 
-	m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, -150.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
+	m_pPlayer = CPlayer::Create(D3DXVECTOR3(-12000.0f, 0.0f, -150.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
 	m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
 	m_pTime->Set(90 * 100);
 
@@ -299,6 +299,7 @@ void CGame::GimmickSet(void)
 	pMove = CGimmickMove::Create(D3DXVECTOR3(-8400.0f, 0.0f, -1500.0f), D3DXVECTOR3(4.0f, 0.0f, 0.0f), 100.0f);
 	pMove = CGimmickMove::Create(D3DXVECTOR3(-9400.0f, 0.0f, -2100.0f), D3DXVECTOR3(-4.0f, 0.0f, 4.0f), 150.0f);
 	pMove = CGimmickMove::Create(D3DXVECTOR3(-9400.0f, 0.0f, -1400.0f), D3DXVECTOR3(-6.0f, 0.0f, -6.0f), 100.0f);
+	pMove = CGimmickMove::Create(D3DXVECTOR3(-14100.0f, 0.0f, -2250.0f), D3DXVECTOR3(0.0f, 0.0f, -3.0f), 100.0f);
 
 	// 回転
 	CGimmickRotate *p = CGimmickRotate::Create();
@@ -334,6 +335,16 @@ void CGame::GimmickSet(void)
 	p->SetRotate(p->GetRotate() * -1.5f);
 	p->SetRotation(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 
+	p = CGimmickRotate::Create();
+	p->SetPosition(D3DXVECTOR3(-12850.0f, 0.0f, -2125.0f));
+	p->SetRotate(p->GetRotate() * 1.0f);
+	p->SetRotation(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+
+	p = CGimmickRotate::Create();
+	p->SetPosition(D3DXVECTOR3(-13550.0f, 0.0f, 960.0f));
+	p->SetRotate(p->GetRotate() * 1.0f);
+	p->SetRotation(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+
 	// 魚
 	CGimmickFish *pFish = CGimmickFish::Create();
 	pFish->SetPosition(D3DXVECTOR3(-500.0f, -750.0f, -400.0f));
@@ -343,6 +354,14 @@ void CGame::GimmickSet(void)
 
 	pFish = CGimmickFish::Create();
 	pFish->SetPosition(D3DXVECTOR3(-8800.0f, -750.0f, -1750.0f));
+
+	pFish = CGimmickFish::Create();
+	pFish->SetPosition(D3DXVECTOR3(-14400.0f, -750.0f, 650.0f));
+	pFish->SetRotation(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+
+	pFish = CGimmickFish::Create();
+	pFish->SetPosition(D3DXVECTOR3(-12700.0f, -750.0f, 275.0f));
+	pFish->SetRotation(D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f));
 
 	// ボタン配置
 	CGimmickButton *pButton = CGimmickButton::Create();
@@ -359,22 +378,36 @@ void CGame::GimmickSet(void)
 
 	// 風配置
 	CGimmickAir *pAir = CGimmickAir::Create();
-	pAir->SetPosition(D3DXVECTOR3(-13525.0f, 0.0f, -800.0f));
+	pAir->SetPosition(D3DXVECTOR3(-13525.0f, 80.0f, -800.0f));
 	pAir->SetMove(D3DXVECTOR3(0.0f, 0.0f, -0.5f));
 	pAir->SetHeight(750.0f);
 	pAir->SetWidth(250.0f);
 
 	pAir = CGimmickAir::Create();
-	pAir->SetPosition(D3DXVECTOR3(-12800.0f, 0.0f, -1325.0f));
+	pAir->SetPosition(D3DXVECTOR3(-12800.0f, 80.0f, -1325.0f));
 	pAir->SetMove(D3DXVECTOR3(0.5f, 0.0f, 0.0f));
 	pAir->SetHeight(225.0f);
 	pAir->SetWidth(950.0f);
 
 	pAir = CGimmickAir::Create();
-	pAir->SetPosition(D3DXVECTOR3(-12800.0f, 0.0f, -275.0f));
+	pAir->SetPosition(D3DXVECTOR3(-12800.0f, 80.0f, -275.0f));
 	pAir->SetMove(D3DXVECTOR3(-0.5f, 0.0f, 0.0f));
 	pAir->SetHeight(225.0f);
 	pAir->SetWidth(950.0f);
+
+	pAir = CGimmickAir::Create();
+	pAir->SetPosition(D3DXVECTOR3(-14000.0f, 80.0f, -1875.0f));
+	pAir->SetMove(D3DXVECTOR3(0.75f, 0.0f, 0.0f));
+	pAir->SetHeight(225.0f);
+	pAir->SetWidth(250.0f);
+	pAir->SetRevease(true);
+
+	pAir = CGimmickAir::Create();
+	pAir->SetPosition(D3DXVECTOR3(-13935.0f, 80.0f, 265.0f));
+	pAir->SetMove(D3DXVECTOR3(0.85f, 0.0f, 0.0f));
+	pAir->SetHeight(205.0f);
+	pAir->SetWidth(185.0f);
+	pAir->SetRevease(true);
 
 	// ドア配置
 	CGimmickDoor *pDoor = CGimmickDoor::Create();
