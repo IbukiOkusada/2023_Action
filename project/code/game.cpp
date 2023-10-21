@@ -117,9 +117,9 @@ HRESULT CGame::Init(void)
 		m_pPause = CPause::Create();
 	}
 
-	m_pPlayer = CPlayer::Create(D3DXVECTOR3(-12000.0f, 0.0f, -150.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
+	m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, -150.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
 	m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
-	m_pTime->Set(90 * 100);
+	m_pTime->Set(150 * 100);
 
 	m_pMeshDome = CMeshDome::Create(D3DXVECTOR3(-8000.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 10000.0f, 10.0f, 3, 10, 10);
 	
@@ -204,6 +204,12 @@ void CGame::Update(void)
 	if (m_pTime != NULL)
 	{
 		m_pTime->Update();
+
+		if (m_pTime->GetNum() < 0)
+		{
+			CManager::GetInstance()->GetFade()->Set(CScene::MODE_RESULT);
+			CResult::SetScore(m_pTime->GetNum());
+		}
 	}
 
 	if (m_pPlayer != NULL)
@@ -211,6 +217,7 @@ void CGame::Update(void)
 		if (m_pPlayer->GetPosition().x < -15000.0f)
 		{
 			CManager::GetInstance()->GetFade()->Set(CScene::MODE_RESULT);
+			CResult::SetScore(m_pTime->GetNum());
 		}
 	}
 
@@ -304,7 +311,7 @@ void CGame::GimmickSet(void)
 	// ‰ñ“]
 	CGimmickRotate *p = CGimmickRotate::Create();
 	p->SetPosition(D3DXVECTOR3(-5625.0f, 0.0f, -350.0f));
-	p->SetRotate(p->GetRotate() * -1.0f);
+	p->SetRotate(p->GetRotate() * 1.0f);
 
 	p = CGimmickRotate::Create();
 	p->SetPosition(D3DXVECTOR3(-6900.0f, 0.0f, -850.0f));
@@ -347,7 +354,8 @@ void CGame::GimmickSet(void)
 
 	// ‹›
 	CGimmickFish *pFish = CGimmickFish::Create();
-	pFish->SetPosition(D3DXVECTOR3(-500.0f, -750.0f, -400.0f));
+	pFish->SetPosition(D3DXVECTOR3(-850.0f, -750.0f, 150.0f));
+	pFish->SetRotation(D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f));
 
 	pFish = CGimmickFish::Create();
 	pFish->SetPosition(D3DXVECTOR3(-3950.0f, -750.0f, -650.0f));

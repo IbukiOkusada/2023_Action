@@ -10,7 +10,7 @@
 #include "gimmick.h"
 
 // 前方宣言
-class CModel;
+class CCharacter;
 
 // マクロ定義
 #define NUM_ROTATEBOX	(10)
@@ -26,7 +26,7 @@ private:
 	struct Obj
 	{
 		D3DXVECTOR3 s_posOld;
-		CModel *s_pModel;
+		CCharacter *s_pModel;
 	};
 
 public:	// 誰でもアクセス可能
@@ -39,20 +39,19 @@ public:	// 誰でもアクセス可能
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
-	void Draw(void);
 	static CGimmickRotate *Create(void);
 
 	// メンバ関数(取得)
 	D3DXVECTOR3 GetRotate(void) { return m_RotateSpeed; }
 
 	// メンバ関数(設定)
-	void SetRotate(D3DXVECTOR3 rotate) { m_RotateSpeed = rotate; }
+	void SetRotate(D3DXVECTOR3 rotate);
 
 private:	// 自分だけがアクセス可能
 
 	// メンバ関数
 	virtual bool CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, int &nDamage, const float fRefMulti = 0.5f);
-
+	void SetRotationCharacter(void);
 	// メンバ変数
 	Obj m_aObj[NUM_ROTATEBOX];	// オブジェ配列
 	D3DXVECTOR3 m_RotateSpeed;	// 回転量

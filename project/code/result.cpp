@@ -14,9 +14,13 @@
 #include "fade.h"
 #include "ranking.h"
 #include "sound.h"
+#include "result.h"
+#include "time.h"
 
 // マクロ定義
 #define MOVE_TIMER	(900)
+
+int CResult::m_nScore = 0;
 
 //===============================================
 // コンストラクタ
@@ -25,6 +29,7 @@ CResult::CResult()
 {
 	m_pMeshSky = NULL;
 	m_nTimer = 0;
+	m_pTime = NULL;
 }
 
 //===============================================
@@ -42,6 +47,9 @@ HRESULT CResult::Init(void)
 {
 	CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_RESULT);
 
+	m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
+	m_pTime->Set(m_nScore);
+
 	return S_OK;
 }
 
@@ -50,7 +58,14 @@ HRESULT CResult::Init(void)
 //===============================================
 void CResult::Uninit(void)
 {
-	
+	if (m_pTime != NULL)
+	{
+		m_pTime->Uninit();
+		delete m_pTime;
+		m_pTime = NULL;
+	}
+
+	m_nScore = 0;
 }
 
 //===============================================

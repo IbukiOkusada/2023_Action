@@ -11,7 +11,7 @@
 
 // 前方宣言
 class CSlow;
-class CObjectX;
+class CCharacter;
 
 //==========================================================
 // 移動オブジェクトのクラス定義
@@ -50,7 +50,7 @@ private:	// 自分だけがアクセス可能
 	// メンバ変数
 	D3DXVECTOR3 m_move;	// 移動量
 	D3DXVECTOR3 m_posOld;
-	CObjectX *m_pObject;
+	CCharacter *m_pObject;
 	float m_fNowMoveTimer;
 	float m_fNumMoveTimer;
 	CSlow *m_pSlow;		// スロー

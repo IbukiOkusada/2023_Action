@@ -9,9 +9,11 @@
 #include "Xfile.h"
 #include "manager.h"
 #include "debugproc.h"
+#include "character.h"
+#include "motion.h"
 
 // マクロ定義
-#define FILENAME "data\\MODEL\\5msphere.x"	// 使用モデル
+#define FILENAME "data\\TXT\\motion_bird.txt"	// 使用モデル
 #define SETSIZE	(100.0f)
 
 //==========================================================
@@ -45,12 +47,13 @@ HRESULT CGimmickRotate::Init(void)
 
 	for (int nCnt = 0; nCnt < NUM_ROTATEBOX; nCnt++)
 	{
-		m_aObj[nCnt].s_pModel = CModel::Create(FILENAME);
+		m_aObj[nCnt].s_pModel = CCharacter::Create(FILENAME);
 		m_aObj[nCnt].s_pModel->SetParent(GetMtxWorld());
 		m_aObj[nCnt].s_pModel->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 
 			((-SETSIZE * (int)(NUM_ROTATEBOX * 0.5f)))
 			+ (SETSIZE * nCnt) 
 			+ (SETSIZE * ((1 - NUM_ROTATEBOX % 2) * 0.5f))));
+		m_aObj[nCnt].s_pModel->GetMotion()->InitSet(0);
 	}
 	return S_OK;
 }
@@ -102,6 +105,7 @@ void CGimmickRotate::Update(void)
 			m_aObj[nCnt].s_posOld.x = m_aObj[nCnt].s_pModel->GetMtxWorld()->_41;
 			m_aObj[nCnt].s_posOld.y = m_aObj[nCnt].s_pModel->GetMtxWorld()->_42;
 			m_aObj[nCnt].s_posOld.z = m_aObj[nCnt].s_pModel->GetMtxWorld()->_43;
+			m_aObj[nCnt].s_pModel->Update();
 		}
 	}
 
@@ -191,4 +195,41 @@ bool CGimmickRotate::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXV
 	}
 
 	return bLand;
+}
+
+//==========================================================
+// 回転速度設定
+//==========================================================
+void CGimmickRotate::SetRotate(D3DXVECTOR3 rotate)
+{ 
+	m_RotateSpeed = rotate; 
+	SetRotationCharacter();
+}
+
+//==========================================================
+// 回転オブジェクトの向きを設定
+//==========================================================
+void CGimmickRotate::SetRotationCharacter(void)
+{
+	if ((int)(NUM_ROTATEBOX * 0.5f) <= 0)
+	{
+		return;
+	}
+
+	for (int nCnt = 0; nCnt < NUM_ROTATEBOX; nCnt++)
+	{
+		if (m_aObj[nCnt].s_pModel != NULL)
+		{
+			if (m_RotateSpeed.y > 0.0f)
+			{
+				m_aObj[nCnt].s_pModel->SetRotation(D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f * (1.0f - (nCnt / (int)(NUM_ROTATEBOX * 0.5f)) * 2),
+					0.0f));
+			}
+			else
+			{
+				m_aObj[nCnt].s_pModel->SetRotation(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f * (1.0f - (nCnt / (int)(NUM_ROTATEBOX * 0.5f)) * 2),
+					0.0f));
+			}
+		}
+	}
 }

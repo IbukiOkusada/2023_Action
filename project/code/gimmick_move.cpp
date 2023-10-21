@@ -8,9 +8,11 @@
 #include "manager.h"
 #include "slow.h"
 #include "Xfile.h"
-#include "objectX.h"
+#include "character.h"
+#include "motion.h"
 
 // マクロ定義
+#define COLLISION_SIZE		(50.0f)
 
 //==========================================================
 // コンストラクタ
@@ -40,8 +42,8 @@ HRESULT CGimmickMove::Init(void)
 	// 読み込み確認
 	if(m_pObject == NULL)
 	{
-		m_pObject = CObjectX::Create(GetPosition(), GetRotation(), "data\\MODEL\\5mcube.x", 3);
-		m_pObject->ListOut();
+		m_pObject = CCharacter::Create("data\\TXT\\motion_bee.txt");
+		m_pObject->GetMotion()->InitSet(0);
 	}
 
 	// スローを覚える
@@ -58,6 +60,7 @@ void CGimmickMove::Uninit(void)
 	if (m_pObject != NULL)
 	{
 		m_pObject->Uninit();
+		delete m_pObject;
 		m_pObject = NULL;
 	}
 
@@ -77,6 +80,11 @@ void CGimmickMove::Update(void)
 	Controller();
 
 	SetMtxWorld();
+
+	if (m_pObject != nullptr)
+	{
+		m_pObject->Update();
+	}
 }
 
 //==========================================================
@@ -132,6 +140,7 @@ void CGimmickMove::Controller(void)
 {
 	// 座標更新
 	D3DXVECTOR3 pos = GetPosition();
+	D3DXVECTOR3 rot = GetRotation();
 	float m_fSlowMulti = 1.0f;	// スロー倍率
 
 	if (!m_pSlow)
@@ -153,6 +162,13 @@ void CGimmickMove::Controller(void)
 	{
 		m_move *= -1.0f;
 		m_fNowMoveTimer = m_fNumMoveTimer;
+
+		D3DXVECTOR2 vec;
+		vec.y = -m_move.x;
+		vec.x = -m_move.z;
+		D3DXVec2Normalize(&vec, &vec);
+		rot.y = atan2f(vec.y, vec.x);
+		SetRotation(rot);
 	}
 
 	if(m_pObject != NULL)
@@ -169,8 +185,8 @@ bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 {
 	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 	bool bLand = false;	// 着地したか否か
-	D3DXVECTOR3 vtxObjMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 vtxObjMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 vtxObjMax = D3DXVECTOR3(COLLISION_SIZE, COLLISION_SIZE, COLLISION_SIZE);
+	D3DXVECTOR3 vtxObjMin = D3DXVECTOR3(-COLLISION_SIZE, -COLLISION_SIZE, -COLLISION_SIZE);
 	D3DXVECTOR3 ObjPos = GetPosition();
 	D3DXVECTOR3 ObjRot = GetRotation();
 
@@ -180,11 +196,6 @@ bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 	}
 
 	// 向きを反映
-	m_pObject->SetRotSize(vtxObjMax,
-		vtxObjMin,
-		pFile->GetMax(m_pObject->GetIdx()),
-		pFile->GetMin(m_pObject->GetIdx()),
-		ObjRot.y);
 
 	if (pos.y + vtxMax.y > ObjPos.y + vtxObjMin.y
 		&& pos.y + vtxMin.y <= ObjPos.y + vtxObjMax.y)

@@ -12,6 +12,7 @@
 class CScore;
 class CFileLoad;
 class CMeshDome;
+class CTime;
 
 //===============================================
 // タイトルクラスの定義(派生クラス)
@@ -29,11 +30,13 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	static void SetScore(int nNum) { m_nScore = nNum; }
 
 private:
 
 	CFileLoad *m_pFileLoad;	// ファイル読み込みのポインタ
 	CMeshDome *m_pMeshSky;		// 空用
+	CTime *m_pTime;
 	CScore *m_pScore;			// スコア
 	int m_nTimer;				// 遷移タイマー
 	static int m_nScore;		// 今回のスコア
