@@ -208,7 +208,7 @@ void CObject::DrawAll(void)
 		{// 使用されていない状態まで
 			CObject *pObjectNext = pObject->m_pNext;	// 次のオブジェクトへのポインタを取得
 
-			if (pObject->m_type != TYPE_PAUSE && pObject->m_type != TYPE_MAP && pObject->m_bDraw == true)
+			if (pObject->m_type != TYPE_PAUSE && pObject->m_type != TYPE_MAP && pObject->m_bDraw == true && pObject->m_bDeath == false)
 			{// ポーズ画面以外
 				// 描画処理
 				pObject->Draw();

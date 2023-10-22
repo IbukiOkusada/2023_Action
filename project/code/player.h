@@ -32,6 +32,16 @@ class CMeshBalloon;
 //==========================================================
 class CPlayer : public CTask
 {
+public:
+
+	// 操作種類列挙型
+	enum TYPE
+	{
+		TYPE_NONE,	// 操作不可能
+		TYPE_ACTIVE,	// 操作可能
+		TYPE_MAX
+	};
+
 private:	// 自分だけがアクセス可能な定義
 
 	// 状態列挙型
@@ -76,11 +86,17 @@ public:	// 誰でもアクセス可能
 	void SetMove(const D3DXVECTOR3 move) { m_Info.move = move; }
 	void SetPosition(const D3DXVECTOR3 pos) { m_Info.pos = pos; }
 	void SetRotation(const D3DXVECTOR3 rot) { m_Info.rot = rot; }
+	void BindId(int nId) { m_nId = nId; }
+	void SetType(TYPE type) { m_type = type; }
 
 	// メンバ関数(取得)
 	D3DXVECTOR3 GetMove(void) { return m_Info.move; }
 	D3DXVECTOR3 GetPosition(void) { return m_Info.pos; }
 	D3DXVECTOR3 GetRotation(void) { return m_Info.rot; }
+	int GetId(void) { return m_nId; }
+	static CPlayer *GetTop(void) { return m_pTop; }
+	CPlayer *GetNext(void) { return m_pNext; }
+	void Damage(int nDamage) { m_nLife -= nDamage; }
 
 private:	// 自分だけがアクセス可能
 
@@ -93,6 +109,10 @@ private:	// 自分だけがアクセス可能
 	void KeyBoardRotation(void);
 
 	// メンバ変数
+	static CPlayer *m_pTop;	// 先頭のオブジェクトへのポインタ
+	static CPlayer *m_pCur;	// 最後尾のオブジェクトへのポインタ
+	CPlayer *m_pPrev;	// 前のオブジェクトへのポインタ
+	CPlayer *m_pNext;	// 次のオブジェクトへのポインタ
 	CObjectBillboard **m_ppBillBoard;
 	SInfo m_Info;			// 自分自身の情報
 	CObjectX *m_pObject;	// 描画オブジェクト
@@ -106,6 +126,8 @@ private:	// 自分だけがアクセス可能
 	float m_fValueRot;	// 回転角
 	CShadow *m_pShadow;	// 影のポインタ
 	int m_nLife;			// 体力
+	int m_nId;	// ID
+	TYPE m_type;
 };
 
 #endif

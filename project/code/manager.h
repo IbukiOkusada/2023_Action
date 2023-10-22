@@ -68,6 +68,8 @@ public:
 	virtual CEnemyRoute *GetEnemyRoute(void) { return NULL; }
 	virtual CCarManager *GetCarManager(void) { return NULL; }
 	virtual CEnemyManager *GetEnemyManager(void) { return NULL; }
+	virtual void SendPosition(D3DXVECTOR3 pos) {  }
+	virtual void SendRotation(D3DXVECTOR3 rot) {  }
 	void SetMode(MODE mode) { m_mode = mode; }
 	MODE GetMode(void) { return m_mode; }
 

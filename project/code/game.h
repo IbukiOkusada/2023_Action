@@ -14,20 +14,12 @@ class CScore;
 class CTime;
 class CPlayer;
 class CMapCamera;
-class CLight;
 class CFileLoad;
 class CEditor;
-class CSlow;
-class CObject3D;
-class CMeshField;
 class CPause;
-class CThermo;
-class CEnemyManager;
-class CCarManager;
-class CEnemyRoute;
-class CMeshDome;
 class CObject2D;
-class CHeatFilter;
+class CClient;
+class CMeshDome;
 
 // マクロ定義
 #define NUM_FILTER	(2)
@@ -39,6 +31,16 @@ class CGame : public CScene
 {
 public:
 
+	enum STATE
+	{
+		STATE_TIMEATTACK = 0,
+		STATE_MULTI,
+		STATE_END,
+		STATE_MAX
+	};
+
+public:
+
 	// メンバ関数
 	CGame();	// コンストラクタ
 	~CGame();	// デストラクタ
@@ -48,41 +50,42 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
+	static void SetState(STATE state) { m_state = state; }
+	void SendPosition(D3DXVECTOR3 pos);
+	void SendRotation(D3DXVECTOR3 rot);
 
 	// メンバ関数(ポインタ)
-	static CScore *GetScore(void);
+	CScore *GetScore(void);
 	CTime *GetTime(void);
 	CPlayer *GetPlayer(void);
-	static CMeshField *GetMeshField(void);
-	static void SetMesh(CMeshField *pMesh) { m_pMeshField = pMesh; }
 	CFileLoad *GetFileLoad(void);
-	static CPause *GetPause(void);
+	CPause *GetPause(void);
 	CEditor *GetEditor(void);
 	CMapCamera *GetMapCamera(void) { return m_pMapCamera; }
-	CEnemyRoute *GetEnemyRoute(void) { return m_pEnemyRoute; }
-	CCarManager *GetCarManager(void) { return m_pCarManager; }
-	CEnemyManager *GetEnemyManager(void) { return m_pEnemyManager; }
 
 private:
 
 	void GimmickSet(void);
 
-	CFileLoad *m_pFileLoad;			// ファイル読み込みのポインタ
-	static CScore *m_pScore;		// スコアのポインタ
-	CTime *m_pTime;					// タイムのポインタ
-	CPlayer *m_pPlayer;				// プレイヤーのポインタ
-	static CMeshField *m_pMeshField;	// メッシュフィールドのポインタ
-	static CPause *m_pPause;		// ポーズのポインタ
-	CEditor *m_pEditor;				// エディターのポインタ
+	// TCP通信用関数
+	void Online(void);
+	void ByteCheck(char *pRecvData, int nRecvByte);
+	void OnlineEnd(void);
+
+	CFileLoad *m_pFileLoad;		// ファイル読み込みのポインタ
+	CScore *m_pScore;		// スコアのポインタ
+	CTime *m_pTime;		// タイムのポインタ
+	CPlayer *m_pPlayer;	// プレイヤーのポインタ
+	CPause *m_pPause;		// ポーズのポインタ
+	CEditor *m_pEditor;	// エディターのポインタ
 	CMapCamera *m_pMapCamera;		// ミニマップ用カメラ
-	CThermo *m_pMapThermo;			// マップ全体の温度表示
-	CEnemyManager *m_pEnemyManager;	// エネミーマネージャーのポインタ
-	CCarManager *m_pCarManager;		// カーマネージャーのポインタ
-	CEnemyRoute *m_pEnemyRoute;		// 敵の順路管理のポインタ
-	CMeshDome *m_pMeshDome;			// メッシュドームのポインタ
-	int m_nMaxEnemy;				// 現在のエネミー最大数
-	CObject2D *m_pStart;			// スタート時の文字
-	CHeatFilter *m_apFilter[NUM_FILTER];
+	CMeshDome *m_pMeshDome;		// メッシュドームのポインタ
+	CObject2D *m_pStart;	// スタート時の文字
+	CClient *m_pClient;	// クライアントのポインタ
+	static char m_aAddress[30];	// 接続先サーバーのアドレス
+	static STATE m_state;	// 状態
+	int m_nSledCnt;		// 現在動作しているスレッド数
+	WSADATA m_wsaData;
 };
 
 #endif

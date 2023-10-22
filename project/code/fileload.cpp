@@ -455,11 +455,6 @@ void CFileLoad::LoadMeshFieldData(FILE *pFile)
 		pMesh->SetTexMove(move);
 	}
 
-	if (CGame::GetMeshField() == NULL && CManager::GetInstance()->GetMode() == CScene::MODE_GAME)
-	{
-		CGame::SetMesh(pMesh);
-	}
-
 	if (aUpDown[0] != '\0')
 	{
 		pMesh->UpDownLoad(&aUpDown[0]);

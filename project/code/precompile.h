@@ -7,6 +7,10 @@
 #ifndef _PRECOMPILE_H_
 #define _PRECOMPILE_H_
 
+// winsock‚Ìİ’è
+#include <winsock2.h>
+#pragma comment(lib, "ws2_32.lib")
+
 //DirectX‚Ì‰Šúİ’è
 #include <stdio.h>
 #include <windows.h>

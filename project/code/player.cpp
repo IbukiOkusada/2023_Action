@@ -34,10 +34,10 @@
 #define SHW_MOVE	(1.0f)	// シャワー中移動量
 #define PLAYER_GRAVITY	(-0.15f)		//プレイヤー重力
 #define PLAYER_JUMP		(10.0f)		//プレイヤージャンプ力
-#define ROT_MULTI	(0.075f)		// 向き補正倍率
+#define ROT_MULTI	(0.075f)	// 向き補正倍率
 #define WIDTH	(20.0f)		// 幅
-#define HEIGHT	(80.0f)		// 高さ
-#define INER	(0.003f)	// 慣性
+#define HEIGHT	(80.0f)	// 高さ
+#define INER	(0.003f)		// 慣性
 #define STEP_SPEED	(50.0f)
 #define STEP_COOLTIME	(90.0f)
 #define STEP_INER	(0.05f)
@@ -47,6 +47,10 @@
 #define DEATH_INTERVAL	(120.0f)
 #define DASH_INTERVAL	(60.0f)
 #define SPAWN_INTERVAL	(60.0f)
+
+// 前方宣言
+CPlayer *CPlayer::m_pTop = NULL;	// 先頭のオブジェクトへのポインタ
+CPlayer *CPlayer::m_pCur = NULL;	// 最後尾のオブジェクトへのポインタ
 
 //===============================================
 // コンストラクタ
@@ -74,6 +78,21 @@ CPlayer::CPlayer(const D3DXVECTOR3 pos)
 	m_pObject = NULL;
 	m_pShadow = NULL;
 	m_nLife = 0;
+	m_type = TYPE_NONE;
+	m_nId = -1;
+
+	// 自分自身をリストに追加
+	if (m_pTop != NULL)
+	{// 先頭が存在している場合
+		m_pCur->m_pNext = this;	// 現在最後尾のオブジェクトのポインタにつなげる
+		m_pPrev = m_pCur;
+		m_pCur = this;	// 自分自身が最後尾になる
+	}
+	else
+	{// 存在しない場合
+		m_pTop = this;	// 自分自身が先頭になる
+		m_pCur = this;	// 自分自身が最後尾になる
+	}
 }
 
 //===============================================
@@ -93,6 +112,21 @@ CPlayer::CPlayer(int nPriOrity)
 	m_pShadow = NULL;
 	m_nLife = 0;
 	m_ppBillBoard = NULL;
+	m_type = TYPE_NONE;
+	m_nId = -1;
+
+	// 自分自身をリストに追加
+	if (m_pTop != NULL)
+	{// 先頭が存在している場合
+		m_pCur->m_pNext = this;	// 現在最後尾のオブジェクトのポインタにつなげる
+		m_pPrev = m_pCur;
+		m_pCur = this;	// 自分自身が最後尾になる
+	}
+	else
+	{// 存在しない場合
+		m_pTop = this;	// 自分自身が先頭になる
+		m_pCur = this;	// 自分自身が最後尾になる
+	}
 }
 
 //===============================================
@@ -132,6 +166,7 @@ HRESULT CPlayer::Init(void)
 	}
 
 	m_Info.state = STATE_APPEAR;
+	m_type = TYPE_NONE;
 	m_nLife = START_LIFE;
 
 	return S_OK;
@@ -149,6 +184,7 @@ HRESULT CPlayer::Init(const char *pBodyName, const char *pLegName)
 	}
 
 	m_nLife = START_LIFE;
+	m_type = TYPE_NONE;
 
 	//ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxRot);
@@ -188,6 +224,45 @@ HRESULT CPlayer::Init(const char *pBodyName, const char *pLegName)
 //===============================================
 void CPlayer::Uninit(void)
 {
+	// リストから自分自身を削除する
+	if (m_pTop == this)
+	{// 自身が先頭
+		if (m_pNext != NULL)
+		{// 次が存在している
+			m_pTop = m_pNext;	// 次を先頭にする
+			m_pNext->m_pPrev = NULL;	// 次の前のポインタを覚えていないようにする
+		}
+		else
+		{// 存在していない
+			m_pTop = NULL;	// 先頭がない状態にする
+			m_pCur = NULL;	// 最後尾がない状態にする
+		}
+	}
+	else if (m_pCur == this)
+	{// 自身が最後尾
+		if (m_pPrev != NULL)
+		{// 次が存在している
+			m_pCur = m_pPrev;			// 前を最後尾にする
+			m_pPrev->m_pNext = NULL;	// 前の次のポインタを覚えていないようにする
+		}
+		else
+		{// 存在していない
+			m_pTop = NULL;	// 先頭がない状態にする
+			m_pCur = NULL;	// 最後尾がない状態にする
+		}
+	}
+	else
+	{
+		if (m_pNext != NULL)
+		{
+			m_pNext->m_pPrev = m_pPrev;	// 自身の次に前のポインタを覚えさせる
+		}
+		if (m_pPrev != NULL)
+		{
+			m_pPrev->m_pNext = m_pNext;	// 自身の前に次のポインタを覚えさせる
+		}
+	}
+
 	if (nullptr != m_pObject){
 		m_pObject->Uninit();
 		m_pObject = NULL;
@@ -227,35 +302,38 @@ void CPlayer::Update(void)
 
 	StateSet();
 
-	if (m_nLife <= 0)
+	if (m_type == TYPE_ACTIVE)
 	{
-		for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
+
+		if (m_nLife <= 0)
 		{
-			if (nullptr != m_ppBillBoard[nCnt]) {
-				m_ppBillBoard[nCnt]->SetPosition(D3DXVECTOR3(m_Info.pos.x, m_Info.pos.y + 50.0f + 10.0f * nCnt, m_Info.pos.z));
+			for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
+			{
+				if (nullptr != m_ppBillBoard[nCnt]) {
+					m_ppBillBoard[nCnt]->SetPosition(D3DXVECTOR3(m_Info.pos.x, m_Info.pos.y + 50.0f + 10.0f * nCnt, m_Info.pos.z));
+				}
 			}
+
+			return;
 		}
 
-		return;
+		// プレイヤー操作
+		Controller();
+
+		// カメラ追従
+		CCamera *pCamera = CManager::GetInstance()->GetCamera();
+
+		// 追従処理
+		pCamera->Pursue(GetPosition(), GetRotation());
+
+		// オンライン送信
+		CManager::GetInstance()->GetScene()->SendPosition(m_Info.pos);
+		CManager::GetInstance()->GetScene()->SendRotation(m_Info.rot);
 	}
 
-	// プレイヤー操作
-	Controller();
-
-	// カメラ追従
-	CCamera *pCamera = CManager::GetInstance()->GetCamera();
-
-	// 追従処理
-	pCamera->Pursue(GetPosition(), GetRotation());
-
-	CManager::GetInstance()->GetDebugProc()->Print("向き [%f, %f, %f]", GetRotation().x, GetRotation().y, GetRotation().z);
+	CManager::GetInstance()->GetDebugProc()->Print("向き [%f, %f, %f] : ID [ %d]\n", GetRotation().x, GetRotation().y, GetRotation().z, m_nId);
 	CManager::GetInstance()->GetDebugProc()->Print("位置 [%f, %f, %f]", GetPosition().x, GetPosition().y, GetPosition().z);
 	CManager::GetInstance()->GetDebugProc()->Print("体力 [ %d ]\n", m_nLife);
-
-	// 回転軸の設定
-
-	// パーティクル
-	//Particle();
 
 	if (m_nLife <= 0)
 	{
@@ -265,9 +343,14 @@ void CPlayer::Update(void)
 		m_Info.fStateCounter = DEATH_INTERVAL;
 	}
 
+	if (nullptr != m_pObject) {
+		m_pObject->SetPosition(m_Info.pos);
+		m_pObject->SetRotation(m_Info.rot);
+	}
+
 	for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
 	{
-		if (nullptr != m_ppBillBoard[nCnt]){
+		if (nullptr != m_ppBillBoard){
 			D3DXVECTOR3 rot = m_ppBillBoard[nCnt]->GetRotation();
 
 			rot.z += 0.0025f * (1 - (nCnt % 2 * 2));
@@ -425,11 +508,6 @@ void CPlayer::Controller(void)
 	float fHeight = CMeshField::GetHeight(pos);
 
 	m_Info.pos = pos;
-
-	if (nullptr != m_pObject){
-		m_pObject->SetPosition(m_Info.pos);
-		m_pObject->SetRotation(m_Info.rot);
-	}
 
 	// 影の設定
 	if (nullptr != m_pShadow) {

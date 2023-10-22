@@ -23,6 +23,9 @@ CGimmickAir::CGimmickAir()
 	m_fHeight = 0.0f; 
 	m_fWidth = 0.0f;
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_moveTex = D3DXVECTOR2(0.0f, 0.0f);
+	m_TexPos = D3DXVECTOR2(0.0f, 0.0f);
 }
 
 //==========================================================

@@ -30,6 +30,13 @@
 #include "gimmick_button.h"
 #include "gimmick_air.h"
 #include "gimmick_door.h"
+#include "tcp_client.h"
+#include <thread>
+#include "protocol_online.h"
+#include <mutex>
+
+// グローバル
+std::mutex g_mtx;
 
 //===============================================
 // マクロ定義
@@ -47,13 +54,14 @@
 #define PM_GOHOME_RUSH	(60 * 19)	// 帰宅ラッシュ
 #define MAX_TIME	(60 * 20 + 10)	// 最大時間
 #define SPEED_UP	(30.0f)
+#define DEF_PORT	(22333)	// ポート番号
+#define MAX_STRING	(2048)
 
 //===============================================
 // 静的メンバ変数
 //===============================================
-CScore *CGame::m_pScore = NULL;		// スコアのポインタ
-CMeshField *CGame::m_pMeshField = NULL;	// メッシュフィールドのポインタ
-CPause *CGame::m_pPause = NULL;		// ポーズのポインタ
+CGame::STATE CGame::m_state = CGame::STATE_MULTI;	// 状態
+char CGame::m_aAddress[30] = "127.0.0.1";	// 接続先サーバーのアドレス
 
 //===============================================
 // コンストラクタ
@@ -62,21 +70,16 @@ CGame::CGame()
 {
 	// 値のクリア
 	m_pMapCamera = NULL;
-	m_pMapThermo = NULL;
-	m_nMaxEnemy = 0;
 	m_pTime = NULL;
-	m_pEnemyManager = NULL;
 	m_pPlayer = NULL;
 	m_pFileLoad = NULL;
 	m_pEditor = NULL;
-	m_pCarManager = NULL;
 	m_pMeshDome = NULL;
 	m_pStart = NULL;
-
-	for (int nCnt = 0; nCnt < NUM_FILTER; nCnt++)
-	{
-		m_apFilter[nCnt] = NULL;
-	}
+	m_pPause = NULL;
+	m_pScore = NULL;
+	m_pClient = NULL;
+	m_nSledCnt = 0;
 }
 
 //===============================================
@@ -92,6 +95,13 @@ CGame::~CGame()
 //===============================================
 HRESULT CGame::Init(void)
 {
+	int nErr = WSAStartup(WINSOCK_VERSION, &m_wsaData);	// winsockの初期化関数
+
+	if (nErr != 0)
+	{// 初期化に失敗した場合
+		
+	}
+
 	// 外部ファイル読み込みの生成
 	if (nullptr == m_pFileLoad)
 	{// 使用していない場合
@@ -118,10 +128,32 @@ HRESULT CGame::Init(void)
 	}
 
 	m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, -150.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
-	m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
-	m_pTime->Set(150 * 100);
+	m_pPlayer->SetType(CPlayer::TYPE_ACTIVE);
 
 	m_pMeshDome = CMeshDome::Create(D3DXVECTOR3(-8000.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 10000.0f, 10.0f, 3, 10, 10);
+
+	if (m_state == STATE_MULTI)
+	{// マルチの場合
+
+		m_pClient = new CClient;
+
+		if (m_pClient->Init(&m_aAddress[0], DEF_PORT))
+		{
+			// マルチスレッド
+			std::thread th(&CGame::Online, this);
+			th.detach();
+		}
+		else
+		{
+			m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
+			m_pTime->Set(150 * 100);
+		}
+	}
+	else
+	{
+		m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
+		m_pTime->Set(150 * 100);
+	}
 	
 	// ギミック設置
 	GimmickSet();
@@ -139,6 +171,17 @@ HRESULT CGame::Init(void)
 //===============================================
 void CGame::Uninit(void)
 {
+	m_pPlayer = nullptr;
+
+	while (1)
+	{
+		OnlineEnd();
+		if (m_nSledCnt <= 0)
+		{
+			break;
+		}
+	}
+
 	if (m_pFileLoad != NULL)
 	{
 		m_pFileLoad->Uninit();
@@ -160,6 +203,17 @@ void CGame::Uninit(void)
 		delete m_pTime;
 		m_pTime = NULL;
 	}
+
+	if (m_pClient != NULL)
+	{
+		m_pClient->Uninit();
+		delete m_pClient;
+		m_pClient = NULL;
+	}
+
+	//Winsock終了処理
+	WSACleanup();	// WSACleanup関数 : winsockの終了処理
+
 }
 
 //===============================================
@@ -261,13 +315,6 @@ CTime *CGame::GetTime(void)
 CPlayer *CGame::GetPlayer(void)
 {
 	return m_pPlayer;
-}
-//===================================================
-// メッシュフィールドの取得
-//===================================================
-CMeshField *CGame::GetMeshField(void)
-{
-	return m_pMeshField;
 }
 
 //===================================================
@@ -421,4 +468,239 @@ void CGame::GimmickSet(void)
 	CGimmickDoor *pDoor = CGimmickDoor::Create();
 	pDoor->SetPosition(D3DXVECTOR3(-13810.0f, 0.0f, -750.0f));
 	pDoor->SetRotation(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+}
+
+//===================================================
+// オンライン通信
+//===================================================
+void CGame::Online(void)
+{
+	m_nSledCnt = 1;
+	while (1)
+	{
+		if (m_pPlayer == NULL)
+		{
+			break;
+		}
+
+		char aRecvData[MAX_STRING] = {};	// 受信用
+
+		// 受信
+		int nRecvByte = m_pClient->Recv(&aRecvData[0], MAX_STRING);
+
+		// マルチスレッド
+		std::thread th(&CGame::ByteCheck, this, &aRecvData[0], nRecvByte);
+		th.detach();
+	}
+
+	m_nSledCnt--;
+}
+
+//===================================================
+// 受信確認
+//===================================================
+void CGame::ByteCheck(char *pRecvData, int nRecvByte)
+{
+	g_mtx.lock();
+	m_nSledCnt++;
+	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	int nType = COMMAND_TYPE_NONE;	// コマンド番号
+	int nId = -1;		// ID
+	int nByte = 0;	// バイト数
+	int nDamage = 0;	// ダメージ数
+	CPlayer *pPlayer = NULL;		// 先頭を取得
+	CPlayer *pPlayerNext = NULL;	// 次を保持
+
+	if (nRecvByte <= 0)
+	{
+		m_nSledCnt--;
+		g_mtx.unlock();
+		return;
+	}
+
+	// 終端文字まで確認する
+	while (nByte < nRecvByte)
+	{
+		bool bIn = false;	// 既にいるかどうか
+		memcpy(&nId, &pRecvData[nByte], sizeof(int));
+		nByte += sizeof(int);
+
+		// コマンド取得
+		memcpy(&nType, &pRecvData[nByte], sizeof(int));
+		nByte += sizeof(int);
+
+		if (nId != -1)
+		{
+			// コマンドごとに分ける
+			switch (nType)
+			{
+
+			case COMMAND_TYPE_SETPOSITION:
+
+				memcpy(&pos, &pRecvData[nByte], sizeof(D3DXVECTOR3));
+				nByte += sizeof(D3DXVECTOR3);
+				break;
+
+			case COMMAND_TYPE_SETROTATION:
+
+				memcpy(&pos, &pRecvData[nByte], sizeof(D3DXVECTOR3));
+				nByte += sizeof(D3DXVECTOR3);
+				break;
+
+			case COMMAND_TYPE_CREATE:
+				break;
+
+			case COMMAND_TYPE_DAMAGE:
+
+				memcpy(&nDamage, &pRecvData[nByte], sizeof(int));
+				nByte += sizeof(int);
+				break;
+
+			case COMMAND_TYPE_DELETE:
+				break;
+
+			case COMMAND_TYPE_GETID:
+				break;
+			}
+		}
+
+		if (m_pPlayer == NULL)
+		{
+			m_nSledCnt--;
+			g_mtx.unlock();
+			return;
+		}
+
+		if (nId != -1 && m_pPlayer->GetId() != -1)
+		{// IDを受信できた
+
+			pPlayer = CPlayer::GetTop();	// 先頭を取得
+
+			while (pPlayer != NULL)
+			{// 使用されている間繰り返し
+				pPlayerNext = pPlayer->GetNext();	// 次を保持
+
+				if (nId == pPlayer->GetId() && m_pPlayer->GetId() != nId)
+				{// 自分以外かつ操作していない
+
+				 // コマンドごとに分ける
+					switch (nType)
+					{
+					case COMMAND_TYPE_SETPOSITION:
+
+						pPlayer->SetPosition(pos);
+						break;
+
+					case COMMAND_TYPE_SETROTATION:
+
+						pPlayer->SetRotation(pos);
+						break;
+
+					case COMMAND_TYPE_CREATE:
+
+						break;
+
+					case COMMAND_TYPE_DELETE:
+
+						pPlayer->Uninit();
+						break;
+
+					case COMMAND_TYPE_GETID:
+
+						break;
+					}
+
+					bIn = true;	// いる状態にする
+					break;
+				}
+				else if (nId == pPlayer->GetId() && m_pPlayer->GetId() == nId)
+				{// 自分以外かつ操作キャラ
+
+					bIn = true;	// いる状態にする
+					break;
+				}
+
+				pPlayer = pPlayerNext;	// 次に移動
+			}
+
+			if (bIn == false && m_pPlayer->GetId() != -1 && nType > COMMAND_TYPE_NONE && nType < COMMAND_TYPE_MAX)
+			{// まだ存在していない場合
+				pPlayer = CPlayer::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
+				pPlayer->BindId(nId);
+			}
+		}
+		else if (nId == -1 && m_pPlayer->GetId() == -1)
+		{// IDが受信できていないかつ自分自身のIDも存在していない
+			nId = nType;
+
+			// 自分のIDを設定
+			m_pPlayer->BindId(nId);
+
+			break;
+		}
+	}
+
+	m_nSledCnt--;
+	g_mtx.unlock();
+}
+
+//===================================================
+// 座標送信
+//===================================================
+void CGame::SendPosition(D3DXVECTOR3 pos)
+{
+	if (m_pClient != nullptr)
+	{
+		char aSendData[MAX_STRING] = {};	// 送信用
+		int nProt = COMMAND_TYPE_SETPOSITION;
+
+		// protocolを挿入
+		memcpy(&aSendData[0], &nProt, sizeof(int));
+
+		// 座標を挿入
+		memcpy(&aSendData[sizeof(int)], &pos, sizeof(D3DXVECTOR3));
+
+		// 送信
+		m_pClient->Send(&aSendData[0], sizeof(int) + sizeof(D3DXVECTOR3));
+	}
+}
+
+//===================================================
+// 向き送信
+//===================================================
+void CGame::SendRotation(D3DXVECTOR3 rot)
+{
+	if (m_pClient != nullptr)
+	{
+		char aSendData[MAX_STRING] = {};	// 送信用
+		int nProt = COMMAND_TYPE_SETROTATION;
+
+		// protocolを挿入
+		memcpy(&aSendData[0], &nProt, sizeof(int));
+
+		// 座標を挿入
+		memcpy(&aSendData[sizeof(int)], &rot, sizeof(D3DXVECTOR3));
+
+		// 送信
+		m_pClient->Send(&aSendData[0], sizeof(int) + sizeof(D3DXVECTOR3));
+	}
+}
+
+//===================================================
+// 終了送信
+//===================================================
+void CGame::OnlineEnd(void)
+{
+	if (m_pClient != nullptr)
+	{
+		char aSendData[MAX_STRING] = {};	// 送信用
+		int nProt = COMMAND_TYPE_DELETE;
+
+		// protocolを挿入
+		memcpy(&aSendData[0], &nProt, sizeof(int));
+
+		// 送信
+		m_pClient->Send(&aSendData[0], sizeof(int) + sizeof(D3DXVECTOR3));
+	}
 }
