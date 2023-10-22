@@ -12,6 +12,7 @@
 #include "model.h"
 
 // マクロ定義
+#define DAMAGE		(1)
 
 //==========================================================
 // コンストラクタ
@@ -196,6 +197,7 @@ bool CGimmickDoor::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 				bLand = true;
 				move.x *= -1.0f;
 				pos.x = ObjPos.x + vtxObjMax.x - vtxMin.x + 0.1f;
+				nDamage = DAMAGE;
 			}
 			else if (posOld.x + vtxMax.x <= ObjPos.x + vtxObjMin.x
 				&& pos.x + vtxMax.x > ObjPos.x + vtxObjMin.x
@@ -206,6 +208,7 @@ bool CGimmickDoor::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 				bLand = true;
 				move.x *= -1.0f;
 				pos.x = ObjPos.x + vtxObjMin.x - vtxMax.x - 0.1f;
+				nDamage = DAMAGE;
 			}
 			else if (posOld.z + vtxMin.z >= ObjPos.z + vtxObjMax.z
 				&& pos.z + vtxMin.z < ObjPos.z + vtxObjMax.z
@@ -216,6 +219,7 @@ bool CGimmickDoor::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 				bLand = true;
 				move.z *= -1.0f;
 				pos.z = ObjPos.z + vtxObjMax.z - vtxMin.z + 0.1f;
+				nDamage = DAMAGE;
 			}
 			else if (posOld.z + vtxMax.z <= ObjPos.z + vtxObjMin.z
 				&& pos.z + vtxMax.z > ObjPos.z + vtxObjMin.z
@@ -226,6 +230,7 @@ bool CGimmickDoor::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 				bLand = true;
 				move.z *= -1.0f;
 				pos.z = ObjPos.z + vtxObjMin.z - vtxMax.z - 0.1f;
+				nDamage = DAMAGE;
 			}
 		}
 

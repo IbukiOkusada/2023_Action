@@ -96,7 +96,7 @@ public:	// 誰でもアクセス可能
 	int GetId(void) { return m_nId; }
 	static CPlayer *GetTop(void) { return m_pTop; }
 	CPlayer *GetNext(void) { return m_pNext; }
-	void Damage(int nDamage) { m_nLife -= nDamage; }
+	void Damage(int nDamage);
 
 private:	// 自分だけがアクセス可能
 

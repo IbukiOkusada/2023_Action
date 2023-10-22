@@ -15,6 +15,7 @@
 // マクロ定義
 #define FILENAME "data\\TXT\\motion_bird.txt"	// 使用モデル
 #define SETSIZE	(100.0f)
+#define DAMAGE		(1)
 
 //==========================================================
 // コンストラクタ
@@ -180,6 +181,7 @@ bool CGimmickRotate::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXV
 		}
 
 		bLand = true;
+		nDamage = DAMAGE;
 
 		// 触れているのでめり込みを直す
 		D3DXVECTOR3 vec = D3DXVECTOR3(pos.x - ObjPos.x, pos.y - ObjPos.y, pos.z - ObjPos.z);

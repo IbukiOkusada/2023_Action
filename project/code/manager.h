@@ -70,6 +70,7 @@ public:
 	virtual CEnemyManager *GetEnemyManager(void) { return NULL; }
 	virtual void SendPosition(D3DXVECTOR3 pos) {  }
 	virtual void SendRotation(D3DXVECTOR3 rot) {  }
+	virtual void SendDamage(int nDamage) {  }
 	void SetMode(MODE mode) { m_mode = mode; }
 	MODE GetMode(void) { return m_mode; }
 

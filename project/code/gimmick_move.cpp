@@ -13,6 +13,7 @@
 
 // マクロ定義
 #define COLLISION_SIZE		(50.0f)
+#define DAMAGE		(1)
 
 //==========================================================
 // コンストラクタ
@@ -209,6 +210,7 @@ bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 			move.x *= -1.0f;
 			//move.x *= fRefMulti;
 			pos.x = ObjPos.x + vtxObjMax.x - vtxMin.x + 0.1f + m_move.x;
+			nDamage = DAMAGE;
 		}
 		else if (posOld.x + vtxMax.x <= m_posOld.x + vtxObjMin.x
 			&& pos.x + vtxMax.x > ObjPos.x + vtxObjMin.x
@@ -221,6 +223,7 @@ bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 			//move.x *= fRefMulti;
 			pos.x = ObjPos.x + vtxObjMin.x - vtxMax.x - 0.1f + m_move.x;
 			//move.x = 0.0f;
+			nDamage = DAMAGE;
 		}
 		else if (posOld.z + vtxMin.z >= m_posOld.z + vtxObjMax.z
 			&& pos.z + vtxMin.z < ObjPos.z + vtxObjMax.z
@@ -233,6 +236,7 @@ bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 			//move.z *= fRefMulti;
 			pos.z = ObjPos.z + vtxObjMax.z - vtxMin.z + 0.1f + m_move.z;
 			//move.z = 0.0f;
+			nDamage = DAMAGE;
 		}
 		else if (posOld.z + vtxMax.z <= m_posOld.z + vtxObjMin.z
 			&& pos.z + vtxMax.z > ObjPos.z + vtxObjMin.z
@@ -245,6 +249,7 @@ bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 			//move.z *= fRefMulti;
 			pos.z = ObjPos.z + vtxObjMin.z - vtxMax.z - 0.1f + m_move.z;
 			//move.z = 0.0f;
+			nDamage = DAMAGE;
 		}
 	}
 

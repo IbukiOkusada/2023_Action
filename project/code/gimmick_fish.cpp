@@ -19,6 +19,7 @@
 #define DOWN_COUNTER	(30.0f)
 #define ATK_ENDCOUNTER	(30.0f)
 #define COLSIZE		(300)
+#define DAMAGE		(4)
 
 //==========================================================
 // コンストラクタ
@@ -236,6 +237,7 @@ bool CGimmickFish::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 
 	if (fLength < COLSIZE)
 	{
+		nDamage = DAMAGE;
 		m_bEat = true;
 		bLand = true;
 	}

@@ -335,19 +335,36 @@ void CPlayer::Update(void)
 	CManager::GetInstance()->GetDebugProc()->Print("位置 [%f, %f, %f]", GetPosition().x, GetPosition().y, GetPosition().z);
 	CManager::GetInstance()->GetDebugProc()->Print("体力 [ %d ]\n", m_nLife);
 
-	if (m_nLife <= 0)
+	// 死亡確認
+	if (m_nLife <= 0 && m_Info.state != STATE_DEATH)
 	{
+		if (m_pObject == nullptr)
+		{
+			return;
+		}
+
 		m_pObject->SetDraw(false);
 		m_pShadow->SetDraw(false);
 		m_Info.state = STATE_DEATH;
 		m_Info.fStateCounter = DEATH_INTERVAL;
 	}
 
+	// 使用オブジェクト更新
 	if (nullptr != m_pObject) {
 		m_pObject->SetPosition(m_Info.pos);
 		m_pObject->SetRotation(m_Info.rot);
 	}
 
+	// 起伏との当たり判定
+	D3DXVECTOR3 nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	float fHeight = CMeshField::GetHeight(m_Info.pos);
+
+	// 影の設定
+	if (nullptr != m_pShadow) {
+		m_pShadow->SetPosition(D3DXVECTOR3(m_Info.pos.x, fHeight + 1.0f, m_Info.pos.z));
+	}
+
+	// シャボン玉更新
 	for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
 	{
 		if (nullptr != m_ppBillBoard){
@@ -477,6 +494,10 @@ void CPlayer::Controller(void)
 		{
 			bDamage = true;
 			CManager::GetInstance()->GetDebugProc()->Print("***壁と当たったよ***\n");
+			if (nDamage == 0)
+			{
+				nDamage = 1;
+			}
 		}
 	}
 
@@ -487,9 +508,8 @@ void CPlayer::Controller(void)
 		{
 			if (bDamage)
 			{
-				m_nLife--;
-				m_Info.fStateCounter = DAMAGE_INTERVAL;
-				m_Info.state = STATE_DAMAGE;
+				CManager::GetInstance()->GetScene()->SendDamage(nDamage);
+				Damage(nDamage);
 			}
 		}
 	}
@@ -503,16 +523,7 @@ void CPlayer::Controller(void)
 	// 壁との当たり判定
 	CMeshWall::Collision(pos, m_Info.posOld);
 
-	// 起伏との当たり判定
-	D3DXVECTOR3 nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	float fHeight = CMeshField::GetHeight(pos);
-
 	m_Info.pos = pos;
-
-	// 影の設定
-	if (nullptr != m_pShadow) {
-		m_pShadow->SetPosition(D3DXVECTOR3(pos.x, fHeight + 1.0f, pos.z));
-	}
 
 	//デバッグ表示
 	CManager::GetInstance()->GetDebugProc()->Print("\n回転[W,A,S,D] : 加速[SPACE] : ステップ[K, (Rボタン)]\n");
@@ -786,6 +797,7 @@ void CPlayer::StateSet(void)
 
 		if (m_Info.fStateCounter <= 0.0f)
 		{
+			m_nLife = START_LIFE;
 			m_Info.fStateCounter = SPAWN_INTERVAL;
 			m_Info.state = STATE_SPAWN;
 			m_pShadow->SetDraw();
@@ -829,10 +841,41 @@ void CPlayer::StateSet(void)
 			m_pObject->SetDraw();
 			m_Info.fStateCounter = 0.0f;
 			m_Info.state = STATE_APPEAR;
-			m_nLife = START_LIFE;
 			m_Info.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		}
 	}
 		break;
+	}
+}
+
+//===============================================
+// 状態管理
+//===============================================
+void CPlayer::Damage(int nDamage) 
+{ 
+	int nOldLife = m_nLife;
+	m_nLife -= nDamage;
+
+	if (m_nLife < 0)
+	{
+		m_nLife = 0;
+	}
+
+	for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
+	{
+		if (nullptr != m_ppBillBoard)
+		{
+			if (nCnt > m_nLife)
+			{
+				m_ppBillBoard[nCnt]->SetDraw(false);
+				m_ppBillBoard[nCnt]->SetSize(0.0f, 0.0f);
+			}
+		}
+	}
+
+	if (m_nLife != nOldLife)
+	{
+		m_Info.fStateCounter = DAMAGE_INTERVAL;
+		m_Info.state = STATE_DAMAGE;
 	}
 }

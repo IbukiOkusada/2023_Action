@@ -601,6 +601,11 @@ void CGame::ByteCheck(char *pRecvData, int nRecvByte)
 
 						break;
 
+					case COMMAND_TYPE_DAMAGE:
+
+						pPlayer->Damage(nDamage);
+						break;
+
 					case COMMAND_TYPE_DELETE:
 
 						pPlayer->Uninit();
@@ -684,6 +689,27 @@ void CGame::SendRotation(D3DXVECTOR3 rot)
 
 		// 送信
 		m_pClient->Send(&aSendData[0], sizeof(int) + sizeof(D3DXVECTOR3));
+	}
+}
+
+//===================================================
+// ダメージ送信
+//===================================================
+void CGame::SendDamage(int nDamage)
+{
+	if (m_pClient != nullptr)
+	{
+		char aSendData[MAX_STRING] = {};	// 送信用
+		int nProt = COMMAND_TYPE_DAMAGE;
+
+		// protocolを挿入
+		memcpy(&aSendData[0], &nProt, sizeof(int));
+
+		// ダメージを挿入
+		memcpy(&aSendData[sizeof(int)], &nDamage, sizeof(int));
+
+		// 送信
+		m_pClient->Send(&aSendData[0], sizeof(int) + sizeof(int));
 	}
 }
 

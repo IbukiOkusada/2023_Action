@@ -53,6 +53,7 @@ public:
 	static void SetState(STATE state) { m_state = state; }
 	void SendPosition(D3DXVECTOR3 pos);
 	void SendRotation(D3DXVECTOR3 rot);
+	void SendDamage(int nDamage);
 
 	// メンバ関数(ポインタ)
 	CScore *GetScore(void);
