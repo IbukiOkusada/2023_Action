@@ -82,6 +82,7 @@ CGame::CGame()
 	m_pClient = NULL;
 	m_pCountDown = NULL;
 	m_nSledCnt = 0;
+	m_bEnd = false;
 }
 
 //===============================================
@@ -182,6 +183,7 @@ HRESULT CGame::Init(void)
 void CGame::Uninit(void)
 {
 	m_pPlayer = nullptr;
+	m_bEnd = true;
 
 	while (1)
 	{
@@ -341,8 +343,11 @@ void CGame::Update(void)
 		}
 	}
 
-	// 更新処理
-	CScene::Update();
+	if (!m_bEnd)
+	{
+		// 更新処理
+		CScene::Update();
+	}
 }
 
 //===============================================
@@ -544,7 +549,7 @@ void CGame::Online(void)
 	m_nSledCnt = 1;
 	while (1)
 	{
-		if (m_pPlayer == NULL)
+		if (m_pPlayer == NULL || m_bEnd == true)
 		{
 			break;
 		}

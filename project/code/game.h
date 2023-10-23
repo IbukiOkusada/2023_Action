@@ -92,6 +92,7 @@ private:
 	int m_nSledCnt;		// 現在動作しているスレッド数
 	CCountDown *m_pCountDown;	// カウントダウンのポインタ
 	WSADATA m_wsaData;
+	bool m_bEnd;
 };
 
 #endif
