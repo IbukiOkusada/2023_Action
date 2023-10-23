@@ -82,6 +82,7 @@ CPlayer::CPlayer(const D3DXVECTOR3 pos)
 	m_type = TYPE_NONE;
 	m_nId = -1;
 	m_bSetUp = false;
+	m_bGoal = false;
 
 	// 自分自身をリストに追加
 	if (m_pTop != NULL)
@@ -119,6 +120,7 @@ CPlayer::CPlayer(int nPriOrity)
 	m_type = TYPE_NONE;
 	m_nId = -1;
 	m_bSetUp = false;
+	m_bGoal = false;
 
 	// 自分自身をリストに追加
 	if (m_pTop != NULL)
@@ -353,6 +355,15 @@ void CPlayer::Update(void)
 	CManager::GetInstance()->GetDebugProc()->Print("向き [%f, %f, %f] : ID [ %d]\n", GetRotation().x, GetRotation().y, GetRotation().z, m_nId);
 	CManager::GetInstance()->GetDebugProc()->Print("位置 [%f, %f, %f]", GetPosition().x, GetPosition().y, GetPosition().z);
 	CManager::GetInstance()->GetDebugProc()->Print("体力 [ %d ]\n", m_nLife);
+
+	if (m_bGoal)
+	{
+		CManager::GetInstance()->GetDebugProc()->Print("[ ゴールした ]\n", m_nLife);
+	}
+	else
+	{
+		CManager::GetInstance()->GetDebugProc()->Print("[ ゴールしてない ]\n", m_nLife);
+	}
 
 	// 死亡確認
 	if (m_nLife <= 0 && m_Info.state != STATE_DEATH)
@@ -898,7 +909,6 @@ void CPlayer::Damage(int nDamage)
 			if (nCnt > m_nLife)
 			{
 				m_ppBillBoard[nCnt]->SetDraw(false);
-				m_ppBillBoard[nCnt]->SetSize(0.0f, 0.0f);
 			}
 		}
 	}
@@ -929,7 +939,6 @@ void CPlayer::SetLife(int nLife)
 			if (nCnt > m_nLife)
 			{
 				m_ppBillBoard[nCnt]->SetDraw(false);
-				m_ppBillBoard[nCnt]->SetSize(0.0f, 0.0f);
 			}
 		}
 	}

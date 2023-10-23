@@ -4,8 +4,8 @@
 // Author : Ibuki Okusada
 //
 //==========================================================
-#ifndef _PROTOCOL_RANKING_H_
-#define _PROTOCOL_RANKING_H_
+#ifndef _PROTOCOL_ONLINE_H_
+#define _PROTOCOL_ONLINE_H_
 
 // マクロ定義
 #define MAX_COMMAND_DATA	((sizeof(int) + sizeof(int) + 1024))	// データのマックスサイズ

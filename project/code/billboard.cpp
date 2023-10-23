@@ -84,6 +84,11 @@ void CObjectBillboard::Update(void)
 //==========================================================
 void CObjectBillboard::Draw(void)
 {
+	if (m_pVtxBuff == nullptr)
+	{
+		return;
+	}
+
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタを取得
 	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス

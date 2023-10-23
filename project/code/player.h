@@ -90,6 +90,7 @@ public:	// 誰でもアクセス可能
 	void BindId(int nId) { m_nId = nId; }
 	void SetType(TYPE type) { m_type = type; }
 	void SetUp(bool bValue) { m_bSetUp = bValue; }
+	void SetGoal(bool bValue) { m_bGoal = bValue; }
 
 	// メンバ関数(取得)
 	D3DXVECTOR3 GetMove(void) { return m_Info.move; }
@@ -101,6 +102,7 @@ public:	// 誰でもアクセス可能
 	void Damage(int nDamage);
 	void SetLife(int nLife);
 	bool GetSetUp(void) { return m_bSetUp; }
+	bool GetGoal(void) { return m_bGoal; }
 	static int GetNum(void) { return m_nNumCount; }
 
 private:	// 自分だけがアクセス可能
@@ -134,6 +136,7 @@ private:	// 自分だけがアクセス可能
 	int m_nId;	// ID
 	bool m_bSetUp;	// 準備完了かどうか
 	TYPE m_type;
+	bool m_bGoal;
 	static int m_nNumCount;
 };
 

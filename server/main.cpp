@@ -31,6 +31,7 @@ void SetDamage(int nId, int nDamage, CClient *pClient);
 void SetLife(int nId, int nLife, CClient *pClient);
 void SetUp(int nId, CClient *pClient);
 void Leave(int nId, CClient *pClient);
+void Goal(int nId, CClient *pClient);
 void Accept(CServer *pServer);
 void Send(CServer **ppServer);
 
@@ -174,6 +175,11 @@ void Access(CClient *pClient)
 
 				memcpy(&nDamage, &aRecvData[sizeof(int)], sizeof(nDamage));
 				SetLife(pClient->GetId(), nDamage, pClient);
+				break;
+
+			case COMMAND_TYPE_GOAL:
+
+				Goal(pClient->GetId(), pClient);
 				break;
 
 			case COMMAND_TYPE_START_OK:
@@ -333,6 +339,9 @@ void SetDamage(int nId, int nDamage, CClient *pClient)
 	pClient->SetData(&aSendData[0], sizeof(int) * 2 + sizeof(int));
 }
 
+//==========================================================
+// 準備完了送信
+//==========================================================
 void SetUp(int nId, CClient *pClient)
 {
 	int nProt = COMMAND_TYPE_START_OK;	// プロトコル番号
@@ -452,4 +461,20 @@ void Send(CServer **ppServer)
 			dwSecondCount++;
 		}
 	}
+}
+
+//==========================================================
+// ゴール送信
+//==========================================================
+void Goal(int nId, CClient *pClient)
+{
+	int nProt = COMMAND_TYPE_GOAL;	// プロトコル番号
+	char aSendData[sizeof(int) * 2] = {};	// 送信用まとめデータ
+
+	// IDを挿入
+	memcpy(&aSendData[0], &nId, sizeof(int));
+	memcpy(&aSendData[sizeof(int)], &nProt, sizeof(int));
+
+	// プロトコルを挿入
+	pClient->SetData(&aSendData[0], sizeof(int) * 2);
 }

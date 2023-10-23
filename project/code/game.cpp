@@ -318,11 +318,6 @@ void CGame::Update(void)
 
 #endif
 
-	if (CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_RETURN))
-	{
-		CManager::GetInstance()->GetFade()->Set(CScene::MODE_RESULT);
-	}
-
 	if (m_pTime != NULL)
 	{
 		m_pTime->Update();
@@ -334,12 +329,42 @@ void CGame::Update(void)
 		}
 	}
 
+	// ゴール判定
 	if (m_pPlayer != NULL)
 	{
 		if (m_pPlayer->GetPosition().x < -15000.0f)
 		{
-			CManager::GetInstance()->GetFade()->Set(CScene::MODE_RESULT);
+			m_pPlayer->SetGoal(true);
 			CResult::SetScore(m_pTime->GetNum());
+			m_pTime->SetActive(false);
+			SendGoal();
+		}
+	}
+	{
+		int nSetUp = 0;
+
+		CPlayer *pPlayer = NULL;		// 先頭を取得
+		CPlayer *pPlayerNext = NULL;	// 次を保持
+		pPlayer = CPlayer::GetTop();	// 先頭を取得
+
+		while (pPlayer != NULL)
+		{// 使用されている間繰り返し
+			pPlayerNext = pPlayer->GetNext();	// 次を保持
+
+			if (pPlayer->GetGoal())
+			{
+				nSetUp++;
+			}
+
+			pPlayer = pPlayerNext;	// 次に移動
+		}
+
+		SendSetUp();
+
+		if ((m_state == STATE_TIMEATTACK && m_pPlayer->GetGoal() == true) || (m_state == STATE_MULTI && nSetUp >= 2 && CPlayer::GetNum() >= 2))
+		{
+			CManager::GetInstance()->GetFade()->Set(CScene::MODE_RESULT);
+			m_bEnd = true;
 		}
 	}
 
@@ -347,6 +372,10 @@ void CGame::Update(void)
 	{
 		// 更新処理
 		CScene::Update();
+	}
+	else
+	{
+		CManager::GetInstance()->GetFade()->Update();
 	}
 }
 
@@ -697,6 +726,11 @@ void CGame::ByteCheck(char *pRecvData, int nRecvByte)
 						pPlayer->Damage(nDamage);
 						break;
 
+					case COMMAND_TYPE_GOAL:
+
+						pPlayer->SetGoal(true);
+						break;
+
 					case COMMAND_TYPE_DELETE:
 
 						pPlayer->Uninit();
@@ -853,6 +887,24 @@ void CGame::SendSetUp(void)
 	{
 		char aSendData[MAX_STRING] = {};	// 送信用
 		int nProt = COMMAND_TYPE_START_OK;
+
+		// protocolを挿入
+		memcpy(&aSendData[0], &nProt, sizeof(int));
+
+		// 送信
+		m_pClient->Send(&aSendData[0], sizeof(int));
+	}
+}
+
+//===============================================
+// ゴール送信
+//===============================================
+void CGame::SendGoal(void)
+{
+	if (m_pClient != nullptr)
+	{
+		char aSendData[MAX_STRING] = {};	// 送信用
+		int nProt = COMMAND_TYPE_GOAL;
 
 		// protocolを挿入
 		memcpy(&aSendData[0], &nProt, sizeof(int));

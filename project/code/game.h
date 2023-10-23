@@ -57,6 +57,7 @@ public:
 	void SendDamage(int nDamage);
 	void SendLife(int nLife);
 	void SendSetUp(void);
+	void SendGoal(void);
 
 	// メンバ関数(ポインタ)
 	CScore *GetScore(void);
