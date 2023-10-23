@@ -31,6 +31,7 @@ public:	// 誰でもアクセス可能
 	static CNumber *Create(void);
 	static CNumber *Create(D3DXVECTOR3 pos, float fWidth, float fHeight);
 	CObject2D *GetObject2D(void) { return m_pObject2D; }
+	void PolygonDelete(void);
 	
 	// メンバ関数(設定)
 	void SetIdx(const int nIdx);

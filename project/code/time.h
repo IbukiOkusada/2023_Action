@@ -47,6 +47,7 @@ public:	// ここから関数(誰でもアクセス可能)
 	void SetPauseTimer(int nValue) { m_nPauseTimer = nValue; }
 	void SetStartTimer(int nValue) { m_nPauseTimer = nValue; }
 	void SetNum(int nValue);
+	void SetActive(bool bActive) { m_bActive = bActive; m_nStartDeltaTime = timeGetTime();}
 
 	// メンバ関数(取得)
 	int GetNum(void) { return m_nNum; }
@@ -74,6 +75,7 @@ private:	// 自分だけがアクセス可能
 	float m_fAnimTimer;	// 1秒カウント
 	float m_fDiff;	// 現在と最大値の差分
 	int m_nIdxTexture;	// テクスチャ番号
+	bool m_bActive;	// 動作可能状態
 	MODE m_mode;		// モード
 };
 

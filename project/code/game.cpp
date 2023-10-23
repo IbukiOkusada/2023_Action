@@ -30,6 +30,7 @@
 #include "gimmick_button.h"
 #include "gimmick_air.h"
 #include "gimmick_door.h"
+#include "countdown.h"
 #include "tcp_client.h"
 #include <thread>
 #include "protocol_online.h"
@@ -56,12 +57,12 @@ std::mutex g_mtx;
 #define SPEED_UP	(30.0f)
 #define DEF_PORT	(22333)	// ポート番号
 #define MAX_STRING	(2048)
+#define ADDRESSFILE	"data\\TXT\\address.txt"
 
 //===============================================
 // 静的メンバ変数
 //===============================================
 CGame::STATE CGame::m_state = CGame::STATE_MULTI;	// 状態
-char CGame::m_aAddress[30] = "127.0.0.1";	// 接続先サーバーのアドレス
 
 //===============================================
 // コンストラクタ
@@ -79,6 +80,7 @@ CGame::CGame()
 	m_pPause = NULL;
 	m_pScore = NULL;
 	m_pClient = NULL;
+	m_pCountDown = NULL;
 	m_nSledCnt = 0;
 }
 
@@ -95,6 +97,7 @@ CGame::~CGame()
 //===============================================
 HRESULT CGame::Init(void)
 {
+	memset(&m_aAddress[0], '\0', sizeof(m_aAddress));
 	int nErr = WSAStartup(WINSOCK_VERSION, &m_wsaData);	// winsockの初期化関数
 
 	if (nErr != 0)
@@ -128,7 +131,9 @@ HRESULT CGame::Init(void)
 	}
 
 	m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, -150.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
-	m_pPlayer->SetType(CPlayer::TYPE_ACTIVE);
+	m_pPlayer->SetUp(true);
+	m_pPlayer->SetType(CPlayer::TYPE_SEND);
+	m_pCountDown = CCountDown::Create();
 
 	m_pMeshDome = CMeshDome::Create(D3DXVECTOR3(-8000.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 10000.0f, 10.0f, 3, 10, 10);
 
@@ -136,6 +141,7 @@ HRESULT CGame::Init(void)
 	{// マルチの場合
 
 		m_pClient = new CClient;
+		AddressLoad(&m_aAddress[0]);
 
 		if (m_pClient->Init(&m_aAddress[0], DEF_PORT))
 		{
@@ -145,9 +151,11 @@ HRESULT CGame::Init(void)
 		}
 		else
 		{
-			m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
-			m_pTime->Set(150 * 100);
+			m_state = STATE_TIMEATTACK;
 		}
+
+		m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
+		m_pTime->Set(150 * 100);
 	}
 	else
 	{
@@ -162,6 +170,8 @@ HRESULT CGame::Init(void)
 	CManager::GetInstance()->GetLight()->EnablePointLight(true);
 
 	CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_GAME);
+
+	CManager::GetInstance()->Update();
 
 	return S_OK;
 }
@@ -211,6 +221,13 @@ void CGame::Uninit(void)
 		m_pClient = NULL;
 	}
 
+	if (m_pCountDown != nullptr)
+	{
+		m_pCountDown->Uninit();
+		delete m_pCountDown;
+		m_pCountDown = nullptr;
+	}
+
 	//Winsock終了処理
 	WSACleanup();	// WSACleanup関数 : winsockの終了処理
 
@@ -221,6 +238,55 @@ void CGame::Uninit(void)
 //===============================================
 void CGame::Update(void)
 {
+	if (m_pCountDown != nullptr)
+	{
+		CScene::Update();
+
+		int nSetUp = 0;
+
+		CPlayer *pPlayer = NULL;		// 先頭を取得
+		CPlayer *pPlayerNext = NULL;	// 次を保持
+		pPlayer = CPlayer::GetTop();	// 先頭を取得
+
+		while (pPlayer != NULL)
+		{// 使用されている間繰り返し
+			pPlayerNext = pPlayer->GetNext();	// 次を保持
+
+			if (pPlayer->GetSetUp() == true)
+			{
+				nSetUp++;
+			}
+
+			pPlayer = pPlayerNext;	// 次に移動
+		}
+
+		SendSetUp();
+
+		if ((m_state == STATE_TIMEATTACK && m_pPlayer->GetSetUp() == true) || (m_state == STATE_MULTI && nSetUp >= 2 && CPlayer::GetNum() >= 2))
+		{
+			if (!m_pCountDown->GetEnd())
+			{
+				m_pCountDown->Update();
+				return;
+			}
+			else
+			{
+				m_pPlayer->SetType(CPlayer::TYPE_ACTIVE);
+				m_pTime->SetActive(true);
+				if (m_pCountDown != nullptr)
+				{
+					m_pCountDown->Uninit();
+					delete m_pCountDown;
+					m_pCountDown = nullptr;
+				}
+			}
+		}
+		else
+		{
+			return;
+		}
+	}
+
 	// ポーズ
 	if (m_pPause != NULL)
 	{
@@ -431,6 +497,11 @@ void CGame::GimmickSet(void)
 	pButton->SetGoalPos(D3DXVECTOR3(-14400.0f, 0.0f, 70.0f));
 	pButton->SetType(CGimmickButton::TYPE_DOOR);
 
+	// ドア配置
+	CGimmickDoor *pDoor = CGimmickDoor::Create();
+	pDoor->SetPosition(D3DXVECTOR3(-13810.0f, 0.0f, -750.0f));
+	pDoor->SetRotation(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+
 	// 風配置
 	CGimmickAir *pAir = CGimmickAir::Create();
 	pAir->SetPosition(D3DXVECTOR3(-13525.0f, 80.0f, -800.0f));
@@ -463,11 +534,6 @@ void CGame::GimmickSet(void)
 	pAir->SetHeight(205.0f);
 	pAir->SetWidth(185.0f);
 	pAir->SetRevease(true);
-
-	// ドア配置
-	CGimmickDoor *pDoor = CGimmickDoor::Create();
-	pDoor->SetPosition(D3DXVECTOR3(-13810.0f, 0.0f, -750.0f));
-	pDoor->SetRotation(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 }
 
 //===================================================
@@ -548,6 +614,16 @@ void CGame::ByteCheck(char *pRecvData, int nRecvByte)
 				nByte += sizeof(D3DXVECTOR3);
 				break;
 
+			case COMMAND_TYPE_SETLIFE:
+
+				memcpy(&nDamage, &pRecvData[nByte], sizeof(int));
+				nByte += sizeof(int);
+				break;
+
+			case COMMAND_TYPE_START_OK:
+
+				break;
+
 			case COMMAND_TYPE_CREATE:
 				break;
 
@@ -597,6 +673,16 @@ void CGame::ByteCheck(char *pRecvData, int nRecvByte)
 						pPlayer->SetRotation(pos);
 						break;
 
+					case COMMAND_TYPE_SETLIFE:
+
+						pPlayer->SetLife(nDamage);
+						break;
+
+					case COMMAND_TYPE_START_OK:
+
+						pPlayer->SetUp(true);
+						break;
+
 					case COMMAND_TYPE_CREATE:
 
 						break;
@@ -633,6 +719,7 @@ void CGame::ByteCheck(char *pRecvData, int nRecvByte)
 			{// まだ存在していない場合
 				pPlayer = CPlayer::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
 				pPlayer->BindId(nId);
+				pPlayer->SetType(CPlayer::TYPE_NONE);
 			}
 		}
 		else if (nId == -1 && m_pPlayer->GetId() == -1)
@@ -714,6 +801,27 @@ void CGame::SendDamage(int nDamage)
 }
 
 //===================================================
+// 体力送信
+//===================================================
+void CGame::SendLife(int nLife)
+{
+	if (m_pClient != nullptr)
+	{
+		char aSendData[MAX_STRING] = {};	// 送信用
+		int nProt = COMMAND_TYPE_SETLIFE;
+
+		// protocolを挿入
+		memcpy(&aSendData[0], &nProt, sizeof(int));
+
+		// ダメージを挿入
+		memcpy(&aSendData[sizeof(int)], &nLife, sizeof(int));
+
+		// 送信
+		m_pClient->Send(&aSendData[0], sizeof(int) + sizeof(int));
+	}
+}
+
+//===================================================
 // 終了送信
 //===================================================
 void CGame::OnlineEnd(void)
@@ -727,6 +835,48 @@ void CGame::OnlineEnd(void)
 		memcpy(&aSendData[0], &nProt, sizeof(int));
 
 		// 送信
-		m_pClient->Send(&aSendData[0], sizeof(int) + sizeof(D3DXVECTOR3));
+		m_pClient->Send(&aSendData[0], sizeof(int));
+	}
+}
+
+//===============================================
+// 体力設定
+//===============================================
+void CGame::SendSetUp(void)
+{
+	if (m_pClient != nullptr)
+	{
+		char aSendData[MAX_STRING] = {};	// 送信用
+		int nProt = COMMAND_TYPE_START_OK;
+
+		// protocolを挿入
+		memcpy(&aSendData[0], &nProt, sizeof(int));
+
+		// 送信
+		m_pClient->Send(&aSendData[0], sizeof(int));
+	}
+}
+
+//===================================================
+// アドレス読み込み
+//===================================================
+void CGame::AddressLoad(char *pAddrss)
+{
+	FILE *pFile;	// ファイルへのポインタ
+
+	pFile = fopen(ADDRESSFILE, "r");
+
+	if (pFile != NULL)
+	{//ファイルが開けた場合
+		
+		//テキスト読み込み
+		int nResult = fscanf(pFile, "%s", pAddrss);
+
+		//ファイルを閉じる
+		fclose(pFile);
+	}
+	else
+	{//ファイルが開けなかった場合
+		return;
 	}
 }

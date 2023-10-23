@@ -28,6 +28,8 @@ void Join(int nId, CClient *pClient);
 void SetPosition(int nId, D3DXVECTOR3 pos, CClient *pClient);
 void SetRotation(int nId, D3DXVECTOR3 pos, CClient *pClient);
 void SetDamage(int nId, int nDamage, CClient *pClient);
+void SetLife(int nId, int nLife, CClient *pClient);
+void SetUp(int nId, CClient *pClient);
 void Leave(int nId, CClient *pClient);
 void Accept(CServer *pServer);
 void Send(CServer **ppServer);
@@ -166,6 +168,18 @@ void Access(CClient *pClient)
 
 				memcpy(&pos, &aRecvData[sizeof(int)], sizeof(D3DXVECTOR3));
 				SetPosition(pClient->GetId(), pos, pClient);
+				break;
+
+			case COMMAND_TYPE_SETLIFE:
+
+				memcpy(&nDamage, &aRecvData[sizeof(int)], sizeof(nDamage));
+				SetLife(pClient->GetId(), nDamage, pClient);
+				break;
+
+			case COMMAND_TYPE_START_OK:
+
+				SetUp(pClient->GetId(), pClient);
+
 				break;
 
 			case COMMAND_TYPE_CREATE:
@@ -308,12 +322,42 @@ void SetRotation(int nId, D3DXVECTOR3 pos, CClient *pClient)
 void SetDamage(int nId, int nDamage, CClient *pClient)
 {
 	int nProt = COMMAND_TYPE_DAMAGE;	// プロトコル番号
-	char aSendData[sizeof(int) * 2 + sizeof(D3DXVECTOR3)] = {};	// 送信用まとめデータ
+	char aSendData[sizeof(int) * 2 + sizeof(int)] = {};	// 送信用まとめデータ
 
 	// IDを挿入
 	memcpy(&aSendData[0], &nId, sizeof(int));
 	memcpy(&aSendData[sizeof(int)], &nProt, sizeof(int));
 	memcpy(&aSendData[sizeof(int) * 2], &nDamage, sizeof(int));
+
+	// プロトコルを挿入
+	pClient->SetData(&aSendData[0], sizeof(int) * 2 + sizeof(int));
+}
+
+void SetUp(int nId, CClient *pClient)
+{
+	int nProt = COMMAND_TYPE_START_OK;	// プロトコル番号
+	char aSendData[sizeof(int) * 2] = {};	// 送信用まとめデータ
+
+	// IDを挿入
+	memcpy(&aSendData[0], &nId, sizeof(int));
+	memcpy(&aSendData[sizeof(int)], &nProt, sizeof(int));
+
+	// プロトコルを挿入
+	pClient->SetData(&aSendData[0], sizeof(int) * 2);
+}
+
+//==========================================================
+// 体力設定
+//==========================================================
+void SetLife(int nId, int nLife, CClient *pClient)
+{
+	int nProt = COMMAND_TYPE_SETLIFE;	// プロトコル番号
+	char aSendData[sizeof(int) * 2 + sizeof(int)] = {};	// 送信用まとめデータ
+
+	// IDを挿入
+	memcpy(&aSendData[0], &nId, sizeof(int));
+	memcpy(&aSendData[sizeof(int)], &nProt, sizeof(int));
+	memcpy(&aSendData[sizeof(int) * 2], &nLife, sizeof(int));
 
 	// プロトコルを挿入
 	pClient->SetData(&aSendData[0], sizeof(int) * 2 + sizeof(int));

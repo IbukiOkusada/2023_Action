@@ -177,10 +177,10 @@ void CRenderer::Uninit(void)
 //===================================================
 void CRenderer::Update(void)
 {
+	CTaskManager::GetInstance()->Update();
+
 	// オブジェクトの全更新
 	CObject::UpdateAll();
-
-	CTaskManager::GetInstance()->Update();
 
 #if _DEBUG	// デバッグ時
 	CInputKeyboard *pKey = CManager::GetInstance()->GetInputKeyboard();

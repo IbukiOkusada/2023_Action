@@ -8,7 +8,7 @@
 #define _PROTOCOL_RANKING_H_
 
 // マクロ定義
-#define MAX_COMMAND_DATA	((sizeof(int) + sizeof(int) + sizeof(D3DXCOLOR)) * 2)	// データのマックスサイズ
+#define MAX_COMMAND_DATA	((sizeof(int) + sizeof(int) + 1024))	// データのマックスサイズ
 
 //**********************************************************
 // 送受信用プロトコル列挙を定義
@@ -18,6 +18,7 @@ enum COMMAND_TYPE
 	COMMAND_TYPE_NONE = 0,			// 何もしない
 	COMMAND_TYPE_SETPOSITION,		// 座標設定
 	COMMAND_TYPE_SETROTATION,		// 向き設定
+	COMMAND_TYPE_SETLIFE,			// 体力設定
 	COMMAND_TYPE_SETCHECKPOINT,	// チェックポイント通過
 	COMMAND_TYPE_GOAL,			// ゴール
 	COMMAND_TYPE_START_OK,			// 開始準備完了

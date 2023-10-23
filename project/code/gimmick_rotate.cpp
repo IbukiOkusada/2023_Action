@@ -99,6 +99,8 @@ void CGimmickRotate::Update(void)
 
 	SetRotation(rot);
 
+	SetMtxWorld();
+
 	for (int nCnt = 0; nCnt < NUM_ROTATEBOX; nCnt++)
 	{
 		if (m_aObj[nCnt].s_pModel != NULL)
@@ -109,8 +111,6 @@ void CGimmickRotate::Update(void)
 			m_aObj[nCnt].s_pModel->Update();
 		}
 	}
-
-	SetMtxWorld();
 }
 
 //==========================================================

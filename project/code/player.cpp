@@ -51,6 +51,7 @@
 // 前方宣言
 CPlayer *CPlayer::m_pTop = NULL;	// 先頭のオブジェクトへのポインタ
 CPlayer *CPlayer::m_pCur = NULL;	// 最後尾のオブジェクトへのポインタ
+int CPlayer::m_nNumCount = 0;
 
 //===============================================
 // コンストラクタ
@@ -80,6 +81,7 @@ CPlayer::CPlayer(const D3DXVECTOR3 pos)
 	m_nLife = 0;
 	m_type = TYPE_NONE;
 	m_nId = -1;
+	m_bSetUp = false;
 
 	// 自分自身をリストに追加
 	if (m_pTop != NULL)
@@ -93,6 +95,8 @@ CPlayer::CPlayer(const D3DXVECTOR3 pos)
 		m_pTop = this;	// 自分自身が先頭になる
 		m_pCur = this;	// 自分自身が最後尾になる
 	}
+
+	m_nNumCount++;
 }
 
 //===============================================
@@ -114,6 +118,7 @@ CPlayer::CPlayer(int nPriOrity)
 	m_ppBillBoard = NULL;
 	m_type = TYPE_NONE;
 	m_nId = -1;
+	m_bSetUp = false;
 
 	// 自分自身をリストに追加
 	if (m_pTop != NULL)
@@ -127,6 +132,8 @@ CPlayer::CPlayer(int nPriOrity)
 		m_pTop = this;	// 自分自身が先頭になる
 		m_pCur = this;	// 自分自身が最後尾になる
 	}
+
+	m_nNumCount++;
 }
 
 //===============================================
@@ -168,6 +175,7 @@ HRESULT CPlayer::Init(void)
 	m_Info.state = STATE_APPEAR;
 	m_type = TYPE_NONE;
 	m_nLife = START_LIFE;
+	m_bSetUp = false;
 
 	return S_OK;
 }
@@ -185,6 +193,7 @@ HRESULT CPlayer::Init(const char *pBodyName, const char *pLegName)
 
 	m_nLife = START_LIFE;
 	m_type = TYPE_NONE;
+	m_bSetUp = false;
 
 	//ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxRot);
@@ -288,6 +297,8 @@ void CPlayer::Uninit(void)
 		m_ppBillBoard = NULL;	// 使用していない状態にする
 	}
 
+	m_nNumCount--;
+
 	// 廃棄
 	Release();
 }
@@ -302,9 +313,16 @@ void CPlayer::Update(void)
 
 	StateSet();
 
+	if (m_type == TYPE_SEND)
+	{
+		CManager::GetInstance()->GetCamera()->Setting(m_Info.pos, m_Info.rot);
+		CManager::GetInstance()->GetScene()->SendPosition(m_Info.pos);
+		CManager::GetInstance()->GetScene()->SendRotation(m_Info.rot);
+		CManager::GetInstance()->GetScene()->SendLife(m_nLife);
+	}
+
 	if (m_type == TYPE_ACTIVE)
 	{
-
 		if (m_nLife <= 0)
 		{
 			for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
@@ -329,6 +347,7 @@ void CPlayer::Update(void)
 		// オンライン送信
 		CManager::GetInstance()->GetScene()->SendPosition(m_Info.pos);
 		CManager::GetInstance()->GetScene()->SendRotation(m_Info.rot);
+		CManager::GetInstance()->GetScene()->SendLife(m_nLife);
 	}
 
 	CManager::GetInstance()->GetDebugProc()->Print("向き [%f, %f, %f] : ID [ %d]\n", GetRotation().x, GetRotation().y, GetRotation().z, m_nId);
@@ -417,8 +436,6 @@ CPlayer *CPlayer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 move, con
 
 		// 種類の設定
 		//pPlayer->SetType(TYPE_PLAYER);
-
-		CManager::GetInstance()->GetCamera()->Setting(pos, rot);
 	}
 	else
 	{// 生成に失敗した場合
@@ -452,6 +469,7 @@ void CPlayer::Controller(void)
 
 	pos = GetPosition();	// 座標を取得
 
+	// 慣性(ステップ状態別)
 	if (m_fStepCoolTime <= 0.0f)
 	{
 		m_Info.move.x += (0.0f - m_Info.move.x) * INER;	//x座標
@@ -797,7 +815,6 @@ void CPlayer::StateSet(void)
 
 		if (m_Info.fStateCounter <= 0.0f)
 		{
-			m_nLife = START_LIFE;
 			m_Info.fStateCounter = SPAWN_INTERVAL;
 			m_Info.state = STATE_SPAWN;
 			m_pShadow->SetDraw();
@@ -841,6 +858,7 @@ void CPlayer::StateSet(void)
 			m_pObject->SetDraw();
 			m_Info.fStateCounter = 0.0f;
 			m_Info.state = STATE_APPEAR;
+			m_nLife = START_LIFE;
 			m_Info.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		}
 	}
@@ -849,7 +867,7 @@ void CPlayer::StateSet(void)
 }
 
 //===============================================
-// 状態管理
+// ダメージ処理
 //===============================================
 void CPlayer::Damage(int nDamage) 
 { 
@@ -877,5 +895,30 @@ void CPlayer::Damage(int nDamage)
 	{
 		m_Info.fStateCounter = DAMAGE_INTERVAL;
 		m_Info.state = STATE_DAMAGE;
+	}
+}
+
+//===============================================
+// 体力設定
+//===============================================
+void CPlayer::SetLife(int nLife)
+{
+	m_nLife = nLife;
+
+	if (m_nLife < 0)
+	{
+		m_nLife = 0;
+	}
+
+	for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
+	{
+		if (nullptr != m_ppBillBoard)
+		{
+			if (nCnt > m_nLife)
+			{
+				m_ppBillBoard[nCnt]->SetDraw(false);
+				m_ppBillBoard[nCnt]->SetSize(0.0f, 0.0f);
+			}
+		}
 	}
 }

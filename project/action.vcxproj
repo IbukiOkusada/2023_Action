@@ -158,6 +158,7 @@
     <ClCompile Include="code\billboard.cpp" />
     <ClCompile Include="code\camera.cpp" />
     <ClCompile Include="code\character.cpp" />
+    <ClCompile Include="code\countdown.cpp" />
     <ClCompile Include="code\debugproc.cpp" />
     <ClCompile Include="code\editor.cpp" />
     <ClCompile Include="code\effect.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="code\billboard.h" />
     <ClInclude Include="code\camera.h" />
     <ClInclude Include="code\character.h" />
+    <ClInclude Include="code\countdown.h" />
     <ClInclude Include="code\debugproc.h" />
     <ClInclude Include="code\editor.h" />
     <ClInclude Include="code\effect.h" />

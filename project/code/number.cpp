@@ -177,3 +177,15 @@ void CNumber::SetIdx(const int nIdx)
 		m_pObject2D->SetVtx(m_nIdx, MAX_WIDTHPATTERN, 1);
 	}
 }
+
+//===============================================
+// ƒ|ƒŠƒSƒ“”pŠü
+//===============================================
+void CNumber::PolygonDelete(void)
+{
+	if (m_pObject2D != NULL)
+	{// Žg—p‚³‚ê‚Ä‚¢‚éê‡
+		m_pObject2D->Uninit();
+		m_pObject2D = NULL;
+	}
+}

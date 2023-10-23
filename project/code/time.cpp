@@ -38,6 +38,7 @@ CTime::CTime()
 	m_nStartDeltaTime = 0;
 	m_nPauseTimer = 0;
 	m_mode = MODE_MAX;
+	m_bActive = false;
 }
 
 //===============================================
@@ -116,6 +117,11 @@ void CTime::Uninit(void)
 //===============================================
 void CTime::Update(void)
 {
+	if(!m_bActive)
+	{
+		return;
+	}
+
 	m_fAnimTimer += CManager::GetInstance()->GetSlow()->Get();
 	if (m_fAnimTimer >= 0)
 	{// 12ƒtƒŒ[ƒ€—§‚Á‚½

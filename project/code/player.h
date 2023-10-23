@@ -38,6 +38,7 @@ public:
 	enum TYPE
 	{
 		TYPE_NONE,	// 操作不可能
+		TYPE_SEND,	// データ送信
 		TYPE_ACTIVE,	// 操作可能
 		TYPE_MAX
 	};
@@ -88,6 +89,7 @@ public:	// 誰でもアクセス可能
 	void SetRotation(const D3DXVECTOR3 rot) { m_Info.rot = rot; }
 	void BindId(int nId) { m_nId = nId; }
 	void SetType(TYPE type) { m_type = type; }
+	void SetUp(bool bValue) { m_bSetUp = bValue; }
 
 	// メンバ関数(取得)
 	D3DXVECTOR3 GetMove(void) { return m_Info.move; }
@@ -97,6 +99,9 @@ public:	// 誰でもアクセス可能
 	static CPlayer *GetTop(void) { return m_pTop; }
 	CPlayer *GetNext(void) { return m_pNext; }
 	void Damage(int nDamage);
+	void SetLife(int nLife);
+	bool GetSetUp(void) { return m_bSetUp; }
+	static int GetNum(void) { return m_nNumCount; }
 
 private:	// 自分だけがアクセス可能
 
@@ -125,9 +130,11 @@ private:	// 自分だけがアクセス可能
 	D3DXVECTOR3 m_vecAxis;	// 回転軸
 	float m_fValueRot;	// 回転角
 	CShadow *m_pShadow;	// 影のポインタ
-	int m_nLife;			// 体力
+	int m_nLife;	// 体力
 	int m_nId;	// ID
+	bool m_bSetUp;	// 準備完了かどうか
 	TYPE m_type;
+	static int m_nNumCount;
 };
 
 #endif

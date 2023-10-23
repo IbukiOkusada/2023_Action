@@ -573,6 +573,12 @@ void CManager::SetMode(CScene::MODE mode)
 	if (m_pScene != NULL)
 	{
 		m_pScene->Init();
+		
+		// レンダラーの更新処理
+		if (CManager::GetInstance()->GetRenderer() != NULL)
+		{// 使用している場合
+			CManager::GetInstance()->GetRenderer()->Update();
+		}
 	}
 
 	// フェードの生成

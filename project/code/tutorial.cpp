@@ -19,6 +19,7 @@
 #include "pause.h"
 #include "result.h"
 #include "sound.h"
+#include "game.h"
 
 //===============================================
 // ƒ}ƒNƒ’è‹`
@@ -87,6 +88,12 @@ void CTutorial::Update(void)
 
 	if (pInputKey->GetTrigger(DIK_RETURN) || pInputPad->GetTrigger(CInputPad::BUTTON_A, 0) || pInputPad->GetTrigger(CInputPad::BUTTON_START, 0))
 	{
+		CGame::SetState(CGame::STATE_TIMEATTACK);
+		CManager::GetInstance()->GetFade()->Set(CScene::MODE_GAME);
+	}
+	else if (pInputKey->GetTrigger(DIK_F1) || pInputPad->GetTrigger(CInputPad::BUTTON_B, 0) || pInputPad->GetTrigger(CInputPad::BUTTON_BACK, 0))
+	{
+		CGame::SetState(CGame::STATE_MULTI);
 		CManager::GetInstance()->GetFade()->Set(CScene::MODE_GAME);
 	}
 

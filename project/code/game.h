@@ -20,6 +20,7 @@ class CPause;
 class CObject2D;
 class CClient;
 class CMeshDome;
+class CCountDown;
 
 // マクロ定義
 #define NUM_FILTER	(2)
@@ -54,6 +55,8 @@ public:
 	void SendPosition(D3DXVECTOR3 pos);
 	void SendRotation(D3DXVECTOR3 rot);
 	void SendDamage(int nDamage);
+	void SendLife(int nLife);
+	void SendSetUp(void);
 
 	// メンバ関数(ポインタ)
 	CScore *GetScore(void);
@@ -72,6 +75,7 @@ private:
 	void Online(void);
 	void ByteCheck(char *pRecvData, int nRecvByte);
 	void OnlineEnd(void);
+	void AddressLoad(char *pAddrss);
 
 	CFileLoad *m_pFileLoad;		// ファイル読み込みのポインタ
 	CScore *m_pScore;		// スコアのポインタ
@@ -83,9 +87,10 @@ private:
 	CMeshDome *m_pMeshDome;		// メッシュドームのポインタ
 	CObject2D *m_pStart;	// スタート時の文字
 	CClient *m_pClient;	// クライアントのポインタ
-	static char m_aAddress[30];	// 接続先サーバーのアドレス
+	char m_aAddress[30];	// 接続先サーバーのアドレス
 	static STATE m_state;	// 状態
 	int m_nSledCnt;		// 現在動作しているスレッド数
+	CCountDown *m_pCountDown;	// カウントダウンのポインタ
 	WSADATA m_wsaData;
 };
 
