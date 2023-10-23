@@ -768,7 +768,10 @@ void CPlayer::StateSet(void)
 
 		if (m_ppBillBoard != NULL)
 		{
-			m_ppBillBoard[m_nLife]->SetSize(m_ppBillBoard[m_nLife]->GetWidth() + 11.0f, m_ppBillBoard[m_nLife]->GetHeight() + 11.0f);
+			if (m_nLife >= 0 && m_nLife < START_LIFE)
+			{
+				m_ppBillBoard[m_nLife]->SetSize(m_ppBillBoard[m_nLife]->GetWidth() + 11.0f, m_ppBillBoard[m_nLife]->GetHeight() + 11.0f);
+			}
 		}
 
 		m_Info.fStateCounter -= CManager::GetInstance()->GetSlow()->Get();
@@ -779,7 +782,10 @@ void CPlayer::StateSet(void)
 
 			if (m_ppBillBoard != NULL)
 			{
-				m_ppBillBoard[m_nLife]->SetDraw(false);
+				if (m_nLife >= 0 && m_nLife < START_LIFE)
+				{
+					m_ppBillBoard[m_nLife]->SetDraw(false);
+				}
 			}
 
 			if (m_pShadow != nullptr)
@@ -798,7 +804,10 @@ void CPlayer::StateSet(void)
 
 		if (m_ppBillBoard != NULL)
 		{
-			m_ppBillBoard[m_nLife]->SetSize(m_ppBillBoard[m_nLife]->GetWidth() + 50.0f, m_ppBillBoard[m_nLife]->GetHeight() + 50.0f);
+			if (m_nLife >= 0 && m_nLife < START_LIFE)
+			{
+				m_ppBillBoard[m_nLife]->SetSize(m_ppBillBoard[m_nLife]->GetWidth() + 50.0f, m_ppBillBoard[m_nLife]->GetHeight() + 50.0f);
+			}
 		}
 
 		{
@@ -808,7 +817,10 @@ void CPlayer::StateSet(void)
 			{
 				if (m_ppBillBoard != NULL)
 				{
-					m_ppBillBoard[m_nLife]->SetDraw(false);
+					if (m_nLife >= 0 && m_nLife < START_LIFE)
+					{
+						m_ppBillBoard[m_nLife]->SetDraw(false);
+					}
 				}
 			}
 		}
@@ -822,6 +834,7 @@ void CPlayer::StateSet(void)
 			m_Info.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 			m_Info.pos.y = -600.0f;
 			SetPosition(m_Info.pos);
+			m_nLife = START_LIFE;
 
 			for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
 			{
@@ -858,7 +871,6 @@ void CPlayer::StateSet(void)
 			m_pObject->SetDraw();
 			m_Info.fStateCounter = 0.0f;
 			m_Info.state = STATE_APPEAR;
-			m_nLife = START_LIFE;
 			m_Info.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		}
 	}
