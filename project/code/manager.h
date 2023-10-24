@@ -102,7 +102,7 @@ public:	// 誰でもアクセス可能
 	CInputPad *GetInputPad(void);
 	CDebugProc *GetDebugProc(void);
 	CSound *GetSound(void);
-	CCamera *GetCamera(void);
+	CMultiCamera *GetCamera(void);
 	CLight *GetLight(void);
 	CTexture *GetTexture(void);
 	CXFile *GetModelFile(void);

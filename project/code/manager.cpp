@@ -415,7 +415,7 @@ CSound *CManager::GetSound(void)
 //===================================================
 // ƒJƒƒ‰‚Ìæ“¾
 //===================================================
-CCamera *CManager::GetCamera(void)
+CMultiCamera *CManager::GetCamera(void)
 {
 	return m_pCamera;
 }
