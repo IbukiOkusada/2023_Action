@@ -21,6 +21,7 @@
 #define MOVE_TIMER	(900)
 
 int CResult::m_nScore = 0;
+CResult::TYPE CResult::m_type = CResult::TYPE_MULTI_WIN;
 
 //===============================================
 // コンストラクタ
@@ -46,9 +47,34 @@ CResult::~CResult()
 HRESULT CResult::Init(void)
 {
 	CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_RESULT);
+	CTexture *pTexture = CManager::GetInstance()->GetTexture();
 
-	m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
-	m_pTime->Set(m_nScore);
+	// 種類ごとに描画
+	switch (m_type)
+	{
+	case TYPE_NONE:
+		m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
+		m_pTime->Set(m_nScore);
+		break;
+
+	case TYPE_MULTI_WIN:
+	{
+		CObject2D *pObj = CObject2D::Create();
+		pObj->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.8f, 0.0f));
+		pObj->SetSize(SCREEN_WIDTH * 0.3f, SCREEN_HEIGHT * 0.2f);
+		pObj->BindTexture(pTexture->Regist("data\\TEXTURE\\result_win.png"));
+	}
+		break;
+
+	case TYPE_MULTI_LOSE:
+	{
+		CObject2D *pObj = CObject2D::Create();
+		pObj->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.8f, 0.0f));
+		pObj->SetSize(SCREEN_WIDTH * 0.3f, SCREEN_HEIGHT * 0.2f);
+		pObj->BindTexture(pTexture->Regist("data\\TEXTURE\\result_lose.png"));
+	}
+		break;
+	}
 
 	return S_OK;
 }
@@ -65,6 +91,7 @@ void CResult::Uninit(void)
 		m_pTime = NULL;
 	}
 
+	m_type = TYPE_NONE;
 	m_nScore = 0;
 }
 

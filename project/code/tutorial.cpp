@@ -27,6 +27,7 @@
 #include "editor.h"
 #include "sound.h"
 #include "game.h"
+#include "debugproc.h"
 
 //===============================================
 // マクロ定義
@@ -136,12 +137,19 @@ void CTutorial::Uninit(void)
 //===============================================
 void CTutorial::Update(void)
 {
-	if (CManager::GetInstance()->GetInputPad()->GetTrigger(CInputPad::BUTTON_START, 0))
+	if (CManager::GetInstance()->GetInputPad()->GetTrigger(CInputPad::BUTTON_START, 0) || CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_RETURN))
 	{
-		
 		CManager::GetInstance()->GetFade()->Set(CScene::MODE_GAME);
 		CGame::SetState(CGame::STATE_TIMEATTACK);
 	}
+	else if (CManager::GetInstance()->GetInputPad()->GetTrigger(CInputPad::BUTTON_BACK, 0) || CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_BACKSPACE))
+	{
+		CManager::GetInstance()->GetFade()->Set(CScene::MODE_GAME);
+		CGame::SetState(CGame::STATE_MULTI);
+	}
+
+	CManager::GetInstance()->GetDebugProc()->Print("[START, ENTER入力でタイムアタック遷移]\n");
+	CManager::GetInstance()->GetDebugProc()->Print("[BACK, BACX SPACE入力で対戦遷移]\n");
 
 	// 更新処理
 	CScene::Update();

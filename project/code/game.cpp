@@ -334,7 +334,7 @@ void CGame::Update(void)
 	{
 		m_pTime->Update();
 
-		if (m_pTime->GetNum() < 0)
+		if (m_pTime->GetNum() <= 0 && m_state == STATE_TIMEATTACK)
 		{
 			CManager::GetInstance()->GetFade()->Set(CScene::MODE_RESULT);
 			CResult::SetScore(m_pTime->GetNum());
@@ -346,6 +346,37 @@ void CGame::Update(void)
 	{
 		if (m_pPlayer->GetPosition().x < -15000.0f)
 		{
+			// マルチプレイ
+			if (m_state == STATE_MULTI && CResult::GetType() == CResult::TYPE_NONE)
+			{
+				int nSetUp = 0;
+
+				CPlayer *pPlayer = NULL;		// 先頭を取得
+				CPlayer *pPlayerNext = NULL;	// 次を保持
+				pPlayer = CPlayer::GetTop();	// 先頭を取得
+
+				while (pPlayer != NULL)
+				{// 使用されている間繰り返し
+					pPlayerNext = pPlayer->GetNext();	// 次を保持
+
+					if (pPlayer->GetGoal())
+					{
+						nSetUp++;
+					}
+
+					pPlayer = pPlayerNext;	// 次に移動
+				}
+
+				if (nSetUp == 0)
+				{
+					CResult::SetType(CResult::TYPE_MULTI_WIN);
+				}
+				else
+				{
+					CResult::SetType(CResult::TYPE_MULTI_LOSE);
+				}
+			}
+
 			m_pPlayer->SetGoal(true);
 			CResult::SetScore(m_pTime->GetNum());
 			m_pTime->SetActive(false);

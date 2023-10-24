@@ -15,10 +15,20 @@ class CMeshDome;
 class CTime;
 
 //===============================================
-// タイトルクラスの定義(派生クラス)
+// リザルトクラスの定義(派生クラス)
 //===============================================
 class CResult : public CScene
 {
+public:
+	
+	// 種類列挙型
+	enum TYPE
+	{
+		TYPE_NONE,		// 通常
+		TYPE_MULTI_WIN,	// マルチ勝利
+		TYPE_MULTI_LOSE,	// マルチ敗北
+	};
+
 public:
 
 	// メンバ関数
@@ -31,6 +41,8 @@ public:
 	void Update(void);
 	void Draw(void);
 	static void SetScore(int nNum) { m_nScore = nNum; }
+	static void SetType(TYPE type) { m_type = type; }
+	static TYPE GetType(void) { return m_type; }
 
 private:
 
@@ -40,6 +52,7 @@ private:
 	CScore *m_pScore;			// スコア
 	int m_nTimer;				// 遷移タイマー
 	static int m_nScore;		// 今回のスコア
+	static TYPE m_type;		// 種類
 };
 
 #endif
