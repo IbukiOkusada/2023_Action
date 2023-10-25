@@ -69,6 +69,7 @@ void CGimmickRotate::Uninit(void)
 		if (m_aObj[nCnt].s_pModel != NULL)
 		{
 			m_aObj[nCnt].s_pModel->Uninit();
+			delete m_aObj[nCnt].s_pModel;
 			m_aObj[nCnt].s_pModel = NULL;
 		}
 	}

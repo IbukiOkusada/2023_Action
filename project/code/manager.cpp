@@ -208,7 +208,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 
 	// モードの生成
-	SetMode(CScene::MODE_RESULT);
+	SetMode(CScene::MODE_TITLE);
 
 	return S_OK;
 }
@@ -220,6 +220,20 @@ void CManager::Uninit(void)
 {
 	// サウンドの停止
 	m_pSound->Stop();
+
+	if (m_pScene != NULL)
+	{
+		m_pScene->Uninit();
+		delete m_pScene;
+		m_pScene = NULL;
+	}
+
+	if (m_pSlow != NULL)
+	{
+		m_pSlow->Uninit();
+		delete m_pScene;
+		m_pScene = NULL;
+	}
 
 	if (m_pInputKeyboard != NULL)
 	{// 使用している場合
@@ -301,20 +315,6 @@ void CManager::Uninit(void)
 		delete m_pModelFile;	// メモリの開放
 
 		m_pModelFile = NULL;	// 使用していない状態にする
-	}
-
-	if (m_pScene != NULL)
-	{
-		m_pScene->Uninit();
-		delete m_pScene;
-		m_pScene = NULL;
-	}
-
-	if (m_pSlow != NULL)
-	{
-		m_pSlow->Uninit();
-		delete m_pScene;
-		m_pScene = NULL;
 	}
 }
 

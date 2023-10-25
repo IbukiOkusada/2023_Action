@@ -13,6 +13,9 @@ class CScore;
 class CFileLoad;
 class CMeshDome;
 class CTime;
+class CCharacter;
+
+#define NUM_RANK	(5)		// ランキングの順位数
 
 //===============================================
 // リザルトクラスの定義(派生クラス)
@@ -24,9 +27,9 @@ public:
 	// 種類列挙型
 	enum TYPE
 	{
-		TYPE_NONE,		// 通常
 		TYPE_MULTI_WIN,	// マルチ勝利
 		TYPE_MULTI_LOSE,	// マルチ敗北
+		TYPE_MAX		// 通常
 	};
 
 public:
@@ -46,10 +49,19 @@ public:
 
 private:
 
+	// メンバ関数
+	void Save(int *pScore);
+	void Load(int *pScore);
+	void Sort(int *pScore);
+	void RankIn(int *pScore, int nResult);
+
+	// メンバ変数
 	CFileLoad *m_pFileLoad;	// ファイル読み込みのポインタ
 	CMeshDome *m_pMeshSky;		// 空用
-	CTime *m_pTime;
-	CScore *m_pScore;			// スコア
+	CTime *m_pTime;			// タイマー
+	CTime *m_apScore[NUM_RANK];	// スコアのポインタ(順位分)
+	CCharacter *m_apCharacter[TYPE_MAX];
+	int m_nRank;				// 今回のランク
 	int m_nTimer;				// 遷移タイマー
 	static int m_nScore;		// 今回のスコア
 	static TYPE m_type;		// 種類

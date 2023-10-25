@@ -128,7 +128,7 @@ void CTitle::Update(void)
 
 		if (m_nTimer >= AUTOMOVE_RANKING)
 		{// ƒ^ƒCƒgƒ‹Ž©“®‘JˆÚ‹K’è’l
-			CManager::GetInstance()->GetFade()->Set(CScene::MODE_RANKING);
+			CManager::GetInstance()->GetFade()->Set(CScene::MODE_RESULT);
 		}
 	}
 

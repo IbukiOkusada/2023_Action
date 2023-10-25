@@ -347,7 +347,7 @@ void CGame::Update(void)
 		if (m_pPlayer->GetPosition().x < -15000.0f)
 		{
 			// マルチプレイ
-			if (m_state == STATE_MULTI && CResult::GetType() == CResult::TYPE_NONE)
+			if (m_state == STATE_MULTI && CResult::GetType() == CResult::TYPE_MAX)
 			{
 				int nSetUp = 0;
 

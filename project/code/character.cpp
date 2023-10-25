@@ -21,9 +21,12 @@ CCharacter::CCharacter()
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_ParentMtx = NULL;
+	m_pMotion = NULL;
+	m_ppParts = NULL;
 
 	//ワールドマトリックスの初期化
-	D3DXMatrixIdentity(&m_mtxWorld);
+	/*D3DXMatrixIdentity(&m_mtxWorld);*/
 }
 
 //===================================================

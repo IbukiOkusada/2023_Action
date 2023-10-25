@@ -242,3 +242,17 @@ void CTime::SetValue(void)
 		}
 	}
 }
+
+//===============================================
+// êFê›íË
+//===============================================
+void CTime::SetColor(D3DXCOLOR col)
+{
+	for (int nCnt = 0; nCnt < NUM_PLACE; nCnt++)
+	{
+		if (m_apNumber[nCnt] != NULL)
+		{// égópÇµÇƒÇ¢Ç»Ç¢èÍçá
+			m_apNumber[nCnt]->GetObject2D()->SetCol(col);
+		}
+	}
+}

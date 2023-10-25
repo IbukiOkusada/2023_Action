@@ -48,6 +48,7 @@ public:	// ここから関数(誰でもアクセス可能)
 	void SetStartTimer(int nValue) { m_nPauseTimer = nValue; }
 	void SetNum(int nValue);
 	void SetActive(bool bActive) { m_bActive = bActive; m_nStartDeltaTime = timeGetTime();}
+	void SetColor(D3DXCOLOR col);
 
 	// メンバ関数(取得)
 	int GetNum(void) { return m_nNum; }
