@@ -25,6 +25,7 @@ CModel::CModel() : CObject(1)
 	m_ChangeMat.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	m_ChangeMat.Emissive = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	m_pParentMtx = NULL;
+	m_bDraw = true;
 
 	//ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
@@ -83,6 +84,11 @@ void CModel::Update(void)
 //==========================================================
 void CModel::Draw(void)
 {
+	if (m_bDraw == false)
+	{
+		return;
+	}
+
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイスへのポインタを取得
 	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス

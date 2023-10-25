@@ -460,3 +460,18 @@ CModel *CCharacter::GetParts(int nIdx)
 	}
 	return NULL;
 }
+
+//==========================================================
+// •`‰æİ’è
+//==========================================================
+void CCharacter::SetDraw(bool bDraw)
+{
+	if (m_ppParts != NULL)
+	{// g—p‚µ‚Ä‚¢‚½ê‡
+		for (int nCnt = 0; nCnt < m_nNumParts; nCnt++)
+		{
+			// I—¹ˆ—
+			m_ppParts[nCnt]->SetDraw(bDraw);
+		}
+	}
+}

@@ -253,21 +253,5 @@ bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 		}
 	}
 
-	if (pos.x + vtxMax.x > ObjPos.x + vtxObjMin.x
-		&& pos.x + vtxMin.x < ObjPos.x + vtxObjMax.x
-		&& pos.z + vtxMax.z > ObjPos.z + vtxObjMin.z
-		&& pos.z + vtxMin.z < ObjPos.z + vtxObjMax.z)
-	{//”ÍˆÍ“à‚É‚ ‚é
-	 //ã‚©‚ç‚Ì”»’è
-		if (posOld.y + vtxMin.y >= ObjPos.y + vtxObjMax.y
-			&& pos.y + vtxMin.y < ObjPos.y + vtxObjMax.y)
-		{//ã‚©‚ç‚ß‚èž‚ñ‚¾
-		 //ã‚É‚Ì‚¹‚é
-			pos.y = ObjPos.y + vtxObjMax.y - vtxMin.y;
-			move.y = 0.0f;
-			bLand = true;
-		}
-	}
-
 	return bLand;
 }

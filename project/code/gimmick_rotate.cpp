@@ -170,9 +170,6 @@ bool CGimmickRotate::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXV
 		float fLength = sqrtf((pos.x - ObjPos.x) * (pos.x - ObjPos.x)
 			+ (pos.z - ObjPos.z) * (pos.z - ObjPos.z));
 
-		float fOldLength = sqrtf((posOld.x - ObjPos.x) * (posOld.x - ObjPos.x)
-			+ (posOld.z - ObjPos.z) * (posOld.z - ObjPos.z));
-
 		float fSize = m_fSize * 0.75f;
 
 		if (fLength > fSize)

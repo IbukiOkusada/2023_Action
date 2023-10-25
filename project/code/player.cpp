@@ -26,6 +26,8 @@
 #include "gimmick.h"
 #include <assert.h>
 #include "billboard.h"
+#include "character.h"
+#include "motion.h"
 
 //===============================================
 // マクロ定義
@@ -161,8 +163,7 @@ HRESULT CPlayer::Init(void)
 {
 	if (nullptr == m_pObject)
 	{
-		m_pObject = CObjectX::Create(GetPosition(), GetRotation(), "data\\MODEL\\triangle.x");
-		m_pObject->SetType(CObject::TYPE_PLAYER);
+		m_pObject = CCharacter::Create(GetPosition(), GetRotation(), "data\\TXT\\motion_kidsboy.txt");
 	}
 
 	//ワールドマトリックスの初期化
@@ -189,8 +190,8 @@ HRESULT CPlayer::Init(const char *pBodyName, const char *pLegName)
 {
 	if (nullptr == m_pObject)
 	{
-		m_pObject = CObjectX::Create(GetPosition(), GetRotation(), "data\\MODEL\\triangle.x");
-		m_pObject->SetType(CObject::TYPE_PLAYER);
+		m_pObject = CCharacter::Create("data\\TXT\\motion_kidsboy.txt");
+		m_pObject->GetMotion()->InitSet(0);
 	}
 
 	m_nLife = START_LIFE;
@@ -213,7 +214,7 @@ HRESULT CPlayer::Init(const char *pBodyName, const char *pLegName)
 				m_ppBillBoard[nCnt] = CObjectBillboard::Create(m_Info.pos, 5);
 				m_ppBillBoard[nCnt]->SetRotation(D3DXVECTOR3(0.0f, 0.0f, D3DXToRadian(rand() % 628 - 314)));
 				m_ppBillBoard[nCnt]->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\balloon.png"));
-				m_ppBillBoard[nCnt]->SetSize(60.0f + nCnt * 15.0f, 60.0f + nCnt * 15.0f);
+				m_ppBillBoard[nCnt]->SetSize(90.0f + nCnt * 5.0f, 90.0f + nCnt * 5.0f);
 			}
 		}
 	}
@@ -299,6 +300,13 @@ void CPlayer::Uninit(void)
 		m_ppBillBoard = NULL;	// 使用していない状態にする
 	}
 
+	if (m_pObject != NULL)
+	{
+		m_pObject->Uninit();
+		delete m_pObject;
+		m_pObject = NULL;
+	}
+
 	m_nNumCount--;
 
 	// 廃棄
@@ -381,8 +389,10 @@ void CPlayer::Update(void)
 
 	// 使用オブジェクト更新
 	if (nullptr != m_pObject) {
-		m_pObject->SetPosition(m_Info.pos);
+		m_pObject->SetPosition(D3DXVECTOR3(m_Info.pos.x, m_Info.pos.y - 50.0f, m_Info.pos.z - 20.0f));
 		m_pObject->SetRotation(m_Info.rot);
+		m_pObject->Update();
+		m_pObject->GetMotion()->BlendSet(START_LIFE - m_nLife);
 	}
 
 	// 起伏との当たり判定
@@ -412,7 +422,7 @@ void CPlayer::Update(void)
 			}
 
 			m_ppBillBoard[nCnt]->SetRotation(rot);
-			m_ppBillBoard[nCnt]->SetPosition(D3DXVECTOR3(m_Info.pos.x, m_Info.pos.y + 50.0f + 10.0f * nCnt, m_Info.pos.z));
+			m_ppBillBoard[nCnt]->SetPosition(D3DXVECTOR3(m_Info.pos.x, m_Info.pos.y + 100.0f + 10.0f * nCnt, m_Info.pos.z));
 			m_ppBillBoard[nCnt]->SetSize(m_ppBillBoard[nCnt]->GetWidth(), m_ppBillBoard[nCnt]->GetHeight());
 		}
 	}
@@ -503,8 +513,8 @@ void CPlayer::Controller(void)
 	if (nullptr != m_pObject)
 	{
 		CXFile *pFile = CManager::GetInstance()->GetModelFile();
-		D3DXVECTOR3 vtxMax = pFile->GetMax(m_pObject->GetIdx());
-		D3DXVECTOR3 vtxMin = pFile->GetMin(m_pObject->GetIdx());
+		D3DXVECTOR3 vtxMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		D3DXVECTOR3 vtxMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 		if (m_ppBillBoard != nullptr){
 			vtxMax = D3DXVECTOR3(m_ppBillBoard[m_nLife - 1]->GetWidth() * 0.7f, m_ppBillBoard[m_nLife - 1]->GetHeight(), m_ppBillBoard[m_nLife - 1]->GetHeight() * 0.7f);
@@ -879,6 +889,14 @@ void CPlayer::StateSet(void)
 
 		if (m_Info.fStateCounter <= 0.0f)
 		{
+			for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
+			{
+				if (nullptr != m_ppBillBoard[nCnt])
+				{
+					m_ppBillBoard[nCnt]->SetSize(90.0f + nCnt * 5.0f, 90.0f + nCnt * 5.0f);
+				}
+			}
+
 			m_pObject->SetDraw();
 			m_Info.fStateCounter = 0.0f;
 			m_Info.state = STATE_APPEAR;

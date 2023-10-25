@@ -26,7 +26,7 @@
 //===============================================
 // 静的メンバ変数
 //===============================================
-CManager *CManager::      m_pManager = NULL;
+CManager *CManager::m_pManager = NULL;
 
 //===================================================
 // コンストラクタ
@@ -208,7 +208,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 
 	// モードの生成
-	SetMode(CScene::MODE_TITLE);
+	SetMode(CScene::MODE_RESULT);
 
 	return S_OK;
 }

@@ -23,7 +23,6 @@ class CLockOn;
 class CMeshOrbit;
 class CObject3D;
 class CCar;
-class CObjectX;
 class CShadow;
 class CMeshBalloon;
 
@@ -122,7 +121,7 @@ private:	// 自分だけがアクセス可能
 	CPlayer *m_pNext;	// 次のオブジェクトへのポインタ
 	CObjectBillboard **m_ppBillBoard;
 	SInfo m_Info;			// 自分自身の情報
-	CObjectX *m_pObject;	// 描画オブジェクト
+	CCharacter *m_pObject;	// 描画オブジェクト
 	float m_fRotMove;		// 現在の角度
 	float m_fRotDiff;		// 目的の角度
 	float m_fRotDest;		// 角度計算
@@ -135,9 +134,10 @@ private:	// 自分だけがアクセス可能
 	int m_nLife;	// 体力
 	int m_nId;	// ID
 	bool m_bSetUp;	// 準備完了かどうか
-	TYPE m_type;
-	bool m_bGoal;
+	TYPE m_type;	// 種類
+	bool m_bGoal;	// ゴールしたか
 	static int m_nNumCount;
+	
 };
 
 #endif
