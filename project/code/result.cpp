@@ -21,7 +21,7 @@
 #define MOVE_TIMER	(900)
 
 int CResult::m_nScore = 0;
-CResult::TYPE CResult::m_type = CResult::TYPE_MULTI_WIN;
+CResult::TYPE CResult::m_type = CResult::TYPE_NONE;
 
 //===============================================
 // コンストラクタ
@@ -102,7 +102,8 @@ void CResult::Update(void)
 {
 	m_nTimer++;
 
-	if (CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_RETURN) || m_nTimer > MOVE_TIMER)
+	if (CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_RETURN) || m_nTimer > MOVE_TIMER 
+		|| CManager::GetInstance()->GetInputPad()->GetTrigger(CInputPad::BUTTON_A, 0) || CManager::GetInstance()->GetInputPad()->GetTrigger(CInputPad::BUTTON_START, 0))
 	{
 		CManager::GetInstance()->GetFade()->Set(CScene::MODE_TITLE);
 	}
