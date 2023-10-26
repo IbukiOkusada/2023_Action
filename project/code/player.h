@@ -137,6 +137,7 @@ private:	// 自分だけがアクセス可能
 	TYPE m_type;	// 種類
 	bool m_bGoal;	// ゴールしたか
 	static int m_nNumCount;
+	float m_fEffectCount;	// エフェクトカウンター
 	
 };
 

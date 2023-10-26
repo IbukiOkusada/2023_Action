@@ -28,6 +28,8 @@
 #include "billboard.h"
 #include "character.h"
 #include "motion.h"
+#include "particle.h"
+#include "effect.h"
 
 //===============================================
 // マクロ定義
@@ -49,6 +51,7 @@
 #define DEATH_INTERVAL	(120.0f)
 #define DASH_INTERVAL	(60.0f)
 #define SPAWN_INTERVAL	(60.0f)
+#define PARTICLE_TIMER	 (10.0f)
 
 // 前方宣言
 CPlayer *CPlayer::m_pTop = NULL;	// 先頭のオブジェクトへのポインタ
@@ -83,6 +86,7 @@ CPlayer::CPlayer(const D3DXVECTOR3 pos)
 	m_nLife = 0;
 	m_type = TYPE_NONE;
 	m_nId = -1;
+	m_fEffectCount = 0.0f;
 	m_bSetUp = false;
 	m_bGoal = false;
 
@@ -121,6 +125,7 @@ CPlayer::CPlayer(int nPriOrity)
 	m_ppBillBoard = NULL;
 	m_type = TYPE_NONE;
 	m_nId = -1;
+	m_fEffectCount = 0.0f;
 	m_bSetUp = false;
 	m_bGoal = false;
 
@@ -385,6 +390,18 @@ void CPlayer::Update(void)
 		m_pShadow->SetDraw(false);
 		m_Info.state = STATE_DEATH;
 		m_Info.fStateCounter = DEATH_INTERVAL;
+
+		CParticle::Create(m_Info.pos, CEffect::TYPE_BALEXPLOSION);
+	}
+	else if (m_nLife > 0 && (m_Info.state != STATE_DEATH && m_Info.state != STATE_APPEAR))
+	{// 体力ある
+		m_fEffectCount += CManager::GetInstance()->GetSlow()->Get();
+
+		if (m_fEffectCount >= PARTICLE_TIMER)
+		{
+			m_fEffectCount = 0.0f;
+			CParticle::Create(m_Info.pos, CEffect::TYPE_BUBBLE);
+		}
 	}
 
 	// 使用オブジェクト更新

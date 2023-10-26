@@ -57,6 +57,7 @@ CEffect::CEffect(D3DXVECTOR3 pos)
 	m_Info.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Info.fRadius = 0.0f;
 	m_Info.Type = TYPE_NONE;
+	m_fusion = FUSION_ADD;
 }
 
 //===============================================
@@ -70,6 +71,7 @@ CEffect::CEffect(int nPriority) : CObjectBillboard(nPriority)
 	m_Info.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Info.fRadius = 0.0f;
 	m_Info.Type = TYPE_NONE;
+	m_fusion = FUSION_ADD;
 }
 
 //===============================================
@@ -213,7 +215,7 @@ void CEffect::Update(void)
 
 			break;
 
-		case CEffect::TYPE_SLOWOK:	// 爆発
+		case CEffect::TYPE_BUBBLE:	// 爆発
 
 			m_Info.col.a -= 0.0001f * CManager::GetInstance()->GetSlow()->Get();
 			m_Info.fRadius -= (rand() % 100 - 50) * 0.05f * CManager::GetInstance()->GetSlow()->Get();
@@ -261,10 +263,20 @@ void CEffect::Draw(void)
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 	pDevice->SetRenderState(D3DRS_ALPHAREF, 0);
 
-	//αブレンディングを加算合成に設定
-	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	if (m_fusion == FUSION_ADD)
+	{
+		//αブレンディングを加算合成に設定
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	}
+	else if (m_fusion == FUSION_MINUS)
+	{
+		//減算合成の設定
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	}
 
 	CObjectBillboard::Draw();
 
@@ -280,10 +292,20 @@ void CEffect::Draw(void)
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_ALWAYS);
 	pDevice->SetRenderState(D3DRS_ALPHAREF, 255);
 
-	//αブレンディングを元に戻す
-	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	if (m_fusion == FUSION_ADD)
+	{
+		//αブレンディングを元に戻す
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	}
+	else if (m_fusion == FUSION_MINUS)
+	{
+		//αブレンディングを元に戻す
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	}
 }
 
 //===============================================

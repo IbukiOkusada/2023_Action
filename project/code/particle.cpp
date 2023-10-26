@@ -153,40 +153,35 @@ void CParticle::Set(D3DXVECTOR3 Defpos, D3DXVECTOR3 Defmove, CEffect::TYPE type)
 		break;
 
 	case CEffect::TYPE_SHWBULLET:	// ’e
-
-		for (int nCnt = 0; nCnt < 3; nCnt++)
+	{
+		for (int nCnt = 0; nCnt < 1; nCnt++)
 		{
 			// À•W‚ÌÝ’è
 			pos = Defpos;
 
-			float fCol = (float)(rand() % 5) / 10.0f + 0.1f;
+			float fCol = (float)(rand() % 3) * 0.05f + 0.0f;
 
 			//ˆÚ“®—Ê‚ÌÝ’è
-			move.x = -cosf(Defmove.y + -D3DX_PI * 0.1f + D3DX_PI * 0.2f * ((rand() % 10) * 0.1f)) * 5.0f;
+			move.x = -sinf(Defmove.y + -D3DX_PI * 0.1f + D3DX_PI * 0.2f * ((rand() % 10) * 0.1f)) * 1.5f;
 			move.y = rand() % 300 * 0.01f;
-			move.z = -sinf(Defmove.y + -D3DX_PI * 0.1f + D3DX_PI * 0.2f * ((rand() % 10) * 0.1f)) * 5.0f;
+			move.z = -cosf(Defmove.y + -D3DX_PI * 0.1f + D3DX_PI * 0.2f * ((rand() % 10) * 0.1f)) * 1.5f;
 
 			//F‚ÌÝ’è
-			col = D3DXCOLOR(fCol, fCol + 0.25f, 1.0f, 1.0f);
+			col = D3DXCOLOR(0.5f - fCol, 0.5f - fCol, 0.0f, 1.0f);
 
 			//”¼Œa‚ÌÝ’è
-			fRadius = 5.0f;
+			fRadius = 8.0f;
 
 			//Žõ–½‚ÌÝ’è
 			fLife = 100.0f;
 
-			if (nCnt <= 5)
-			{// ˆêŒÂ–Ú‚Ì‚Ý
-				ParType = CEffect::TYPE_SHWREF;
-			}
-			else
-			{
-				ParType = CEffect::TYPE_SHWBULLET;
-			}
+			
+			ParType = CEffect::TYPE_SHWBULLET;
 
-			CEffect::Create(Defpos, move, col, fRadius, fLife, ParType);
+			CEffect *p = CEffect::Create(Defpos, move, col, fRadius, fLife, ParType);
+			p->SetFusion(CEffect::FUSION_ADD);
 		}
-
+	}
 		break;
 
 	case CEffect::TYPE_SWEAT:	// Š¾
@@ -202,20 +197,21 @@ void CParticle::Set(D3DXVECTOR3 Defpos, D3DXVECTOR3 Defmove, CEffect::TYPE type)
 			pos.z += (float)(rand() % 21 - 10);
 
 			//ˆÚ“®—Ê‚ÌÝ’è
-			move.x = sinf((float)(rand() % 629 - 314) / 100.0f) * ((float)(rand() % 100)) * 0.001f;
-			move.y = rand() % 100 * -0.007f;
-			move.z = cosf((float)(rand() % 629 - 314) / 100.0f) * ((float)(rand() % 100)) * 0.001f;
+			move.x = -sinf(Defmove.y + -D3DX_PI * 0.1f + D3DX_PI * 0.2f * ((rand() % 10) * 0.1f)) * 0.5f;
+			move.y = rand() % 300 * 0.01f;
+			move.z = -cosf(Defmove.y + -D3DX_PI * 0.1f + D3DX_PI * 0.2f * ((rand() % 10) * 0.1f)) * 0.5f;
 
 			//F‚ÌÝ’è
-			col = D3DXCOLOR(fCol + 0.5f, fCol + 0.5f, fCol + 0.5f, 1.0f);
+			col = D3DXCOLOR(fCol + 0.0f, fCol + 0.0f, fCol + 0.0f, 1.0f);
 
 			//”¼Œa‚ÌÝ’è
-			fRadius = 2.0f;
+			fRadius = 10.0f;
 
 			//Žõ–½‚ÌÝ’è
-			fLife = 20.0f;
+			fLife = 60.0f;
 
-			CEffect::Create(pos, move, col, fRadius, fLife, type);
+			CEffect *p = CEffect::Create(pos, move, col, fRadius, fLife, type);
+			p->SetFusion(CEffect::FUSION_MINUS);
 		}
 
 		break;
@@ -321,24 +317,23 @@ void CParticle::Set(D3DXVECTOR3 Defpos, D3DXVECTOR3 Defmove, CEffect::TYPE type)
 
 		for (int nCnt = 0; nCnt < 20; nCnt++)
 		{
-			// À•W‚ÌÝ’è
-			pos = Defpos;
-
 			//ˆÚ“®—Ê‚ÌÝ’è
-			move.x = sinf((float)(rand() % 629 - 314) * 0.01f) * ((float)(rand() % 100)) * 0.2f;
-			move.y = ((float)(rand() % 100)) * 0.25f;
-			move.z = cosf((float)(rand() % 629 - 314) * 0.01f) * ((float)(rand() % 100)) * 0.2f;
+			move.x = sinf((float)(rand() % 629 - 314) * 0.01f) * ((float)(rand() % 100)) * 0.025f;
+			move.y = ((float)(rand() % 50)) * 0.025f;
+			move.z = cosf((float)(rand() % 629 - 314) * 0.01f) * ((float)(rand() % 100)) * 0.025f;
 
 			//F‚ÌÝ’è
-			col = D3DXCOLOR(0.4f, 0.4f, rand() % 40 * 0.1f + 0.6f, 1.0f);
+			col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 			//”¼Œa‚ÌÝ’è
-			fRadius = 25.0f;
+			fRadius = 15.0f;
 
 			//Žõ–½‚ÌÝ’è
-			fLife = 30.0f;
+			fLife = 100.0f;
 
-			CEffect::Create(Defpos, move, col, fRadius, fLife, type);
+			CEffect *p = CEffect::Create(Defpos + move, move, col, fRadius, fLife, CEffect::TYPE_BUBBLE);
+			p->SetFusion(CEffect::FUSION_NORMAL);
+			p->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\balloon.png"));
 		}
 
 		break;
@@ -369,24 +364,26 @@ void CParticle::Set(D3DXVECTOR3 Defpos, D3DXVECTOR3 Defmove, CEffect::TYPE type)
 
 		break;
 
-	case CEffect::TYPE_SLOWOK:	// ‰Œ
-
-								//ˆÚ“®—Ê‚ÌÝ’è
+	case CEffect::TYPE_BUBBLE:	// ‰Œ
+	{
+		//ˆÚ“®—Ê‚ÌÝ’è
 		move.x = sinf((float)(rand() % 629 - 314) * 0.01f) * ((float)(rand() % 100)) * 0.0025f;
 		move.y = ((float)(rand() % 50)) * 0.025f;
 		move.z = cosf((float)(rand() % 629 - 314) * 0.01f) * ((float)(rand() % 100)) * 0.0025f;
 
 		//F‚ÌÝ’è
-		col = D3DXCOLOR(rand() % 20 * 0.01f + 0.1f, rand() % 20 * 0.01f + 0.4f, rand() % 50 * 0.01f + 0.4f, 0.15f);
+		col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 		//”¼Œa‚ÌÝ’è
-		fRadius = 50.0f;
+		fRadius = 15.0f;
 
 		//Žõ–½‚ÌÝ’è
-		fLife = 15.0f;
+		fLife = 100.0f;
 
-		CEffect::Create(Defpos + move, move, col, fRadius, fLife, type);
-
+		CEffect *p = CEffect::Create(Defpos + move, move, col, fRadius, fLife, type);
+		p->SetFusion(CEffect::FUSION_NORMAL);
+		p->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\balloon.png"));
+	}
 		break;
 
 	case CEffect::TYPE_HEATHAZE:	// ‰Œ

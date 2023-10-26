@@ -147,6 +147,10 @@ HRESULT CGame::Init(void)
 			// マルチスレッド
 			std::thread th(&CGame::Online, this);
 			th.detach();
+
+			m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
+			m_pTime->Set(0);
+			m_pTime->SetMode(CTime::MODE_PLUS);
 		}
 		else
 		{// 接続失敗

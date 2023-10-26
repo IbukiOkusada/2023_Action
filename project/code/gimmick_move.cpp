@@ -12,6 +12,8 @@
 #include "motion.h"
 #include "shadow.h"
 #include "meshfield.h"
+#include "particle.h"
+#include "renderer.h"
 
 // マクロ定義
 #define COLLISION_SIZE		(50.0f)
@@ -108,6 +110,33 @@ void CGimmickMove::Update(void)
 	if (nullptr != m_pShadow) {
 		m_pShadow->SetPosition(D3DXVECTOR3(GetPosition().x, fHeight + 1.0f, GetPosition().z));
 	}
+
+	D3DXMATRIX mtxProjection;
+	D3DXMATRIX mtxView;
+	D3DXMATRIX mtxWorld;
+	D3DXVECTOR3 ScreenPos;
+	D3DVIEWPORT9 Viewport;
+
+	//デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
+
+	pDevice->GetTransform(D3DTS_PROJECTION, &mtxProjection);	// プロジェクションマトリックスを取得
+	pDevice->GetTransform(D3DTS_VIEW, &mtxView);				// ビューマトリックスを取得
+	pDevice->GetViewport(&Viewport);							// ビューポートを取得
+
+	//ワールドマトリックスの初期化
+	D3DXMatrixIdentity(&mtxWorld);
+
+	// ワールド座標からスクリーン座標に変換する
+	D3DXVec3Project(&ScreenPos, &GetPosition(), &Viewport, &mtxProjection, &mtxView, &mtxWorld);
+
+	if (ScreenPos.x < 0.0f || ScreenPos.x > SCREEN_WIDTH ||
+		ScreenPos.y < 0.0f || ScreenPos.y > SCREEN_HEIGHT || ScreenPos.z >= 1.0f)
+	{// 画面に描画されていない
+		return;
+	}
+
+	CParticle::Create(GetPosition(), GetRotation(), CEffect::TYPE_SHWBULLET);
 }
 
 //==========================================================

@@ -13,6 +13,9 @@
 #include "motion.h"
 #include "shadow.h"
 #include "meshfield.h"
+#include "particle.h"
+#include "effect.h"
+#include "renderer.h"
 
 // マクロ定義
 #define FILENAME "data\\TXT\\motion_bird.txt"	// 使用モデル
@@ -129,6 +132,35 @@ void CGimmickRotate::Update(void)
 				D3DXVECTOR3 nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				float fHeight = CMeshField::GetHeight(m_aObj[nCnt].s_posOld);
 				m_aObj[nCnt].s_pShadow->SetPosition(D3DXVECTOR3(m_aObj[nCnt].s_posOld.x, fHeight + 7.0f, m_aObj[nCnt].s_posOld.z));
+
+				D3DXMATRIX mtxProjection;
+				D3DXMATRIX mtxView;
+				D3DXMATRIX mtxWorld;
+				D3DXVECTOR3 ScreenPos;
+				D3DVIEWPORT9 Viewport;
+
+				//デバイスの取得
+				LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
+
+				pDevice->GetTransform(D3DTS_PROJECTION, &mtxProjection);	// プロジェクションマトリックスを取得
+				pDevice->GetTransform(D3DTS_VIEW, &mtxView);				// ビューマトリックスを取得
+				pDevice->GetViewport(&Viewport);							// ビューポートを取得
+
+																			//ワールドマトリックスの初期化
+				D3DXMatrixIdentity(&mtxWorld);
+
+				// ワールド座標からスクリーン座標に変換する
+				D3DXVec3Project(&ScreenPos, &GetPosition(), &Viewport, &mtxProjection, &mtxView, &mtxWorld);
+
+				if (ScreenPos.x < 0.0f || ScreenPos.x > SCREEN_WIDTH ||
+					ScreenPos.y < 0.0f || ScreenPos.y > SCREEN_HEIGHT || ScreenPos.z >= 1.0f)
+				{// 画面に描画されていない
+					
+				}
+				else
+				{
+					CParticle::Create(m_aObj[nCnt].s_posOld, CEffect::TYPE_SWEAT);
+				}
 			}
 		}
 	}

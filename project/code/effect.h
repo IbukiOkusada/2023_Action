@@ -33,9 +33,18 @@ public:	// 誰でもアクセス可能な定義
 		TYPE_BALEXPLOSION,	// 風船爆発
 		TYPE_SMAKE,		// 煙
 		TYPE_HEATHAZE,	// 陽炎
-		TYPE_SLOWOK,	// スロー可能
+		TYPE_BUBBLE,		// シャボン玉
 		TYPE_MAX
 	}TYPE;
+
+	// 合成方法列挙型
+	enum FUSION
+	{
+		FUSION_ADD = 0,	// 加算合成
+		FUSION_MINUS,		// 減算合成
+		FUSION_NORMAL,	// 合成しない
+		FUSION_MAX
+	};
 
 private:	// 自分だけアクセス可能な定義
 
@@ -64,6 +73,7 @@ public:	// 誰でもアクセス可能
 	static CEffect *Create(D3DXVECTOR3 pos, TYPE type);
 	static CEffect *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, D3DXCOLOR col, float fRadius, float fLife, TYPE type);
 	void SetMove(D3DXVECTOR3 move);
+	void SetFusion(FUSION fusion) { m_fusion = fusion; }
 	D3DXVECTOR3 GetMove(void) { return m_Info.move; }
 
 private:	// 自分だけがアクセス可能
@@ -76,6 +86,7 @@ private:	// 自分だけがアクセス可能
 	int nIdxTexture;	// テクスチャ番号
 	static const D3DXCOLOR m_aColInfo[TYPE_MAX];	// 色の情報
 	static const float m_aRadiusInfo[TYPE_MAX];		// 半径の情報
+	FUSION m_fusion;
 	INFO m_Info;	// 情報の構造体
 };
 
