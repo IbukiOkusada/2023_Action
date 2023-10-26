@@ -137,12 +137,12 @@ void CTutorial::Uninit(void)
 //===============================================
 void CTutorial::Update(void)
 {
-	if (CManager::GetInstance()->GetInputPad()->GetTrigger(CInputPad::BUTTON_START, 0) || CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_RETURN))
+	if (CManager::GetInstance()->GetInputPad()->GetTrigger(CInputPad::BUTTON_Y, 0) || CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_Y))
 	{
 		CManager::GetInstance()->GetFade()->Set(CScene::MODE_GAME);
 		CGame::SetState(CGame::STATE_TIMEATTACK);
 	}
-	else if (CManager::GetInstance()->GetInputPad()->GetTrigger(CInputPad::BUTTON_BACK, 0) || CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_BACKSPACE))
+	else if (CManager::GetInstance()->GetInputPad()->GetTrigger(CInputPad::BUTTON_B, 0) || CManager::GetInstance()->GetInputKeyboard()->GetTrigger(DIK_B))
 	{
 		CManager::GetInstance()->GetFade()->Set(CScene::MODE_GAME);
 		CGame::SetState(CGame::STATE_MULTI);

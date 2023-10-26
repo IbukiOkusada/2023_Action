@@ -11,6 +11,8 @@
 #include "debugproc.h"
 #include "character.h"
 #include "motion.h"
+#include "shadow.h"
+#include "meshfield.h"
 
 // マクロ定義
 #define FILENAME "data\\TXT\\motion_bird.txt"	// 使用モデル
@@ -25,6 +27,7 @@ CGimmickRotate::CGimmickRotate()
 	for (int nCnt = 0; nCnt < NUM_ROTATEBOX; nCnt++)
 	{
 		m_aObj[nCnt].s_pModel = NULL;
+		m_aObj[nCnt].s_pShadow = NULL;
 	}
 
 	m_RotateSpeed = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -55,6 +58,11 @@ HRESULT CGimmickRotate::Init(void)
 			+ (SETSIZE * nCnt) 
 			+ (SETSIZE * ((1 - NUM_ROTATEBOX % 2) * 0.5f))));
 		m_aObj[nCnt].s_pModel->GetMotion()->InitSet(0);
+
+		if (nullptr == m_aObj[nCnt].s_pShadow)
+		{
+			m_aObj[nCnt].s_pShadow = CShadow::Create(GetPosition(), 60.0f, 60.0f);
+		}
 	}
 	return S_OK;
 }
@@ -71,6 +79,11 @@ void CGimmickRotate::Uninit(void)
 			m_aObj[nCnt].s_pModel->Uninit();
 			delete m_aObj[nCnt].s_pModel;
 			m_aObj[nCnt].s_pModel = NULL;
+
+			if (nullptr != m_aObj[nCnt].s_pShadow) {
+				m_aObj[nCnt].s_pShadow->Uninit();
+				m_aObj[nCnt].s_pShadow = NULL;
+			}
 		}
 	}
 
@@ -110,6 +123,13 @@ void CGimmickRotate::Update(void)
 			m_aObj[nCnt].s_posOld.y = m_aObj[nCnt].s_pModel->GetMtxWorld()->_42;
 			m_aObj[nCnt].s_posOld.z = m_aObj[nCnt].s_pModel->GetMtxWorld()->_43;
 			m_aObj[nCnt].s_pModel->Update();
+
+			if (nullptr != m_aObj[nCnt].s_pShadow) {
+				// 起伏との当たり判定
+				D3DXVECTOR3 nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				float fHeight = CMeshField::GetHeight(m_aObj[nCnt].s_posOld);
+				m_aObj[nCnt].s_pShadow->SetPosition(D3DXVECTOR3(m_aObj[nCnt].s_posOld.x, fHeight + 7.0f, m_aObj[nCnt].s_posOld.z));
+			}
 		}
 	}
 }

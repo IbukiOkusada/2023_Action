@@ -18,8 +18,8 @@ TEXTURE_FILENAME = data/TEXTURE/river000.jpg			# [0]川水(下)
 TEXTURE_FILENAME = data/TEXTURE/river000.png			# [1]川水(上)
 TEXTURE_FILENAME = data/TEXTURE/cloth.jpg				# [2]布
 TEXTURE_FILENAME = data/TEXTURE/tutorial.png			# [3]チュートリアル
-TEXTURE_FILENAME = data/TEXTURE/stage_easy.jpg			# [4]簡単ステージ
-TEXTURE_FILENAME = data/TEXTURE/stage_hard.jpg			# [5]難しいステージ
+TEXTURE_FILENAME = data/TEXTURE/stage_easy.png			# [4]簡単ステージ
+TEXTURE_FILENAME = data/TEXTURE/stage_hard.png			# [5]難しいステージ
 
 #------------------------------------------------------------------------------
 # モデル数
@@ -111,20 +111,38 @@ FIELDSET
 END_FIELDSET
 
 FIELDSET
+	TEXTYPE = 2
+	POS = -1100.0 -298.0 -400.0
+	ROT = 0 0 0
+	BLOCK = 1 1
+	SIZE = 300 300
+	MOVE = -0.0005 0.0
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 2
+	POS = -1100.0 -298.0 400.0
+	ROT = 0 0 0
+	BLOCK = 1 1
+	SIZE = 300 300
+	MOVE = -0.0005 0.0
+END_FIELDSET
+
+FIELDSET
 	TEXTYPE = 4
-	POS = -1100.0 -297.0 -200.0
+	POS = -1100.0 -297.0 -400.0
 	ROT = 0 180 0
 	BLOCK = 1 1
-	SIZE = 200 200
+	SIZE = 300 300
 	MOVE = 0.0 0.0
 END_FIELDSET
 
 FIELDSET
 	TEXTYPE = 5
-	POS = -1100.0 -297.0 200.0
+	POS = -1100.0 -297.0 400.0
 	ROT = 0 180 0
 	BLOCK = 1 1
-	SIZE = 200 200
+	SIZE = 300 300
 	MOVE = 0.0 0.0
 END_FIELDSET
 

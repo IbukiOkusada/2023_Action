@@ -11,6 +11,7 @@
 
 // 前方宣言
 class CCharacter;
+class CShadow;
 
 // マクロ定義
 #define NUM_ROTATEBOX	(10)
@@ -27,6 +28,7 @@ private:
 	{
 		D3DXVECTOR3 s_posOld;
 		CCharacter *s_pModel;
+		CShadow *s_pShadow;
 	};
 
 public:	// 誰でもアクセス可能

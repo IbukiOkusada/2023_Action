@@ -34,10 +34,8 @@
 #include "tcp_client.h"
 #include <thread>
 #include "protocol_online.h"
-#include <mutex>
 
 // グローバル
-std::mutex g_mtx;
 
 //===============================================
 // マクロ定義
@@ -145,18 +143,19 @@ HRESULT CGame::Init(void)
 		AddressLoad(&m_aAddress[0]);
 
 		if (m_pClient->Init(&m_aAddress[0], DEF_PORT))
-		{
+		{// 初期接続成功
 			// マルチスレッド
 			std::thread th(&CGame::Online, this);
 			th.detach();
 		}
 		else
-		{
-			m_state = STATE_TIMEATTACK;
-		}
+		{// 接続失敗
 
-		m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
-		m_pTime->Set(150 * 100);
+			// タイムアタックに変更
+			m_state = STATE_TIMEATTACK;
+			m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
+			m_pTime->Set(150 * 100);
+		}
 	}
 	else
 	{
@@ -286,7 +285,10 @@ void CGame::Update(void)
 			else
 			{
 				m_pPlayer->SetType(CPlayer::TYPE_ACTIVE);
-				m_pTime->SetActive(true);
+				if (m_pTime != nullptr)
+				{
+					m_pTime->SetActive(true);
+				}
 				if (m_pCountDown != nullptr)
 				{
 					m_pCountDown->Uninit();
@@ -378,8 +380,11 @@ void CGame::Update(void)
 			}
 
 			m_pPlayer->SetGoal(true);
-			CResult::SetScore(m_pTime->GetNum());
-			m_pTime->SetActive(false);
+			if (m_pTime != nullptr)
+			{
+				CResult::SetScore(m_pTime->GetNum());
+				m_pTime->SetActive(false);
+			}
 			SendGoal();
 		}
 	}
@@ -644,7 +649,7 @@ void CGame::Online(void)
 //===================================================
 void CGame::ByteCheck(char *pRecvData, int nRecvByte)
 {
-	g_mtx.lock();
+	m_mutex.lock();
 	m_nSledCnt++;
 	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
@@ -658,7 +663,7 @@ void CGame::ByteCheck(char *pRecvData, int nRecvByte)
 	if (nRecvByte <= 0)
 	{
 		m_nSledCnt--;
-		g_mtx.unlock();
+		m_mutex.unlock();
 		return;
 	}
 
@@ -721,7 +726,7 @@ void CGame::ByteCheck(char *pRecvData, int nRecvByte)
 		if (m_pPlayer == NULL)
 		{
 			m_nSledCnt--;
-			g_mtx.unlock();
+			m_mutex.unlock();
 			return;
 		}
 
@@ -816,7 +821,7 @@ void CGame::ByteCheck(char *pRecvData, int nRecvByte)
 	}
 
 	m_nSledCnt--;
-	g_mtx.unlock();
+	m_mutex.unlock();
 }
 
 //===================================================

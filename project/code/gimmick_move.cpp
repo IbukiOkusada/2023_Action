@@ -10,6 +10,8 @@
 #include "Xfile.h"
 #include "character.h"
 #include "motion.h"
+#include "shadow.h"
+#include "meshfield.h"
 
 // マクロ定義
 #define COLLISION_SIZE		(50.0f)
@@ -47,6 +49,12 @@ HRESULT CGimmickMove::Init(void)
 		m_pObject->GetMotion()->InitSet(0);
 	}
 
+	// 影の生成
+	if (nullptr == m_pShadow)
+	{
+		m_pShadow = CShadow::Create(GetPosition(), 50.0f, 50.0f);
+	}
+
 	// スローを覚える
 	m_pSlow = CManager::GetInstance()->GetSlow();
 
@@ -63,6 +71,11 @@ void CGimmickMove::Uninit(void)
 		m_pObject->Uninit();
 		delete m_pObject;
 		m_pObject = NULL;
+	}
+
+	if (nullptr != m_pShadow) {
+		m_pShadow->Uninit();
+		m_pShadow = NULL;
 	}
 
 	ListOut();
@@ -85,6 +98,15 @@ void CGimmickMove::Update(void)
 	if (m_pObject != nullptr)
 	{
 		m_pObject->Update();
+	}
+
+	// 起伏との当たり判定
+	D3DXVECTOR3 nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	float fHeight = CMeshField::GetHeight(GetPosition());
+
+	// 影の設定
+	if (nullptr != m_pShadow) {
+		m_pShadow->SetPosition(D3DXVECTOR3(GetPosition().x, fHeight + 1.0f, GetPosition().z));
 	}
 }
 

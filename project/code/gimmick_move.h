@@ -12,6 +12,7 @@
 // 前方宣言
 class CSlow;
 class CCharacter;
+class CShadow;
 
 //==========================================================
 // 移動オブジェクトのクラス定義
@@ -51,6 +52,7 @@ private:	// 自分だけがアクセス可能
 	D3DXVECTOR3 m_move;	// 移動量
 	D3DXVECTOR3 m_posOld;
 	CCharacter *m_pObject;
+	CShadow *m_pShadow;
 	float m_fNowMoveTimer;
 	float m_fNumMoveTimer;
 	CSlow *m_pSlow;		// スロー

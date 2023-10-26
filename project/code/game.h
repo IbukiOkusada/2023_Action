@@ -8,6 +8,7 @@
 #define _GAME_H_		// 二重インクルード防止用マクロを定義
 
 #include "manager.h"
+#include <mutex>
 
 // 前方宣言
 class CScore;
@@ -93,6 +94,7 @@ private:
 	int m_nSledCnt;		// 現在動作しているスレッド数
 	CCountDown *m_pCountDown;	// カウントダウンのポインタ
 	WSADATA m_wsaData;
+	std::mutex m_mutex;
 	bool m_bEnd;
 };
 

@@ -121,7 +121,15 @@ HRESULT CResult::Init(void)
 	case TYPE_MAX:
 	{
 		m_apCharacter[TYPE_MULTI_WIN] = CCharacter::Create("data\\TXT\\motion_kidsboy.txt");
-		m_apCharacter[TYPE_MULTI_WIN]->GetMotion()->InitSet(4);
+		if (m_nScore != 0)
+		{
+			m_apCharacter[TYPE_MULTI_WIN]->GetMotion()->InitSet(4);
+		}
+		else
+		{
+			m_apCharacter[TYPE_MULTI_WIN]->GetMotion()->InitSet(5);
+		}
+
 		m_apCharacter[TYPE_MULTI_WIN]->SetPosition(D3DXVECTOR3(0.0f, 0.0f, 100.0f));
 		m_apCharacter[TYPE_MULTI_WIN]->SetRotation(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
 

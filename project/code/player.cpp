@@ -589,7 +589,7 @@ void CPlayer::Move(void)
 		return;
 	}
 
-	if (pInputKey->GetTrigger(DIK_K) || pInputPad->GetTrigger(CInputPad::BUTTON_RIGHTBUTTON, 0))
+	if (pInputKey->GetTrigger(DIK_RETURN) || pInputPad->GetTrigger(CInputPad::BUTTON_RIGHTBUTTON, 0))
 	{
 		if (m_fStepCoolTime <= 0.0f && m_Info.state != STATE_DAMAGE)
 		{

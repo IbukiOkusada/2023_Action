@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------------------------
 # テクスチャ数
 #------------------------------------------------------------------------------
-NUM_TEXTURE = 3
+NUM_TEXTURE = 5
 
 #------------------------------------------------------------------------------
 # テクスチャファイル名
@@ -17,6 +17,8 @@ NUM_TEXTURE = 3
 TEXTURE_FILENAME = data/TEXTURE/river000.jpg			# [0]川水(下)
 TEXTURE_FILENAME = data/TEXTURE/river000.png			# [1]川水(上)
 TEXTURE_FILENAME = data/TEXTURE/line000.jpg				# [2]ゴール線
+TEXTURE_FILENAME = data/TEXTURE/arrow000.jpg			# [2]ゴール線
+TEXTURE_FILENAME = data/TEXTURE/arrow001.jpg			# [2]ゴール線
 
 #------------------------------------------------------------------------------
 # モデル数
@@ -99,6 +101,142 @@ FIELDSET
 	ROT = 0 0 0
 	BLOCK = 8 1
 	SIZE = 100 40
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 3
+	POS = -4100.0 105.0 350.0
+	ROT = 0 180 0
+	BLOCK = 1 1
+	SIZE = 50 50
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 3
+	POS = -5000.0 105.0 350.0
+	ROT = 0 180 0
+	BLOCK = 1 1
+	SIZE = 50 50
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 3
+	POS = -4020.0 105.0 250.0
+	ROT = 0 90 0
+	BLOCK = 1 1
+	SIZE = 50 50
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 3
+	POS = -4320.0 105.0 -356.0
+	ROT = 0 180 0
+	BLOCK = 1 1
+	SIZE = 50 50
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 3
+	POS = -5620.0 105.0 -890.0
+	ROT = 0 180 0
+	BLOCK = 1 1
+	SIZE = 50 50
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 3
+	POS = -6360.0 105.0 -1160.0
+	ROT = 0 120 0
+	BLOCK = 1 1
+	SIZE = 50 50
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 3
+	POS = -6290.0 105.0 -1040.0
+	ROT = 0 180 0
+	BLOCK = 1 1
+	SIZE = 50 50
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 3
+	POS = -6290.0 105.0 -470.0
+	ROT = 0 90 0
+	BLOCK = 1 1
+	SIZE = 50 50
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 3
+	POS = -7050.0 105.0 -1390.0
+	ROT = 0 180 0
+	BLOCK = 1 1
+	SIZE = 50 50
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 3
+	POS = -8040.0 105.0 -1390.0
+	ROT = 0 180 0
+	BLOCK = 1 1
+	SIZE = 50 50
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 3
+	POS = -9090.0 105.0 -1390.0
+	ROT = 0 180 0
+	BLOCK = 1 1
+	SIZE = 50 50
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 3
+	POS = -10090.0 105.0 -1390.0
+	ROT = 0 180 0
+	BLOCK = 1 1
+	SIZE = 50 50
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 3
+	POS = -11110.0 105.0 -1080.0
+	ROT = 0 180 0
+	BLOCK = 1 1
+	SIZE = 50 50
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 4
+	POS = -13430.0 105.0 -10.0
+	ROT = 0 -90 0
+	BLOCK = 1 1
+	SIZE = 50 50
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 4
+	POS = -13810.0 105.0 -10.0
+	ROT = 0 -90 0
+	BLOCK = 1 1
+	SIZE = 50 50
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 4
+	POS = -13410.0 105.0 -1570.0
+	ROT = 0 -90 0
+	BLOCK = 1 1
+	SIZE = 50 50
+END_FIELDSET
+
+FIELDSET
+	TEXTYPE = 4
+	POS = -13810.0 105.0 -1580.0
+	ROT = 0 -90 0
+	BLOCK = 1 1
+	SIZE = 50 50
 END_FIELDSET
 
 # モデル配置
