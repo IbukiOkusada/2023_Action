@@ -25,9 +25,9 @@ public:	// 誰でもアクセス可能な定義
 		LABEL_BGM_RESULT,			// BGMリザルト
 		LABEL_BGM_RANKING,		// BGMランキング
 		LABEL_SE_CLICK,			// Enter
-		LABEL_SE_MOVE,			// 移動音
-		LABEL_SE_JUMP,			// ジャンプ音
-		LABEL_SE_LAND,			// 着地音
+		LABEL_SE_STEP,			// ステップ音
+		LABEL_SE_DAMAGE,			// ダメージ音
+		LABEL_SE_SPAWN,			// 復活音
 		LABEL_MAX,
 	} LABEL;
 

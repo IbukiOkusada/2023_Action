@@ -478,3 +478,31 @@ void CCharacter::SetDraw(bool bDraw)
 		}
 	}
 }
+
+//==========================================================
+// 影設定
+//==========================================================
+void CCharacter::SetShadow(bool bShadow)
+{
+	if (m_ppParts != NULL)
+	{// 使用していた場合
+		for (int nCnt = 0; nCnt < m_nNumParts; nCnt++)
+		{
+			// 終了処理
+			m_ppParts[nCnt]->SetShadow(bShadow);
+			m_ppParts[nCnt]->SetCharaParent(&m_mtxWorld);
+		}
+	}
+}
+
+void CCharacter::SetCharaMtx(void)
+{
+	if (m_ppParts != NULL)
+	{// 使用していた場合
+		for (int nCnt = 0; nCnt < m_nNumParts; nCnt++)
+		{
+			// 終了処理
+			m_ppParts[nCnt]->SetCharaParent(&m_mtxWorld);
+		}
+	}
+}

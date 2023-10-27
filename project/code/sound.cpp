@@ -17,10 +17,10 @@ const CSound::SOUNDINFO CSound::m_aSoundInfo[LABEL_MAX] =
 	{ "data/BGM/game.wav", -1 },		// BGMゲーム
 	{ "data/BGM/result.wav", -1 },		// BGMリザルト
 	{ "data/BGM/ranking.wav", -1 },		// BGMランキング
-	{ "data/SE/click.wav", 0 },			// Enter
-	{ "data/SE/walk.wav", 0 },			// 移動音
-	{ "data/SE/jump.wav", 0 },			// ジャンプ音
-	{ "data/SE/land.wav", 0 },			// 着地音
+	{ "data/SE/click.wav", 0 },		// Enter
+	{ "data/SE/dash.wav", 0 },			// 移動音
+	{ "data/SE/damage.wav", 0 },		// ジャンプ音
+	{ "data/SE/spawn.wav", 0 },		// 着地音
 };										
 
 //=============================================================================

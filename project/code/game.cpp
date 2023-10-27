@@ -123,12 +123,6 @@ HRESULT CGame::Init(void)
 		m_pEditor->Init();
 	}
 
-	// ポーズの生成
-	if (nullptr == m_pPause)
-	{
-		m_pPause = CPause::Create();
-	}
-
 	m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, -150.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
 	m_pPlayer->SetUp(true);
 	m_pPlayer->SetType(CPlayer::TYPE_SEND);
@@ -182,6 +176,12 @@ HRESULT CGame::Init(void)
 		viewport.MinZ = 0.0f;
 		viewport.MaxZ = 1.0f;
 		CManager::GetInstance()->GetCamera()->SetViewPort(viewport);
+	}
+
+	// ポーズの生成
+	if (nullptr == m_pPause)
+	{
+		m_pPause = CPause::Create();
 	}
 
 	// スポットライトをオン

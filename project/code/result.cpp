@@ -24,7 +24,7 @@
 
 // マクロ定義
 #define RANKING_FILE	"data\\FILE\\ranking.bin"	// ランキングファイル
-#define MOVE_TIMER	(900)
+#define MOVE_TIMER	(660)
 
 int CResult::m_nScore = 0;
 CResult::TYPE CResult::m_type = CResult::TYPE_MAX;
@@ -221,7 +221,7 @@ void CResult::Uninit(void)
 //===============================================
 void CResult::Update(void)
 {
-	//m_nTimer++;
+	m_nTimer++;
 
 	for (int nCnt = 0; nCnt < TYPE_MAX; nCnt++)
 	{

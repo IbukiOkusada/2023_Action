@@ -10,6 +10,7 @@
 #include "texture.h"
 #include "renderer.h"
 #include "slow.h"
+#include "meshfield.h"
 
 //==========================================================
 // コンストラクタ
@@ -26,6 +27,8 @@ CModel::CModel() : CObject(1)
 	m_ChangeMat.Emissive = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	m_pParentMtx = NULL;
 	m_bDraw = true;
+	m_bShadow = true;
+	m_pCharacterMtx = nullptr;
 
 	//ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
@@ -171,6 +174,83 @@ void CModel::Draw(void)
 
 	//保存していたマテリアルを戻す
 	pDevice->SetMaterial(&matDef);
+
+	if(m_bShadow == true)
+	{
+		D3DXMATRIX mtxShadow;
+		D3DLIGHT9 light;
+		D3DXVECTOR4 posLight;
+		D3DXVECTOR3 pos, normal;
+		D3DXPLANE plane;
+
+		// ライトの位置を設定
+		pDevice->GetLight(0, &light);
+		posLight = D3DXVECTOR4(-light.Direction.x, -light.Direction.y, -light.Direction.z, 0.0f);
+
+		// 平面情報を設定
+		if (m_mtxWorld._42 >= -296.0f)
+		{
+			pos = D3DXVECTOR3(0.0f, -296.0f, 0.0f);
+			pos.y = CMeshField::GetHeight(D3DXVECTOR3(m_mtxWorld._41, m_mtxWorld._42, m_mtxWorld._43)) + 2.0f;
+			normal = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+			D3DXPlaneFromPointNormal(&plane, &pos, &normal);
+
+			// シャドウマトリックスの初期化
+			D3DXMatrixIdentity(&mtxShadow);
+
+			// シャドウマトリックスの作成
+			D3DXMatrixShadow(&mtxShadow, &posLight, &plane);
+			D3DXMatrixMultiply(&mtxShadow, &m_mtxWorld, &mtxShadow);
+
+			//ワールドマトリックスの設定
+			pDevice->SetTransform(D3DTS_WORLD, &mtxShadow);
+
+			//現在のマテリアルを取得
+			pDevice->GetMaterial(&matDef);
+
+			// モデル情報を取得
+			pFileData = pModelFile->SetAddress(m_nIdxModel);
+
+			if (pFileData != NULL)
+			{// 使用されている場合
+				//マテリアルデータへのポインタを取得
+				pMat = (D3DXMATERIAL*)pFileData->pBuffMat->GetBufferPointer();
+				for (int nCntMat = 0; nCntMat < (int)pFileData->dwNumMat; nCntMat++)
+				{
+					int nIdxTex = pFileData->pIdexTexture[nCntMat];	// テクスチャ番号
+
+					if (m_bChangeCol == false)
+					{
+						m_ChangeMat.Emissive.r = 0.0f;
+						m_ChangeMat.Emissive.g = 0.0f;
+						m_ChangeMat.Emissive.b = 0.0f;
+						m_ChangeMat.Emissive.a = 0.7f;
+						m_ChangeMat.Diffuse.r = 0.0f;
+						m_ChangeMat.Diffuse.g = 0.0f;
+						m_ChangeMat.Diffuse.b = 0.0f;
+						m_ChangeMat.Diffuse.a = 0.7f;
+
+						//マテリアルの設定
+						pDevice->SetMaterial(&m_ChangeMat);
+					}
+					else
+					{
+
+						pDevice->SetMaterial(&m_ChangeMat);
+					}
+
+					//テクスチャの設定
+					pDevice->SetTexture(0, nullptr);
+
+					//モデル(パーツ)の描画
+					pFileData->pMesh->DrawSubset(nCntMat);
+				}
+			}
+
+			//保存していたマテリアルを戻す
+			pDevice->SetMaterial(&matDef);
+		}
+	}
 }
 
 //==========================================================

@@ -13,14 +13,14 @@
 #include "time.h"
 
 //マクロ定義
-#define BUTTONWIDTH		(120.0f)		//ポーズ画面ボタン幅
-#define BUTTONHEIGHT	(40.0f)			//ポーズ画面ボタン高さ
+#define BUTTONWIDTH		(140.0f)		//ポーズ画面ボタン幅
+#define BUTTONHEIGHT		(50.0f)			//ポーズ画面ボタン高さ
 #define BUTTONX			(640.0f)		//ポーズ画面X座標
 #define BUTTONY			(280.0f)		//ポーズ画面Y座標
 #define BUTTONSPACE		(110.0f)		//ポーズ画面縦スペース
-#define MOVECOLA		(-0.02f)		//毎フレーム変わるボタンの透明度
-#define BGSIZE			(200.0f)		//サイズ
-#define BGHEIGHT		(80.0f)			//縦幅
+#define MOVECOLA		(-0.02f)			//毎フレーム変わるボタンの透明度
+#define BGSIZE			(270.0f)		//サイズ
+#define BGHEIGHT		(270.0f)			//縦幅
 
 //===============================================
 // テクスチャファイル名
@@ -74,8 +74,8 @@ HRESULT CPause::Init(void)
 	if (m_pBg != NULL)
 	{
 		m_pBg->BindTexture(CManager::GetInstance()->GetTexture()->Regist(m_apTexPass[TYPE_BG]));
-		m_pBg->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f));
-		m_pBg->SetSize(BGSIZE, BGSIZE);
+		m_pBg->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.49f, 0.0f));
+		m_pBg->SetSize(BGSIZE, BGHEIGHT);
 		m_pBg->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		m_pBg->SetType(CObject::TYPE_PAUSE);
 	}

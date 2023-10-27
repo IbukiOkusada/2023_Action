@@ -33,7 +33,7 @@ HRESULT CLight::Init(void)
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		// デバイスへのポインタを取得
 	D3DXVECTOR3 vecDir;		// 設定変更用ベクトル
 
-	for (int nCntLight = 0; nCntLight < NUM_LIGHT; nCntLight++)
+	for (int nCntLight = 0; nCntLight < NUM_LIGHT - 1; nCntLight++)
 	{
 		// ライトの情報をクリアする
 		ZeroMemory(&m_aLight[nCntLight], sizeof(D3DLIGHT9));
@@ -53,21 +53,27 @@ HRESULT CLight::Init(void)
 		case 2:
 			m_aLight[nCntLight].Diffuse = D3DXCOLOR(0.65f, 0.65f, 0.65f, 1.0f);
 			break;
+		case 3:
+			m_aLight[nCntLight].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+			break;
 		}
-
 		// ライトの方向を設定
 		switch (nCntLight)
 		{
 		case 0:
 			//vecDir = D3DXVECTOR3(0.1f, -0.11f, 0.44f);
 			//vecDir = D3DXVECTOR3(0.8f, 0.23f, -0.55f);
-			vecDir = D3DXVECTOR3(0.22f, -0.87f, -0.44f);
+			vecDir = D3DXVECTOR3(-0.05f, -0.87f, 0.05f);
+
 			break;
 		case 1:
 			vecDir = D3DXVECTOR3(0.46f, 0.88f, -0.44f);
 			break;
 		case 2:
 			vecDir = D3DXVECTOR3(-0.60f, -0.82f, 0.42f);
+			break;
+		case 3:
+			vecDir = D3DXVECTOR3(0.22f, -0.87f, -0.44f);
 			break;
 		}
 

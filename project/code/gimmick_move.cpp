@@ -54,7 +54,7 @@ HRESULT CGimmickMove::Init(void)
 	// ‰e‚Ì¶¬
 	if (nullptr == m_pShadow)
 	{
-		m_pShadow = CShadow::Create(GetPosition(), 50.0f, 50.0f);
+		//m_pShadow = CShadow::Create(GetPosition(), 50.0f, 50.0f);
 	}
 
 	// ƒXƒ[‚ğŠo‚¦‚é

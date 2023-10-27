@@ -30,6 +30,7 @@
 #include "motion.h"
 #include "particle.h"
 #include "effect.h"
+#include "sound.h"
 
 //===============================================
 // マクロ定義
@@ -51,7 +52,8 @@
 #define DEATH_INTERVAL	(120.0f)
 #define DASH_INTERVAL	(60.0f)
 #define SPAWN_INTERVAL	(60.0f)
-#define PARTICLE_TIMER	 (10.0f)
+#define PARTICLE_TIMER	 (5.0f)
+#define SHADOW_ALPHA	(0.4f)
 
 // 前方宣言
 CPlayer *CPlayer::m_pTop = NULL;	// 先頭のオブジェクトへのポインタ
@@ -169,6 +171,7 @@ HRESULT CPlayer::Init(void)
 	if (nullptr == m_pObject)
 	{
 		m_pObject = CCharacter::Create(GetPosition(), GetRotation(), "data\\TXT\\motion_kidsboy.txt");
+		m_pObject->SetShadow(true);
 	}
 
 	//ワールドマトリックスの初期化
@@ -197,6 +200,7 @@ HRESULT CPlayer::Init(const char *pBodyName, const char *pLegName)
 	{
 		m_pObject = CCharacter::Create("data\\TXT\\motion_kidsboy.txt");
 		m_pObject->GetMotion()->InitSet(0);
+		m_pObject->SetShadow(true);
 	}
 
 	m_nLife = START_LIFE;
@@ -229,6 +233,7 @@ HRESULT CPlayer::Init(const char *pBodyName, const char *pLegName)
 	{
 		m_pShadow = CShadow::Create(m_Info.pos, 50.0f, 50.0f);
 		m_pShadow->SetpVtx(m_ppBillBoard[m_nLife - 1]->GetWidth(), m_ppBillBoard[m_nLife - 1]->GetHeight());
+		m_pShadow->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, (float)((float)m_nLife / (float)START_LIFE * SHADOW_ALPHA)));
 	}
 
 	m_pObject->SetDraw();
@@ -350,8 +355,11 @@ void CPlayer::Update(void)
 			return;
 		}
 
-		// プレイヤー操作
-		Controller();
+		if (m_Info.state != STATE_SPAWN)
+		{
+			// プレイヤー操作
+			Controller();
+		}
 
 		// カメラ追従
 		CCamera *pCamera = CManager::GetInstance()->GetCamera();
@@ -534,7 +542,7 @@ void CPlayer::Controller(void)
 		D3DXVECTOR3 vtxMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 		if (m_ppBillBoard != nullptr){
-			vtxMax = D3DXVECTOR3(m_ppBillBoard[m_nLife - 1]->GetWidth() * 0.7f, m_ppBillBoard[m_nLife - 1]->GetHeight(), m_ppBillBoard[m_nLife - 1]->GetHeight() * 0.7f);
+			vtxMax = D3DXVECTOR3(m_ppBillBoard[0]->GetWidth() * 0.7f, m_ppBillBoard[0]->GetHeight(), m_ppBillBoard[0]->GetHeight() * 0.7f);
 			vtxMin = vtxMax * -1.0f;
 		}
 
@@ -566,6 +574,11 @@ void CPlayer::Controller(void)
 			{
 				CManager::GetInstance()->GetScene()->SendDamage(nDamage);
 				Damage(nDamage);
+
+				if (m_type == TYPE_ACTIVE)
+				{
+					CManager::GetInstance()->GetSound()->Play(CSound::LABEL_SE_DAMAGE);
+				}
 			}
 		}
 	}
@@ -615,6 +628,11 @@ void CPlayer::Move(void)
 			m_Info.move.z = -cosf(m_Info.rot.y) * STEP_SPEED;
 			m_Info.state = STATE_APPEAR;
 			m_Info.fStateCounter = DASH_INTERVAL;
+
+			if (m_type == TYPE_ACTIVE)
+			{
+				CManager::GetInstance()->GetSound()->Play(CSound::LABEL_SE_STEP);
+			}
 		}
 	}
 
@@ -829,7 +847,7 @@ void CPlayer::StateSet(void)
 			if (m_pShadow != nullptr)
 			{
 				m_pShadow->SetpVtx(m_ppBillBoard[m_nLife - 1]->GetWidth(), m_ppBillBoard[m_nLife - 1]->GetHeight());
-				m_pShadow->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, (float)((float)m_nLife / (float)START_LIFE)));
+				m_pShadow->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, (float)((float)m_nLife / (float)START_LIFE * SHADOW_ALPHA)));
 
 			}
 		}
@@ -874,6 +892,11 @@ void CPlayer::StateSet(void)
 			SetPosition(m_Info.pos);
 			m_nLife = START_LIFE;
 
+			if (m_type == TYPE_ACTIVE)
+			{
+				CManager::GetInstance()->GetSound()->Play(CSound::LABEL_SE_SPAWN);
+			}
+
 			for (int nCnt = 0; nCnt < START_LIFE; nCnt++)
 			{
 				if (nullptr != m_ppBillBoard[nCnt])
@@ -902,7 +925,7 @@ void CPlayer::StateSet(void)
 		}
 
 		m_pShadow->SetpVtx(m_pShadow->GetWidth() + 1.0f + START_LIFE * 0.25f, m_pShadow->GetHeight() + 1.0f + START_LIFE * 0.25f);
-		m_pShadow->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, (float)((float)(SPAWN_INTERVAL - m_Info.fStateCounter) / (float)SPAWN_INTERVAL)));
+		m_pShadow->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, (float)((float)(SPAWN_INTERVAL - m_Info.fStateCounter) / (float)SPAWN_INTERVAL * SHADOW_ALPHA)));
 
 		if (m_Info.fStateCounter <= 0.0f)
 		{

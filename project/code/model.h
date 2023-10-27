@@ -28,6 +28,7 @@ public:	// 誰でもアクセス可能
 	void Draw(void);
 	static CModel *Create(const char *pFileName);
 	void SetParent(D3DXMATRIX *pMtx);
+	void SetCharaParent(D3DXMATRIX *pMtx) { m_pCharacterMtx = pMtx; }
 	void BindModelFile(int nIdx);
 	void SetRotSize(D3DXVECTOR3 &SetMax, D3DXVECTOR3 &SetMin, D3DXVECTOR3 vtxMax, D3DXVECTOR3 vtxMin, float fRot);
 
@@ -45,6 +46,7 @@ public:	// 誰でもアクセス可能
 	void SetCurrentPosition(const D3DXVECTOR3 pos);
 	void SetCurrentRotation(const D3DXVECTOR3 rot);
 	void SetDraw(bool bDraw = true) { m_bDraw = bDraw; }
+	void SetShadow(bool bShadow = false) { m_bShadow = bShadow; }
 
 private:	// 自分だけがアクセス可能
 
@@ -59,6 +61,8 @@ private:	// 自分だけがアクセス可能
 	D3DXVECTOR3 m_CurRot;	// 現在の向き
 	D3DXMATRIX m_mtxWorld;	// ワールドマトリックス
 	D3DXMATRIX *m_pParentMtx;	// 親のワールドマトリックス
+	D3DXMATRIX *m_pCharacterMtx;	// まとめている親のマトリックス
+	bool m_bShadow;		// 影も描画するか否か
 };
 
 #endif

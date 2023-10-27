@@ -315,7 +315,7 @@ void CParticle::Set(D3DXVECTOR3 Defpos, D3DXVECTOR3 Defmove, CEffect::TYPE type)
 
 	case CEffect::TYPE_BALEXPLOSION:	// •—‘D”š”­
 
-		for (int nCnt = 0; nCnt < 20; nCnt++)
+		for (int nCnt = 0; nCnt < 30; nCnt++)
 		{
 			//ˆÚ“®—Ê‚ÌÝ’è
 			move.x = sinf((float)(rand() % 629 - 314) * 0.01f) * ((float)(rand() % 100)) * 0.025f;
@@ -329,7 +329,7 @@ void CParticle::Set(D3DXVECTOR3 Defpos, D3DXVECTOR3 Defmove, CEffect::TYPE type)
 			fRadius = 15.0f;
 
 			//Žõ–½‚ÌÝ’è
-			fLife = 100.0f;
+			fLife = 100.0f + nCnt * 3;
 
 			CEffect *p = CEffect::Create(Defpos + move, move, col, fRadius, fLife, CEffect::TYPE_BUBBLE);
 			p->SetFusion(CEffect::FUSION_NORMAL);
@@ -367,9 +367,9 @@ void CParticle::Set(D3DXVECTOR3 Defpos, D3DXVECTOR3 Defmove, CEffect::TYPE type)
 	case CEffect::TYPE_BUBBLE:	// ‰Œ
 	{
 		//ˆÚ“®—Ê‚ÌÝ’è
-		move.x = sinf((float)(rand() % 629 - 314) * 0.01f) * ((float)(rand() % 100)) * 0.0025f;
+		move.x = sinf((float)(rand() % 629 - 314) * 0.01f) * ((float)(rand() % 100)) * 0.0015f;
 		move.y = ((float)(rand() % 50)) * 0.025f;
-		move.z = cosf((float)(rand() % 629 - 314) * 0.01f) * ((float)(rand() % 100)) * 0.0025f;
+		move.z = cosf((float)(rand() % 629 - 314) * 0.01f) * ((float)(rand() % 100)) * 0.0015f;
 
 		//F‚ÌÝ’è
 		col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
@@ -378,7 +378,7 @@ void CParticle::Set(D3DXVECTOR3 Defpos, D3DXVECTOR3 Defmove, CEffect::TYPE type)
 		fRadius = 15.0f;
 
 		//Žõ–½‚ÌÝ’è
-		fLife = 100.0f;
+		fLife = 200.0f;
 
 		CEffect *p = CEffect::Create(Defpos + move, move, col, fRadius, fLife, type);
 		p->SetFusion(CEffect::FUSION_NORMAL);

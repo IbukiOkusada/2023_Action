@@ -422,6 +422,7 @@ float CMeshField::GetHeight(D3DXVECTOR3 pos)
 {
 	CMeshField *pMesh = CMeshField::GetTop();	// æ“ª‚ðŽæ“¾
 	float fHeight = 0.0f;	// ‚‚³
+	bool bValue = false;
 	D3DXVECTOR3 Pos0, Pos1, Pos2, Pos3;
 	D3DXVECTOR3 vecToPos;	//”»’è—p•Ï”
 	D3DXVECTOR3 vec1, vec2;	//”»’è—p•Ï”
@@ -503,10 +504,14 @@ float CMeshField::GetHeight(D3DXVECTOR3 pos)
 		{
 			if (fRate >= 0.0f && fRate <= 1.0f && fRate2 >= 0.0f && fRate2 <= 1.0f && (fRate + fRate2) <= 1.0f)
 			{// ŽOŠpƒ|ƒŠƒSƒ“‚Ì’†‚É‚¢‚é
-				fHeight = (-((pos.x - (MeshPos.x + Pos0.x)) * nor0.x) +
+				float fValue = (-((pos.x - (MeshPos.x + Pos0.x)) * nor0.x) +
 					-((pos.z - (MeshPos.z + Pos0.z)) * nor0.z)) / nor0.y + (MeshPos.y + Pos0.y);
 
-				return fHeight;
+				if (fValue > fHeight || bValue == false)
+				{
+					bValue = true;
+					fHeight = fValue;
+				}
 			}
 		}
 
@@ -539,10 +544,16 @@ float CMeshField::GetHeight(D3DXVECTOR3 pos)
 		{
 			if (fRate >= 0.0f && fRate <= 1.0f && fRate2 >= 0.0f && fRate2 <= 1.0f && (fRate + fRate2) <= 1.0f)
 			{// ŽOŠpƒ|ƒŠƒSƒ“‚Ì’†‚É‚¢‚é
-				fHeight = (-((pos.x - (MeshPos.x + Pos3.x)) * nor3.x) +
+
+				float fValue = (-((pos.x - (MeshPos.x + Pos3.x)) * nor3.x) +
 					-((pos.z - (MeshPos.z + Pos3.z)) * nor3.z)) / nor3.y + (MeshPos.y + Pos3.y);
 
-				return fHeight;
+
+				if (fValue > fHeight || bValue == false)
+				{
+					bValue = true;
+					fHeight = fValue;
+				}
 			}
 		}
 

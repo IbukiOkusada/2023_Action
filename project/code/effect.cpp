@@ -192,21 +192,21 @@ void CEffect::Update(void)
 			m_Info.move.y -= m_Info.move.y * 0.05f * CManager::GetInstance()->GetSlow()->Get();
 
 			break;
-		case CEffect::TYPE_BALEXPLOSION:	// ”š”­
+		case TYPE_BALEXPLOSION:	// ”š”­
 
 			m_Info.col.a -= 0.01f * CManager::GetInstance()->GetSlow()->Get();
 			m_Info.fRadius -= 1.2f * CManager::GetInstance()->GetSlow()->Get();
 
 			break;
 
-		case CEffect::TYPE_SMAKE:	// ”š”­
+		case TYPE_SMAKE:	// ”š”­
 
 			m_Info.col.a -= 0.035f * CManager::GetInstance()->GetSlow()->Get();
 			m_Info.move.y -= m_Info.move.y * 0.005f * CManager::GetInstance()->GetSlow()->Get();
 
 			break;
 
-		case CEffect::TYPE_HEATHAZE:	// ”š”­
+		case TYPE_HEATHAZE:	// ”š”­
 
 			m_Info.col.a -= 0.0001f * CManager::GetInstance()->GetSlow()->Get();
 			m_Info.fRadius -= (rand() % 100 - 50) * 0.01f * CManager::GetInstance()->GetSlow()->Get();
@@ -215,12 +215,12 @@ void CEffect::Update(void)
 
 			break;
 
-		case CEffect::TYPE_BUBBLE:	// ”š”­
+		case TYPE_BUBBLE:	// ”š”­
 
 			m_Info.col.a -= 0.0001f * CManager::GetInstance()->GetSlow()->Get();
 			m_Info.fRadius -= (rand() % 100 - 50) * 0.05f * CManager::GetInstance()->GetSlow()->Get();
-			m_Info.move.x += (rand() % 100 - 50) * 0.01f;
-			m_Info.move.z += (rand() % 100 - 50) * 0.01f;
+			m_Info.move.x += (rand() % 100 - 50) * 0.005f;
+			m_Info.move.z += (rand() % 100 - 50) * 0.005f;
 
 			break;
 		}

@@ -64,7 +64,7 @@ HRESULT CGimmickRotate::Init(void)
 
 		if (nullptr == m_aObj[nCnt].s_pShadow)
 		{
-			m_aObj[nCnt].s_pShadow = CShadow::Create(GetPosition(), 60.0f, 60.0f);
+			//m_aObj[nCnt].s_pShadow = CShadow::Create(GetPosition(), 60.0f, 60.0f);
 		}
 	}
 	return S_OK;
@@ -131,7 +131,7 @@ void CGimmickRotate::Update(void)
 				// ‹N•š‚Æ‚Ì“–‚½‚è”»’è
 				D3DXVECTOR3 nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				float fHeight = CMeshField::GetHeight(m_aObj[nCnt].s_posOld);
-				m_aObj[nCnt].s_pShadow->SetPosition(D3DXVECTOR3(m_aObj[nCnt].s_posOld.x, fHeight + 7.0f, m_aObj[nCnt].s_posOld.z));
+				//m_aObj[nCnt].s_pShadow->SetPosition(D3DXVECTOR3(m_aObj[nCnt].s_posOld.x, fHeight + 7.0f, m_aObj[nCnt].s_posOld.z));
 
 				D3DXMATRIX mtxProjection;
 				D3DXMATRIX mtxView;

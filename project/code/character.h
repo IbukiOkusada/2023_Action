@@ -39,6 +39,8 @@ public:	// 誰でもアクセス可能
 	void SetRotation(const D3DXVECTOR3 rot);
 	void SetParent(D3DXMATRIX *pMtx) { m_ParentMtx = pMtx; }
 	void SetDraw(bool bDraw = true);
+	void SetShadow(bool bShadow = false);
+	void SetCharaMtx(void);
 
 	// メンバ関数(取得)
 	D3DXVECTOR3 GetRotation(void) { return m_rot; }
