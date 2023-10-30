@@ -236,6 +236,15 @@ HRESULT CPlayer::Init(const char *pBodyName, const char *pLegName)
 		m_pShadow->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, (float)((float)m_nLife / (float)START_LIFE * SHADOW_ALPHA)));
 	}
 
+	if (nullptr == m_pMapIcon && CManager::GetInstance()->GetMode() == CScene::MODE_GAME)
+	{
+		m_pMapIcon = CObject2D::Create();
+		m_pMapIcon->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\mapicon.png"));
+		m_pMapIcon->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.025f, SCREEN_HEIGHT * 0.97f, 0.0f));
+		m_pMapIcon->SetCol(D3DXCOLOR(0.0f, 0.8f, 1.0f, 1.0f));
+		m_pMapIcon->SetSize(10.0f, 10.0f);
+	}
+
 	m_pObject->SetDraw();
 
 	return S_OK;
@@ -372,6 +381,11 @@ void CPlayer::Update(void)
 		CManager::GetInstance()->GetScene()->SendRotation(m_Info.rot);
 		CManager::GetInstance()->GetScene()->SendLife(m_nLife);
 	}
+	else
+	{// 操作キャラではない
+		D3DXVECTOR3 posDest = m_Info.posDiff - m_Info.pos;
+		m_Info.pos += posDest * 0.95f;
+	}
 
 	CManager::GetInstance()->GetDebugProc()->Print("向き [%f, %f, %f] : ID [ %d]\n", GetRotation().x, GetRotation().y, GetRotation().z, m_nId);
 	CManager::GetInstance()->GetDebugProc()->Print("位置 [%f, %f, %f]", GetPosition().x, GetPosition().y, GetPosition().z);
@@ -450,6 +464,24 @@ void CPlayer::Update(void)
 			m_ppBillBoard[nCnt]->SetPosition(D3DXVECTOR3(m_Info.pos.x, m_Info.pos.y + 100.0f + 10.0f * nCnt, m_Info.pos.z));
 			m_ppBillBoard[nCnt]->SetSize(m_ppBillBoard[nCnt]->GetWidth(), m_ppBillBoard[nCnt]->GetHeight());
 		}
+	}
+
+	// マップ更新
+	if (m_pMapIcon != nullptr)
+	{
+		float fDiff = (m_Info.pos.x / -15000.0f);
+		
+		if (fDiff > 0.975f)
+		{
+			fDiff = 0.975f;
+		}
+		else if (fDiff < 0.025f)
+		{
+			fDiff = 0.025f;
+		}
+
+		m_pMapIcon->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * fDiff, m_pMapIcon->GetPosition().y, 0.0f));
+		m_pMapIcon->SetSize(10.0f, 10.0f);
 	}
 }
 
@@ -998,6 +1030,23 @@ void CPlayer::SetLife(int nLife)
 			{
 				m_ppBillBoard[nCnt]->SetDraw(false);
 			}
+		}
+	}
+}
+
+//===============================================
+// 体力設定
+//===============================================
+void CPlayer::SetType(TYPE type)
+{
+	m_type = type;
+
+	if (m_type == TYPE_ACTIVE)
+	{
+		if (m_pMapIcon != nullptr)
+		{
+			m_pMapIcon->SetCol(D3DXCOLOR(1.0f, 0.8f, 0.0f, 1.0f));
+			m_pMapIcon->SetPosition(D3DXVECTOR3(m_pMapIcon->GetPosition().x, SCREEN_HEIGHT * 0.93f, 0.0f));
 		}
 	}
 }

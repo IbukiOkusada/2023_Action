@@ -34,6 +34,7 @@
 #include "tcp_client.h"
 #include <thread>
 #include "protocol_online.h"
+#include "object2D.h"
 
 // グローバル
 
@@ -122,6 +123,12 @@ HRESULT CGame::Init(void)
 		m_pEditor = new CEditor;
 		m_pEditor->Init();
 	}
+
+	// マップの生成
+	CObject2D *pObj = CObject2D::Create();
+	pObj->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\map.png"));
+	pObj->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.95f, 0.0f));
+	pObj->SetSize(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.05f);
 
 	m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, -150.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
 	m_pPlayer->SetUp(true);
@@ -751,7 +758,7 @@ void CGame::ByteCheck(char *pRecvData, int nRecvByte)
 					{
 					case COMMAND_TYPE_SETPOSITION:
 
-						pPlayer->SetPosition(pos);
+						pPlayer->SetDiffPosition(pos);
 						break;
 
 					case COMMAND_TYPE_SETROTATION:

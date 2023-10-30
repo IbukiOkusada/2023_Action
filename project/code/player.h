@@ -63,6 +63,7 @@ private:	// 自分だけがアクセス可能な定義
 		D3DXVECTOR3 move;		// 移動量
 		D3DXVECTOR3 posOld;	// 設定位置
 		D3DXMATRIX mtxWorld;	// ワールドマトリックス
+		D3DXVECTOR3 posDiff;
 		STATE state;			// 状態
 		float fStateCounter;	// 状態管理カウンター
 	}SInfo;
@@ -84,10 +85,11 @@ public:	// 誰でもアクセス可能
 
 	// メンバ関数(設定)
 	void SetMove(const D3DXVECTOR3 move) { m_Info.move = move; }
-	void SetPosition(const D3DXVECTOR3 pos) { m_Info.pos = pos; }
+	void SetPosition(const D3DXVECTOR3 pos) { m_Info.pos = pos; m_Info.posDiff = pos; }
+	void SetDiffPosition(const D3DXVECTOR3 pos) { m_Info.posDiff = pos; }
 	void SetRotation(const D3DXVECTOR3 rot) { m_Info.rot = rot; }
 	void BindId(int nId) { m_nId = nId; }
-	void SetType(TYPE type) { m_type = type; }
+	void SetType(TYPE type);
 	void SetUp(bool bValue) { m_bSetUp = bValue; }
 	void SetGoal(bool bValue) { m_bGoal = bValue; }
 
@@ -131,6 +133,7 @@ private:	// 自分だけがアクセス可能
 	D3DXVECTOR3 m_vecAxis;	// 回転軸
 	float m_fValueRot;	// 回転角
 	CShadow *m_pShadow;	// 影のポインタ
+	CObject2D *m_pMapIcon;	// ミニマップ表示用アイコン
 	int m_nLife;	// 体力
 	int m_nId;	// ID
 	bool m_bSetUp;	// 準備完了かどうか
