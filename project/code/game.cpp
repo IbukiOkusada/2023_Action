@@ -159,13 +159,13 @@ HRESULT CGame::Init(void)
 			// タイムアタックに変更
 			m_state = STATE_TIMEATTACK;
 			m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
-			m_pTime->Set(150 * 100);
+			m_pTime->Set(180 * 100);
 		}
 	}
 	else
 	{
 		m_pTime = CTime::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.4f, SCREEN_HEIGHT * 0.075f, 0.0f));
-		m_pTime->Set(150 * 100);
+		m_pTime->Set(180 * 100);
 	}
 	
 	// ギミック設置
