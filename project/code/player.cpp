@@ -91,6 +91,7 @@ CPlayer::CPlayer(const D3DXVECTOR3 pos)
 	m_fEffectCount = 0.0f;
 	m_bSetUp = false;
 	m_bGoal = false;
+	m_pGoal = nullptr;
 
 	// 自分自身をリストに追加
 	if (m_pTop != NULL)
@@ -130,6 +131,7 @@ CPlayer::CPlayer(int nPriOrity)
 	m_fEffectCount = 0.0f;
 	m_bSetUp = false;
 	m_bGoal = false;
+	m_pGoal = nullptr;
 
 	// 自分自身をリストに追加
 	if (m_pTop != NULL)
@@ -152,15 +154,7 @@ CPlayer::CPlayer(int nPriOrity)
 //===============================================
 CPlayer::~CPlayer()
 {
-	if (m_pShadow != nullptr)
-	{
-		assert(false);
-	}
-
-	if (m_pObject != nullptr)
-	{
-		assert(false);
-	}
+	
 }
 
 //===============================================
@@ -326,6 +320,18 @@ void CPlayer::Uninit(void)
 		m_pObject = NULL;
 	}
 
+	if (m_pMapIcon != NULL)
+	{
+		m_pMapIcon->Uninit();
+		m_pMapIcon = NULL;
+	}
+
+	if (m_pGoal != NULL)
+	{
+		m_pGoal->Uninit();
+		m_pGoal = NULL;
+	}
+
 	m_nNumCount--;
 
 	// 廃棄
@@ -341,6 +347,34 @@ void CPlayer::Update(void)
 	m_Info.posOld = GetPosition();
 
 	StateSet();
+
+	if (m_pGoal != nullptr)
+	{
+		D3DXVECTOR3 pos = m_pGoal->GetPosition();
+
+		// 移動
+		if (pos.x > SCREEN_WIDTH * 0.75f)
+		{
+			pos.x -= 30.0f;
+		}
+		else if (pos.x < SCREEN_WIDTH * 0.35f)
+		{
+			pos.x -= 40.0f;
+		}
+		else
+		{
+			pos.x -= 2.5f;
+		}
+
+		m_pGoal->SetPosition(pos);
+		m_pGoal->SetVtx();
+
+		if (pos.x < -SCREEN_WIDTH * 0.5f)
+		{
+			m_pGoal->Uninit();
+			m_pGoal = NULL;
+		}
+	}
 
 	if (m_type == TYPE_SEND)
 	{
@@ -1047,6 +1081,44 @@ void CPlayer::SetType(TYPE type)
 		{
 			m_pMapIcon->SetCol(D3DXCOLOR(1.0f, 0.8f, 0.0f, 1.0f));
 			m_pMapIcon->SetPosition(D3DXVECTOR3(m_pMapIcon->GetPosition().x, SCREEN_HEIGHT * 0.93f, 0.0f));
+		}
+
+		if (m_pGoal == nullptr && CManager::GetInstance()->GetMode() == CScene::MODE_GAME)
+		{
+			m_pGoal = CObject2D::Create(6);
+			m_pGoal->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 1.5f, SCREEN_HEIGHT * 0.4f, 0.0f));
+			m_pGoal->SetRotation(D3DXVECTOR3(0.0f, 0.0f, -D3DX_PI * 0.05f));
+			m_pGoal->SetLength(SCREEN_WIDTH * 0.75f, SCREEN_HEIGHT * 0.2f);
+			m_pGoal->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\start.png"));
+		}
+	}
+}
+
+//===============================================
+// ポリゴン描画
+//===============================================
+void CPlayer::SetGoal(bool bValue)
+{
+	bool Old = m_bGoal;
+	m_bGoal = bValue;
+
+	if (Old == false && m_bGoal == true)
+	{
+		m_pGoal = CObject2D::Create(6);
+		m_pGoal->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 1.5f, SCREEN_HEIGHT * 0.4f, 0.0f));
+		m_pGoal->SetRotation(D3DXVECTOR3(0.0f, 0.0f, -D3DX_PI * 0.05f));
+		m_pGoal->SetLength(SCREEN_WIDTH * 0.75f, SCREEN_HEIGHT * 0.25f);
+
+		if (m_pGoal != nullptr)
+		{
+			if (m_type == TYPE_NONE)
+			{
+				m_pGoal->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\goal_lose.png"));
+			}
+			else
+			{
+				m_pGoal->BindTexture(CManager::GetInstance()->GetTexture()->Regist("data\\TEXTURE\\goal_win.png"));
+			}
 		}
 	}
 }

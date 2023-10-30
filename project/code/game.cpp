@@ -678,6 +678,28 @@ void CGame::ByteCheck(char *pRecvData, int nRecvByte)
 		return;
 	}
 
+	int nSetUp = 0;
+	pPlayer = CPlayer::GetTop();	// 先頭を取得
+
+	while (pPlayer != NULL)
+	{// 使用されている間繰り返し
+		pPlayerNext = pPlayer->GetNext();	// 次を保持
+
+		if (pPlayer->GetGoal())
+		{
+			nSetUp++;
+		}
+
+		pPlayer = pPlayerNext;	// 次に移動
+	}
+
+	if (nSetUp >= 2)
+	{
+		m_nSledCnt--;
+		m_mutex.unlock();
+		return;
+	}
+
 	// 終端文字まで確認する
 	while (nByte < nRecvByte)
 	{
@@ -787,7 +809,18 @@ void CGame::ByteCheck(char *pRecvData, int nRecvByte)
 
 					case COMMAND_TYPE_GOAL:
 
-						pPlayer->SetGoal(true);
+						if (m_pPlayer != NULL)
+						{
+							if (!m_pPlayer->GetGoal())
+							{
+								pPlayer->SetGoal(true);
+							}
+							else
+							{
+								pPlayer->SetGoalValue(true);
+							}
+						}
+
 						break;
 
 					case COMMAND_TYPE_DELETE:

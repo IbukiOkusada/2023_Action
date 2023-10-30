@@ -90,8 +90,9 @@ public:	// 誰でもアクセス可能
 	void SetRotation(const D3DXVECTOR3 rot) { m_Info.rot = rot; }
 	void BindId(int nId) { m_nId = nId; }
 	void SetType(TYPE type);
+	void SetGoalValue(bool bValue) { m_bGoal = bValue; }
 	void SetUp(bool bValue) { m_bSetUp = bValue; }
-	void SetGoal(bool bValue) { m_bGoal = bValue; }
+	void SetGoal(bool bValue);
 
 	// メンバ関数(取得)
 	D3DXVECTOR3 GetMove(void) { return m_Info.move; }
@@ -134,6 +135,7 @@ private:	// 自分だけがアクセス可能
 	float m_fValueRot;	// 回転角
 	CShadow *m_pShadow;	// 影のポインタ
 	CObject2D *m_pMapIcon;	// ミニマップ表示用アイコン
+	CObject2D *m_pGoal;
 	int m_nLife;	// 体力
 	int m_nId;	// ID
 	bool m_bSetUp;	// 準備完了かどうか
