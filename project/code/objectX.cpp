@@ -11,6 +11,11 @@
 #include "texture.h"
 #include "Xfile.h"
 
+namespace GOD
+{
+	const int a = 0;
+}
+
 // 静的メンバ変数宣言
 CObjectX *CObjectX::m_pTop = NULL;	// 先頭のオブジェクトへのポインタ
 CObjectX *CObjectX::m_pCur = NULL;	// 最後尾のオブジェクトへのポインタ
@@ -52,8 +57,6 @@ CObjectX::~CObjectX()
 //==========================================================
 HRESULT CObjectX::Init(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタを取得
-
 	//各種変数の初期化
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -149,7 +152,7 @@ void CObjectX::Draw(void)
 //==========================================================
 // 生成
 //==========================================================
-CObjectX *CObjectX::Create(D3DXVECTOR3 pos,D3DXVECTOR3 rot, const char *pFileName, const int nPriority)
+CObjectX *CObjectX::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const char *pFileName, const int nPriority)
 {
 	CObjectX *pObjectX = NULL;
 	CXFile *pModelFile = CManager::GetInstance()->GetModelFile();
@@ -193,7 +196,7 @@ void CObjectX::BindFile(int nIdx)
 //==========================================================
 // 座標の設定
 //==========================================================
-void CObjectX::SetPosition(const D3DXVECTOR3 pos)
+void CObjectX::SetPosition(const D3DXVECTOR3& pos)
 {
 	m_pos = pos; 
 }
@@ -201,7 +204,7 @@ void CObjectX::SetPosition(const D3DXVECTOR3 pos)
 //==========================================================
 // 向きの設定
 //==========================================================
-void CObjectX::SetRotation(const D3DXVECTOR3 rot)
+void CObjectX::SetRotation(const D3DXVECTOR3& rot)
 { 
 	m_rot = rot;
 
@@ -239,7 +242,6 @@ void CObjectX::SetRotation(const D3DXVECTOR3 rot)
 bool CObjectX::Collision(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, float fRefMulti)
 {
 	CObjectX *pObj = m_pTop;	// 先頭取得
-	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 	bool bLand = false;	// 着地したか否か
 
 	while (pObj != NULL)

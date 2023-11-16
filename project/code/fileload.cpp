@@ -470,10 +470,6 @@ void CFileLoad::LoadModelData(FILE *pFile)
 
 	D3DXVECTOR3 pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	int nWidth = 0;			// 幅枚数
-	int nHeight = 0;		// 高さ枚数
-	float fWidth = 0.0f;	// 幅
-	float fHeight = 0.0f;	// 高さ
 	int nIdx = -1;
 
 	//終了文字まで読み込み
@@ -511,22 +507,6 @@ void CFileLoad::LoadModelData(FILE *pFile)
 
 	//フィールドの配置
 	CObjectX::Create(pos, D3DXToRadian(rot), GetModelFileName(nIdx));
-}
-
-//==========================================================
-// メッシュドーム配置情報取得
-//==========================================================
-void CFileLoad::LoadDomeData(FILE *pFile)
-{
-
-}
-
-//==========================================================
-// メッシュシリンダー配置情報取得
-//==========================================================
-void CFileLoad::LoadCylinderData(FILE *pFile)
-{
-
 }
 
 //==========================================================
@@ -609,9 +589,4 @@ void CFileLoad::LoadVtxMinData(FILE *pFile, int nIdx)
 	fscanf(pFile, "%f", &VtxMin.z);	//z座標読み込み
 
 	CManager::GetInstance()->GetModelFile()->SetSizeVtxMin(nIdx, VtxMin);
-}
-
-void LoadGimmickData(FILE *pFile, int nIdx)
-{
-
 }

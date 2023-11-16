@@ -92,10 +92,7 @@ void CCharacter::Uninit(void)
 //===================================================
 void CCharacter::Update(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();	//デバイスへのポインタを取得
-	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
-	CXFile *pModelFile = CManager::GetInstance()->GetModelFile();	// Xファイル情報のポインタ
 	D3DXMATRIX mtxParent;			// 親のマトリックス情報
 
 	//ワールドマトリックスの初期化
@@ -179,7 +176,6 @@ void CCharacter::LoadFile(FILE *pFile)
 {
 	char aStr[256] = "";
 	char aStrOld[256];
-	int nMotion = 0;	//読み込みモーション番号
 
 	//情報読み込み開始
 	while (1)
@@ -238,7 +234,6 @@ void CCharacter::LoadXFile(FILE *pFile)
 {
 	int nParts = 0;		//現在のパーツ番号
 	char aStr[128] = {};	//配置数文字格納用
-	CXFile *pModelFile = CManager::GetInstance()->GetModelFile();
 
 	while (1)
 	{
@@ -283,7 +278,7 @@ void CCharacter::LoadSetData(FILE *pFile)
 	while (1)
 	{
 		//テキスト読み込み
-		int nResult = fscanf(pFile, "%s", &aStr[0]);
+		fscanf(pFile, "%s", &aStr[0]);
 
 		if (strcmp(&aStr[0], "PARTSSET") == 0)
 		{//パーツ情報確認文字あった場合
@@ -391,7 +386,7 @@ CCharacter *CCharacter::Create(const char* pFileName)
 //==========================================================
 // 生成(座標向き指定)
 //==========================================================
-CCharacter *CCharacter::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, const char* pFileName)
+CCharacter *CCharacter::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const char* pFileName)
 {
 	CCharacter *pCharacter = NULL;
 
@@ -420,7 +415,7 @@ CCharacter *CCharacter::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, const char* pFi
 //==========================================================
 // 向き設定
 //==========================================================
-void CCharacter::SetRotation(const D3DXVECTOR3 rot)
+void CCharacter::SetRotation(const D3DXVECTOR3& rot)
 {
 	m_rot = rot;
 

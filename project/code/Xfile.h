@@ -49,14 +49,14 @@ public:	// 誰でもアクセス可能
 	// メンバ関数
 	 int Regist(const char *pFileName);
 	 void Unload(void);
-	 void SetSizeVtxMax(int nIdx, D3DXVECTOR3 vtxMax) { m_apModelFileData[nIdx]->filedata.vtxMax = vtxMax; }
-	 void SetSizeVtxMin(int nIdx, D3DXVECTOR3 vtxMin) { m_apModelFileData[nIdx]->filedata.vtxMin = vtxMin; }
+	 void SetSizeVtxMax(int nIdx, const D3DXVECTOR3& vtxMax) { m_apModelFileData[nIdx]->filedata.vtxMax = vtxMax; }
+	 void SetSizeVtxMin(int nIdx, const D3DXVECTOR3& vtxMin) { m_apModelFileData[nIdx]->filedata.vtxMin = vtxMin; }
 
 	 // メンバ関数(取得)
 	 FileData *SetAddress(int nIdx);
 	 static int GetNumAll(void) { return m_nNumAll; }
-	 D3DXVECTOR3 GetMax(int nIdx) { return m_apModelFileData[nIdx]->filedata.vtxMax; }
-	 D3DXVECTOR3 GetMin(int nIdx) { return m_apModelFileData[nIdx]->filedata.vtxMin; }
+	 D3DXVECTOR3 GetMax(int nIdx) const { return m_apModelFileData[nIdx]->filedata.vtxMax; }
+	 D3DXVECTOR3 GetMin(int nIdx) const { return m_apModelFileData[nIdx]->filedata.vtxMin; }
 	 char *GetFileName(int nIdx) { return &m_apModelFileData[nIdx]->aFileName[0]; }
 
 private:	// 自分だけがアクセス可能

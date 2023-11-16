@@ -25,14 +25,12 @@ public:	// 誰でもアクセス可能
 	void Uninit(void);
 	int Send(const char *pSendData, int nSendDataSize);
 	int Recv(char *pRecvData, int nRecvDataSize);
-	void SetIP(char *pIp);
 	void SetCliePort(int nPort) { m_nClientPort = nPort; }
 	char *GetIP(void) { return &m_aClientIP[0]; }
 	int GetPort(void) { return m_nClientPort; }
 	int GetId(void) { return m_nId; }
 	void SetId(int nId) { m_nId = nId; }
 	char *GetName(void) { return &m_aName[0]; }
-	void SetName(char *pName);
 	SOCKET GetSock(void) { return m_sock; }
 
 private:	// 自分だけアクセス可能

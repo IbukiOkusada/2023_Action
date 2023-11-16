@@ -23,14 +23,11 @@ class CObject2D : public CObject
 public:	// 誰でもアクセス可能
 
 	//CObject2D();	// コンストラクタ
-	CObject2D(const D3DXVECTOR3 pos);	// コンストラクタ(オーバーロード)
-	CObject2D(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const int nPriority = 3);	// コンストラクタ(オーバーロード)
 	CObject2D(int nPriority = DEF_2DPRI);	// デフォルト引数コンストラクタ
 	virtual ~CObject2D();	// デストラクタ
 	
 	// メンバ関数
 	virtual HRESULT Init(void);
-	HRESULT Init(const char *pFileName);
 	virtual void Uninit(void);
 	virtual void Update(void);
 	virtual void Draw(void);
@@ -39,8 +36,8 @@ public:	// 誰でもアクセス可能
 	void BindTexture(int nIdx);
 
 	// メンバ関数(設定)
-	void SetPosition(const D3DXVECTOR3 pos);
-	void SetRotation(const D3DXVECTOR3 rot);
+	void SetPosition(const D3DXVECTOR3& pos);
+	void SetRotation(const D3DXVECTOR3& rot);
 	void SetLength(const float fLength);
 	void SetAngle(const float fAngle);
 	void SetLength(float fWidth, float fHeight);
@@ -50,8 +47,8 @@ public:	// 誰でもアクセス可能
 	void SetIdxTex(int nIdx);
 
 	// メンバ関数(取得)
-	D3DXVECTOR3 GetPosition(void) { return m_pos; }
-	D3DXVECTOR3 GetRotation(void) { return m_rot; }
+	D3DXVECTOR3 GetPosition(void) const { return m_pos; }
+	D3DXVECTOR3 GetRotation(void) const { return m_rot; }
 	float GetLength(void) { return m_fLength; }
 	float GetAngle(void) { return m_fAngle; }
 	float GetWidth(void) { return m_fWidth; }

@@ -31,12 +31,12 @@ public:	// 誰でもアクセス可能
 	void Update(void);
 	void Draw(void);
 	void OpenFile(const char *pFileData);
-	static CCharacter *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, const char* pFileName);
+	static CCharacter *Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const char* pFileName);
 	static CCharacter *Create(const char* pFileName);
 
 	// 設定
-	void SetPosition(const D3DXVECTOR3 pos) { m_pos = pos; }
-	void SetRotation(const D3DXVECTOR3 rot);
+	void SetPosition(const D3DXVECTOR3& pos) { m_pos = pos; }
+	void SetRotation(const D3DXVECTOR3& rot);
 	void SetParent(D3DXMATRIX *pMtx) { m_ParentMtx = pMtx; }
 	void SetDraw(bool bDraw = true);
 	void SetShadow(bool bShadow = false);

@@ -151,8 +151,8 @@ void CMeshWall::SetVtxInfo(void)
 //==========================================================
 // 生成
 //==========================================================
-CMeshWall *CMeshWall::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, float fWidth, float fHeight,
-	const char *pFileName, const int nWidth, const int nHeight, const int nPriority )
+CMeshWall *CMeshWall::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, float fWidth, float fHeight,
+	const char *pFileName, const int nWidth, const int nHeight)
 {
 	CMeshWall *pMeshWall = NULL;	// メッシュフィールドのポインタ
 	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
@@ -204,7 +204,6 @@ void CMeshWall::SetSize(float fWidth, float fHeight)
 void CMeshWall::Collision(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld)
 {
 	CMeshWall *pObj = m_pTop;
-	bool bCollision = false;		//当たったかどうか判定
 
 	while (pObj != NULL)
 	{

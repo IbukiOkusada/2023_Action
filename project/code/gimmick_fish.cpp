@@ -115,7 +115,7 @@ CGimmickFish *CGimmickFish::Create(void)
 	return pObjectFish;
 }
 
-CGimmickFish *CGimmickFish::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fTimer)
+CGimmickFish *CGimmickFish::Create(D3DXVECTOR3& pos, D3DXVECTOR3& move, float fTimer)
 {
 	CGimmickFish *pObjectFish = new CGimmickFish;
 
@@ -216,7 +216,7 @@ void CGimmickFish::Controller(void)
 //==========================================================
 // 個別判定チェック
 //==========================================================
-bool CGimmickFish::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, int &nDamage, const float fRefMulti)
+bool CGimmickFish::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, const D3DXVECTOR3& vtxMin, const D3DXVECTOR3& vtxMax, int &nDamage)
 {
 	bool bLand = false;	// 着地したか否か
 
@@ -225,9 +225,6 @@ bool CGimmickFish::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVEC
 		return bLand;
 	}
 
-	CXFile *pFile = CManager::GetInstance()->GetModelFile();
-	D3DXVECTOR3 vtxObjMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 vtxObjMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 ObjPos = GetPosition();
 	D3DXVECTOR3 ObjRot = GetRotation();
 

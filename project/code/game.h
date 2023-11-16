@@ -53,10 +53,10 @@ public:
 	void Update(void);
 	void Draw(void);
 	static void SetState(STATE state) { m_state = state; }
-	void SendPosition(D3DXVECTOR3 pos);
-	void SendRotation(D3DXVECTOR3 rot);
-	void SendDamage(int nDamage);
-	void SendLife(int nLife);
+	void SendPosition(const D3DXVECTOR3& pos);
+	void SendRotation(const D3DXVECTOR3& rot);
+	void SendDamage(const int nDamage);
+	void SendLife(const int nLife);
 	void SendSetUp(void);
 	void SendGoal(void);
 

@@ -132,7 +132,7 @@ void CGimmickButton::Controller(void)
 //==========================================================
 // 個別判定チェック
 //==========================================================
-bool CGimmickButton::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, int &nDamage, const float fRefMulti)
+bool CGimmickButton::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, const D3DXVECTOR3& vtxMin, const D3DXVECTOR3& vtxMax, int &nDamage)
 {
 	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 	bool bLand = false;	// 着地したか否か

@@ -76,10 +76,9 @@ void CGimmick::SetMtxWorld(void)
 //==========================================================
 // “–‚½‚è”»’è
 //==========================================================
-bool CGimmick::Collision(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, int &nDamage, const float fRefMulti)
+bool CGimmick::Collision(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, const D3DXVECTOR3& vtxMin, const D3DXVECTOR3& vtxMax, int &nDamage)
 {
 	CGimmick *pObj = m_pTop;	// æ“ªŽæ“¾
-	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 	bool bLand = false;	// ’…’n‚µ‚½‚©”Û‚©
 
 	while (pObj != NULL)
@@ -87,7 +86,7 @@ bool CGimmick::Collision(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &mov
 		CGimmick *pObjNext = pObj->m_pNext;
 		D3DXVECTOR3 vtxObjMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		D3DXVECTOR3 vtxObjMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		if (pObj->CollisionCheck(pos, posOld, move, vtxMin, vtxMax, nDamage, fRefMulti))
+		if (pObj->CollisionCheck(pos, posOld, move, vtxMin, vtxMax, nDamage))
 		{
 			bLand = true;
 		}
@@ -149,7 +148,6 @@ void CGimmick::ListOut(void)
 void CGimmick::AirReverse(void)
 {
 	CGimmick *pObj = m_pTop;	// æ“ªŽæ“¾
-	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 
 	while (pObj != NULL)
 	{
@@ -167,7 +165,6 @@ void CGimmick::AirReverse(void)
 void CGimmick::DoorOpen(int nId)
 {
 	CGimmick *pObj = m_pTop;	// æ“ªŽæ“¾
-	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 
 	while (pObj != NULL)
 	{

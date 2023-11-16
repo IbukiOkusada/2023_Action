@@ -27,7 +27,7 @@ public:		// 誰でもアクセス可能
 	void Draw(void);
 	void SetVtxInfo(void);
 	void SetColor(float fDiff);
-	static CMeshDome *Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, float fLength, float fHeight, const int nPriority = 3, const int nWidth = 1, const int nHeight = 1);
+	static CMeshDome *Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, float fLength, float fHeight, const int nWidth = 1, const int nHeight = 1);
 
 private:	// 自分だけがアクセス可能
 

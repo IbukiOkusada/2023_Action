@@ -26,11 +26,11 @@ public:		// 誰でもアクセス可能
 	void Update(void);
 	void Draw(void);
 	void SetVtxInfo(void);
-	static CMeshField *Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, float fWidth, float fHeight,
-		const char *pFileName, const int nWidth = 1, const int nHeight = 1, const int nPriority = 3);
+	static CMeshField *Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, float fWidth, float fHeight,
+		const char *pFileName, const int nWidth = 1, const int nHeight = 1);
 	void Edit(float *pLength, float *pSpeed);
 	void UpDownLoad(const char *pFileName);
-	static CMeshField *GetArea(D3DXVECTOR3 pos);
+	static CMeshField *GetArea(const D3DXVECTOR3& pos);
 
 	// メンバ関数(取得)
 	float GetWidth(void) { return m_fWidth; }
@@ -40,9 +40,9 @@ public:		// 誰でもアクセス可能
 
 	// メンバ関数(設定)
 	void SetSize(float fWidth, float fHeight);
-	void SetTexMove(D3DXVECTOR2 texmove) { m_texmove = texmove; }
-	float GetHeight(D3DXVECTOR3 pos, D3DXVECTOR3 &normal);
-	static float GetHeight(D3DXVECTOR3 pos);
+	void SetTexMove(const D3DXVECTOR2& texmove) { m_texmove = texmove; }
+	float GetHeight(const D3DXVECTOR3& pos, D3DXVECTOR3 &normal);
+	static float GetHeight(const D3DXVECTOR3& pos);
 
 private:	// 自分だけがアクセス可能
 

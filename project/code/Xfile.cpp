@@ -205,9 +205,6 @@ void CXFile::Unload(void)
 		{// 使用されていない場合
 			continue;	// やり直し
 		}
-
-		// マテリアル数取得
-		int nNumMat = (int)m_apModelFileData[nCnt]->filedata.dwNumMat;
 		
 		// 値をクリアする
 		memset(m_apModelFileData[nCnt]->aFileName, '\0', sizeof(m_apModelFileData[nCnt]->aFileName));

@@ -217,7 +217,6 @@ void CModel::Draw(void)
 				pMat = (D3DXMATERIAL*)pFileData->pBuffMat->GetBufferPointer();
 				for (int nCntMat = 0; nCntMat < (int)pFileData->dwNumMat; nCntMat++)
 				{
-					int nIdxTex = pFileData->pIdexTexture[nCntMat];	// テクスチャ番号
 
 					if (m_bChangeCol == false)
 					{
@@ -259,7 +258,6 @@ void CModel::Draw(void)
 CModel *CModel::Create(const char *pFileName)
 {
 	CModel *pModel = NULL;
-	CXFile *pModelFile = CManager::GetInstance()->GetModelFile();
 
 	// オブジェクトXの生成
 	pModel = new CModel;
@@ -290,7 +288,7 @@ void CModel::SetParent(D3DXMATRIX *pMtx)
 //==========================================================
 // 初期位置を設定
 //==========================================================
-void CModel::SetPosition(const D3DXVECTOR3 pos)
+void CModel::SetPosition(const D3DXVECTOR3& pos)
 {
 	m_pos = pos;
 
@@ -300,7 +298,7 @@ void CModel::SetPosition(const D3DXVECTOR3 pos)
 //==========================================================
 // 初期向きを設定
 //==========================================================
-void CModel::SetRotation(const D3DXVECTOR3 rot)
+void CModel::SetRotation(const D3DXVECTOR3& rot)
 {
 	m_rot = rot;
 
@@ -310,7 +308,7 @@ void CModel::SetRotation(const D3DXVECTOR3 rot)
 //==========================================================
 // 現在の位置を設定
 //==========================================================
-void CModel::SetCurrentPosition(const D3DXVECTOR3 pos)
+void CModel::SetCurrentPosition(const D3DXVECTOR3& pos)
 {
 	m_CurPos = pos;
 }
@@ -318,7 +316,7 @@ void CModel::SetCurrentPosition(const D3DXVECTOR3 pos)
 //==========================================================
 // 現在の向きを設定
 //==========================================================
-void CModel::SetCurrentRotation(const D3DXVECTOR3 rot)
+void CModel::SetCurrentRotation(const D3DXVECTOR3& rot)
 {
 	m_CurRot = rot;
 }

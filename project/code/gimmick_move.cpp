@@ -114,6 +114,7 @@ void CGimmickMove::Update(void)
 	D3DXMATRIX mtxProjection;
 	D3DXMATRIX mtxView;
 	D3DXMATRIX mtxWorld;
+	D3DXVECTOR3 pos = GetPosition();
 	D3DXVECTOR3 ScreenPos;
 	D3DVIEWPORT9 Viewport;
 
@@ -128,7 +129,7 @@ void CGimmickMove::Update(void)
 	D3DXMatrixIdentity(&mtxWorld);
 
 	// ワールド座標からスクリーン座標に変換する
-	D3DXVec3Project(&ScreenPos, &GetPosition(), &Viewport, &mtxProjection, &mtxView, &mtxWorld);
+	D3DXVec3Project(&ScreenPos, &pos, &Viewport, &mtxProjection, &mtxView, &mtxWorld);
 
 	if (ScreenPos.x < 0.0f || ScreenPos.x > SCREEN_WIDTH ||
 		ScreenPos.y < 0.0f || ScreenPos.y > SCREEN_HEIGHT || ScreenPos.z >= 1.0f)
@@ -166,7 +167,7 @@ CGimmickMove *CGimmickMove::Create(void)
 //==========================================================
 // 生成
 //==========================================================
-CGimmickMove *CGimmickMove::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fTimer)
+CGimmickMove *CGimmickMove::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& move, float fTimer)
 {
 	CGimmickMove *pObjectMove = new CGimmickMove;
 
@@ -233,9 +234,8 @@ void CGimmickMove::Controller(void)
 //==========================================================
 // 個別判定チェック
 //==========================================================
-bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, int &nDamage, const float fRefMulti)
+bool CGimmickMove::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, const D3DXVECTOR3& vtxMin, const D3DXVECTOR3& vtxMax, int &nDamage)
 {
-	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 	bool bLand = false;	// 着地したか否か
 	D3DXVECTOR3 vtxObjMax = D3DXVECTOR3(COLLISION_SIZE, COLLISION_SIZE, COLLISION_SIZE);
 	D3DXVECTOR3 vtxObjMin = D3DXVECTOR3(-COLLISION_SIZE, -COLLISION_SIZE, -COLLISION_SIZE);

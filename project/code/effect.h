@@ -61,7 +61,6 @@ private:	// 自分だけアクセス可能な定義
 public:	// 誰でもアクセス可能
 
 	//CEffect();	// コンストラクタ
-	CEffect(D3DXVECTOR3 pos);	// コンストラクタ(オーバーロード)
 	CEffect(int nPriority = 5);	// デフォルト引数コンストラクタ
 	~CEffect();	// デストラクタ
 

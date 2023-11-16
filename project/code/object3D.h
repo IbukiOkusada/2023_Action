@@ -25,14 +25,14 @@ public:	// 誰でもアクセス可能
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	static CObject3D *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot);
+	static CObject3D *Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot);
 	void SetpVtx(float fWidth, float fHeight);
 	void SetTextureVtx(float fWidth, float fHeight);
 	void BindTexture(int nIdx);
 
 	// メンバ関数(設定)
-	void SetPosition(const D3DXVECTOR3 pos) { m_pos = pos; }
-	void SetRotation(const D3DXVECTOR3 rot) { m_rot = rot; }
+	void SetPosition(const D3DXVECTOR3& pos) { m_pos = pos; }
+	void SetRotation(const D3DXVECTOR3& rot) { m_rot = rot; }
 	void SetSize(float fWidth, float fHeight);
 	float GetHeight(void) { return m_fHeight; }
 	void SetCol(D3DXCOLOR col);
@@ -41,10 +41,10 @@ public:	// 誰でもアクセス可能
 	D3DXMATRIX *GetMtx(void) { return &m_mtxWorld; }
 
 	// メンバ関数(取得)
-	D3DXVECTOR3 GetPosition(void) { return m_pos; }
-	D3DXVECTOR3 GetRotation(void) { return m_rot; }
+	D3DXVECTOR3 GetPosition(void) const { return m_pos; }
+	D3DXVECTOR3 GetRotation(void) const { return m_rot; }
 	CObject2D *GetObject2D(void) { return NULL; }
-	float GetHeight(D3DXVECTOR3 pos, D3DXVECTOR3 &normal);
+	float GetHeight(const D3DXVECTOR3& pos, D3DXVECTOR3 &normal);
 
 private:	// 自分だけがアクセス可能
 

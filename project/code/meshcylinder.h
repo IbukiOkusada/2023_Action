@@ -28,7 +28,7 @@ public:		// 誰でもアクセス可能
 	virtual void Draw(void);
 	void SetVtxInfo(void);
 	static CMeshCylinder *Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, float fLength,
-		float fHeight, const int nPriority = 3, const int nWidth = 1, const int nHeight = 1);
+		float fHeight, const int nWidth = 1, const int nHeight = 1);
 
 protected:
 
@@ -59,8 +59,8 @@ public:		// 誰でもアクセス可能
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	static CMeshSmake *Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, float fLength,
-		float fHeight, const int nPriority = 3, const int nWidth = 1, const int nHeight = 1);
+	static CMeshSmake *Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, float fLength,
+		float fHeight, const int nWidth = 1, const int nHeight = 1);
 
 private:	// 自分だけがアクセス可能
 

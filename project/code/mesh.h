@@ -45,13 +45,13 @@ public:		// 誰でもアクセス可能
 	void Create(int nWidth, int nHeight);
 
 	// メンバ関数(設定)
-	void SetPosition(const D3DXVECTOR3 pos);
-	void SetRotation(const D3DXVECTOR3 rot);
-	void SetMtx(D3DXMATRIX MtxWorld) { m_mtxWorld = MtxWorld; }
+	void SetPosition(const D3DXVECTOR3& pos);
+	void SetRotation(const D3DXVECTOR3& rot);
+	void SetMtx(const D3DXMATRIX& MtxWorld) { m_mtxWorld = MtxWorld; }
 
 	// メンバ関数(取得)
-	D3DXVECTOR3 GetPosition(void) { return m_pos; }
-	D3DXVECTOR3 GetRotation(void) { return m_rot; }
+	D3DXVECTOR3 GetPosition(void) const { return m_pos; }
+	D3DXVECTOR3 GetRotation(void) const { return m_rot; }
 	D3DXMATRIX *GetMtx(void) { return &m_mtxWorld; }
 	int GetVertex(void) { return m_nVertex; }
 	int GetIndex(void) { return m_nIndex; }

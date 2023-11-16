@@ -199,6 +199,7 @@ void CObjectMesh::SetIndex(void)
 		pIdx[nCntIdx * 2] = (nCntIdx + m_nNumWidth + 1)
 			- (nCntIdx % (m_nNumWidth + 2) / (m_nNumWidth + 1) * (m_nNumWidth + 2))
 			- (nCntIdx / (m_nNumWidth + 2));
+
 		pIdx[nCntIdx * 2 + 1] = nCntIdx
 			+ (nCntIdx % (m_nNumWidth + 2) / (m_nNumWidth + 1) * (m_nNumWidth + 1))
 			- (nCntIdx / (m_nNumWidth + 2));
@@ -206,6 +207,7 @@ void CObjectMesh::SetIndex(void)
 		pIdx[nCntIdx * 2] = (nCntIdx + m_nNumWidth + 1)
 			- (nCntIdx % (m_nNumWidth + 2) / (m_nNumWidth + 1) * (m_nNumWidth + 2))
 			- (nCntIdx / (m_nNumWidth + 2));
+
 		pIdx[nCntIdx * 2 + 1] = nCntIdx
 			+ (nCntIdx % (m_nNumWidth + 2) / (m_nNumWidth + 1) * (m_nNumWidth + 1))
 			- (nCntIdx / (m_nNumWidth + 2));
@@ -280,7 +282,7 @@ void CObjectMesh::BindTexture(int nIdx)
 //===============================================
 // ç¿ïWê›íË
 //===============================================
-void CObjectMesh::SetPosition(const D3DXVECTOR3 pos)
+void CObjectMesh::SetPosition(const D3DXVECTOR3& pos)
 {
 	m_pos = pos;
 }
@@ -288,7 +290,7 @@ void CObjectMesh::SetPosition(const D3DXVECTOR3 pos)
 //===============================================
 // å¸Ç´ê›íË
 //===============================================
-void CObjectMesh::SetRotation(const D3DXVECTOR3 rot)
+void CObjectMesh::SetRotation(const D3DXVECTOR3& rot)
 {
 	m_rot = rot;
 

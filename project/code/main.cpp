@@ -24,7 +24,6 @@ int g_nCountFPS = 0;		//FPSカウンタ
 //===========================================================
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstancePrev, LPSTR lpCmdLine, int nCmdShow)
 {
-	CManager *pManager = NULL;
 	DWORD dwCurrentTime;	//現在時刻
 	DWORD dwExecLastTime;	//最後に処理した時刻
 	DWORD dwFrameCount;		//フレームカウント

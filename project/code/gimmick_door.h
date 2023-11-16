@@ -46,7 +46,7 @@ public:	// 誰でもアクセス可能
 	void Update(void);
 	void Draw(void);
 	static CGimmickDoor *Create(void);
-	static CGimmickDoor *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fTimer);
+	static CGimmickDoor *Create(const D3DXVECTOR3& pos);
 	void Open(int nId);
 
 	// メンバ関数(取得)
@@ -56,7 +56,7 @@ private:	// 自分だけがアクセス可能
 
 			// メンバ関数
 	void Controller(void);
-	bool CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, int &nDamage, const float fRefMulti = 0.5f);
+	bool CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, const D3DXVECTOR3& vtxMin, const D3DXVECTOR3& vtxMax, int &nDamage);
 
 	// メンバ変数
 	SObject m_aObject[TYPE_MAX];

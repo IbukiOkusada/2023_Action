@@ -30,17 +30,17 @@ public:	// 誰でもアクセス可能
 	virtual void Draw(void);
 	void BindFile(int nIdx);
 
-	static CObjectX *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, const char *pFileName, const int nPriority = 4);
+	static CObjectX *Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const char *pFileName, const int nPriority = 4);
 	static bool Collision(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, const float fRefMulti = 0.5f);
 	void SetRotSize(D3DXVECTOR3 &SetMax, D3DXVECTOR3 &SetMin, D3DXVECTOR3 vtxMax, D3DXVECTOR3 vtxMin, float fRot);
 
 	// メンバ関数(設定)
-	void SetPosition(const D3DXVECTOR3 pos);
-	void SetRotation(const D3DXVECTOR3 rot);
+	void SetPosition(const D3DXVECTOR3& pos);
+	void SetRotation(const D3DXVECTOR3& rot);
 
 	// メンバ関数(取得)
-	D3DXVECTOR3 GetPosition(void) { return m_pos; }
-	D3DXVECTOR3 GetRotation(void) { return m_rot; }
+	D3DXVECTOR3 GetPosition(void) const { return m_pos; }
+	D3DXVECTOR3 GetRotation(void) const { return m_rot; }
 	CObject2D *GetObject2D(void) { return NULL; }
 	virtual D3DXMATRIX *GetMtx(void) { return &m_mtxWorld; }
 	int GetIdx(void) { return m_nIdxModel; }

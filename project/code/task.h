@@ -58,8 +58,6 @@ private:	// 自分だけがアクセス可能
 	// メンバ関数
 
 	// メンバ変数
-	static CTask *m_pTop;	// 先頭のオブジェクトへのポインタ
-	static CTask *m_pCur;	// 最後尾のオブジェクトへのポインタ
 	CTask *m_pPrev;	// 前のオブジェクトへのポインタ
 	CTask *m_pNext;	// 次のオブジェクトへのポインタ
 	bool m_bDeath;	// 死亡フラグ

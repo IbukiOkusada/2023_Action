@@ -40,7 +40,7 @@ public:	// 誰でもアクセス可能
 	// メンバ関数(取得)
 
 	// メンバ関数(設定)
-	void SetGoalPos(D3DXVECTOR3 pos) { m_GoalPos = pos; }
+	void SetGoalPos(const D3DXVECTOR3& pos) { m_GoalPos = pos; }
 	void SetType(TYPE type) { m_type = type; }
 	void SetId(int nId) { m_nId = nId; }
 
@@ -48,7 +48,7 @@ private:	// 自分だけがアクセス可能
 
 	// メンバ関数
 	void Controller(void);
-	bool CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, int &nDamage, const float fRefMulti = 0.5f);
+	bool CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, const D3DXVECTOR3& vtxMin, const D3DXVECTOR3& vtxMax, int &nDamage);
 
 	// メンバ変数
 	D3DXVECTOR3 m_GoalPos;		// 入力後座標

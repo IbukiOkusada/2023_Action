@@ -23,7 +23,6 @@
 #include "fade.h"
 #include "pause.h"
 #include "result.h"
-#include "meshballoon.h"
 #include "editor.h"
 #include "sound.h"
 #include "game.h"
@@ -85,10 +84,9 @@ HRESULT CTutorial::Init(void)
 	}
 
 	// オブジェクト生成
-	m_pMeshDome = CMeshDome::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 20000.0f, 10.0f, 3, 10, 10);
-	CMeshCylinder::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 17000.0f, 100.0f, 3, 10, 10);
-	m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, 550.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		"data\\TXT\\motion_body.txt", "data\\TXT\\motion_leg.txt", 1);
+	m_pMeshDome = CMeshDome::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 20000.0f, 10.0f, 10, 10);
+	CMeshCylinder::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 17000.0f, 100.0f, 10, 10);
+	m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, 550.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	m_pPlayer->SetType(CPlayer::TYPE_ACTIVE);
 
 	//カメラ初期化

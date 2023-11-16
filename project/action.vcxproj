@@ -89,7 +89,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
@@ -173,7 +173,6 @@
     <ClCompile Include="code\main.cpp" />
     <ClCompile Include="code\manager.cpp" />
     <ClCompile Include="code\mesh.cpp" />
-    <ClCompile Include="code\meshballoon.cpp" />
     <ClCompile Include="code\meshcylinder.cpp" />
     <ClCompile Include="code\meshdome.cpp" />
     <ClCompile Include="code\meshfield.cpp" />
@@ -231,7 +230,6 @@
     <ClInclude Include="code\main.h" />
     <ClInclude Include="code\manager.h" />
     <ClInclude Include="code\mesh.h" />
-    <ClInclude Include="code\meshballoon.h" />
     <ClInclude Include="code\meshcylinder.h" />
     <ClInclude Include="code\meshdome.h" />
     <ClInclude Include="code\meshfield.h" />

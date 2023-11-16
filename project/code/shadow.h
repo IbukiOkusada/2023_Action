@@ -26,7 +26,7 @@ public:		// 誰でもアクセス可能
 	void Update(void);
 	void Draw(void);
 
-	static CShadow *Create(D3DXVECTOR3 pos, float fWidth, float fHeight);
+	static CShadow *Create(const D3DXVECTOR3& pos, float fWidth, float fHeight);
 
 private:	// 自分だけがアクセス可能
 };

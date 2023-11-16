@@ -21,13 +21,13 @@ public:	// 誰でもアクセス可能
 	~CParticle();	// デストラクタ
 
 	// メンバ関数
-	static void Create(D3DXVECTOR3 pos, CEffect::TYPE type);
-	static void Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, CEffect::TYPE type);
+	static void Create(const D3DXVECTOR3& pos, CEffect::TYPE type);
+	static void Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& move, CEffect::TYPE type);
 
 private:	// 自分だけがアクセス可能
 
 	// メンバ関数
-	static void Set(D3DXVECTOR3 Defpos, D3DXVECTOR3 Defmove, CEffect::TYPE type);
+	static void Set(const D3DXVECTOR3& Defpos, const D3DXVECTOR3& Defmove, CEffect::TYPE type);
 };
 
 #endif

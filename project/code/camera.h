@@ -30,7 +30,7 @@ public:	// 誰でもアクセス可能な定義
 
 public:	// 誰でもアクセス可能
 	CCamera();	// コンストラクタ
-	~CCamera();	// デストラクタ
+	virtual ~CCamera();	// デストラクタ
 
 	// メンバ関数
 	virtual HRESULT Init(void);
@@ -61,8 +61,8 @@ public:	// 誰でもアクセス可能
 	void SetLength(float fLength) { m_fLength = fLength; }
 
 	// メンバ関数(設定)
-	D3DXMATRIX SetMtxView(D3DXMATRIX mtxView) { m_mtxView = mtxView; }
-	D3DXMATRIX SetMtxProjection(D3DXMATRIX mtxProjection) { m_mtxProjection = mtxProjection; }
+	D3DXMATRIX SetMtxView(const D3DXMATRIX& mtxView) { m_mtxView = mtxView; }
+	D3DXMATRIX SetMtxProjection(const D3DXMATRIX& mtxProjection) { m_mtxProjection = mtxProjection; }
 
 private:	// 自分だけがアクセス可能
 
@@ -77,13 +77,13 @@ private:	// 自分だけがアクセス可能
 	// メンバ変数
 	D3DXMATRIX m_mtxView;		// ビューマトリックス
 	D3DXMATRIX m_mtxProjection;	// プロジェクションマトリックス
-	D3DXVECTOR3 m_posV;			// 視点
-	D3DXVECTOR3 m_posR;			// 注視点
-	D3DXVECTOR3 m_vecU;			// 上方向ベクトル
-	D3DXVECTOR3 m_rot;			// 向き
+	D3DXVECTOR3 m_posV;		// 視点
+	D3DXVECTOR3 m_posR;		// 注視点
+	D3DXVECTOR3 m_vecU;		// 上方向ベクトル
+	D3DXVECTOR3 m_rot;		// 向き
 	D3DXVECTOR3 m_SlowOldRot;	// スロー前の向き
 	MODE m_mode;				// モード
-	float m_fMulScore;			// スコア倍率
+	float m_fMulScore;		// スコア倍率
 	float m_fLength;			// 視点と注視点の距離
 };
 
@@ -94,14 +94,14 @@ class CMultiCamera : public CCamera
 {
 public:	// 誰でもアクセス可能
 	CMultiCamera();	// コンストラクタ
-	~CMultiCamera();	// デストラクタ
+	~CMultiCamera() override;	// デストラクタ
 
 	// メンバ関数
-	virtual HRESULT Init(void);
-	virtual void Uninit(void);
-	virtual void Update(void);
-	virtual void SetCamera(void);
-	void SetViewPort(D3DVIEWPORT9 viewport) { m_viewport = viewport; }
+	HRESULT Init(void) override;
+	void Uninit(void) override;
+	void Update(void) override;
+	void SetCamera(void) override;
+	void SetViewPort(const D3DVIEWPORT9& viewport) { m_viewport = viewport; }
 	D3DVIEWPORT9 *GetViewPort(void) { return &m_viewport; }
 
 private:	// 自分だけがアクセス可能
@@ -116,7 +116,7 @@ private:	// 自分だけがアクセス可能
 class CMapCamera : public CMultiCamera
 {
 public:	// 誰でもアクセス可能
-	CMapCamera();	// コンストラクタ
+	CMapCamera();		// コンストラクタ
 	~CMapCamera();	// デストラクタ
 
 	// メンバ関数

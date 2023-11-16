@@ -68,10 +68,10 @@ public:
 	virtual CEnemyRoute *GetEnemyRoute(void) { return NULL; }
 	virtual CCarManager *GetCarManager(void) { return NULL; }
 	virtual CEnemyManager *GetEnemyManager(void) { return NULL; }
-	virtual void SendPosition(D3DXVECTOR3 pos) {  }
-	virtual void SendRotation(D3DXVECTOR3 rot) {  }
-	virtual void SendDamage(int nDamage) {  }
-	virtual void SendLife(int nLife) {  }
+	virtual void SendPosition(const D3DXVECTOR3&) {  }
+	virtual void SendRotation(const D3DXVECTOR3&) {  }
+	virtual void SendDamage(const int) {  }
+	virtual void SendLife(const int) {  }
 	void SetMode(MODE mode) { m_mode = mode; }
 	MODE GetMode(void) { return m_mode; }
 

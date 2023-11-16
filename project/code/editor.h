@@ -49,13 +49,13 @@ public:	// 誰でもアクセス可能
 private:	// 自分だけがアクセス可能
 	
 	ObjectX m_Object;	// モデルポインタ
-	int m_nIdx;			// インデックス
-	float m_fSpeed;		// 速度
-	int m_nMoveCnt;		// 操作カウント
-	int m_nNumMove;		// 移動までの時間
+	int m_nIdx;		// インデックス
+	float m_fSpeed;	// 速度
+	int m_nMoveCnt;	// 操作カウント
+	int m_nNumMove;	// 移動までの時間
 	int m_nType;		// 種類
 	float m_fLength;	// メッシュ調整用半径
-	float m_fMeshMove;
+	float m_fMeshMove;	// メッシュの移動量
 	bool m_bUse;		// 使用中かどう
 	bool m_bMesh;		// メッシュ操作するか否か
 };

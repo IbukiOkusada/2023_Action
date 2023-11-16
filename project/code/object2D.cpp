@@ -39,36 +39,6 @@
 //===============================================
 // コンストラクタ(オーバーロード)
 //===============================================
-CObject2D::CObject2D(const D3DXVECTOR3 pos) : CObject(3)
-{
-	// 規定値を入れる
-	m_pos = pos;
-	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_fLength = 0.0f;
-	m_fAngle = 0.0f;
-	m_fWidth = 0.0f;
-	m_fHeight = 0.0f;
-	m_nIdxTexture = -1;
-}
-
-//===============================================
-// コンストラクタ(オーバーロード)
-//===============================================
-CObject2D::CObject2D(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const int nPriority) : CObject(nPriority)
-{
-	// 規定値を入れる
-	m_pos = pos;
-	m_rot = rot;
-	m_fLength = 0.0f;
-	m_fAngle = 0.0f;
-	m_fWidth = 0.0f;
-	m_fHeight = 0.0f;
-	m_nIdxTexture = -1;
-}
-
-//===============================================
-// コンストラクタ(オーバーロード)
-//===============================================
 CObject2D::CObject2D(int nPriority) : CObject(nPriority)
 {
 	// 値をクリアする
@@ -99,11 +69,6 @@ HRESULT CObject2D::Init(void)
 	//デバイスの取得
 	pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
 
-	// テクスチャの読み込み(割り当てるのでいらない)
-	/*D3DXCreateTextureFromFile(pDevice, 
-		TEX_FILENAME, 
-		&m_pTexture);*/
-
 	//頂点バッファの生成
 	pDevice->CreateVertexBuffer(
 		sizeof(VERTEX_2D) * VTX,
@@ -123,47 +88,6 @@ HRESULT CObject2D::Init(void)
 
 	//対角線の角度を算出する
 	m_fAngle = atan2f(WIDTH, HEIGHT);
-
-	// 頂点情報設定
-	SetVtx();
-
-	return S_OK;
-}
-
-//===============================================
-// 初期化処理
-//===============================================
-HRESULT CObject2D::Init(const char *pFileName)
-{
-	LPDIRECT3DDEVICE9 pDevice;		//デバイスへのポインタ
-
-	//デバイスの取得
-	pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
-
-	// テクスチャの読み込み(割り当てるのでいらない)
-	/*D3DXCreateTextureFromFile(pDevice,
-		pFileName,
-		&m_pTexture);*/
-
-	//頂点バッファの生成
-	pDevice->CreateVertexBuffer(
-		sizeof(VERTEX_2D) * VTX,
-		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_2D,
-		D3DPOOL_MANAGED,
-		&m_pVtxBuff,
-		NULL);
-
-	if (m_pVtxBuff == NULL)
-	{// 生成に失敗した場合
-		return E_FAIL;
-	}
-
-	//対角線の長さを算出する
-	m_fLength = sqrtf(m_fWidth * m_fWidth + m_fHeight * m_fHeight) * 0.5f;
-
-	//対角線の角度を算出する
-	m_fAngle = atan2f(m_fWidth, m_fHeight);
 
 	// 頂点情報設定
 	SetVtx();
@@ -363,12 +287,18 @@ CObject2D *CObject2D::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const
 	CObject2D *pObject2D = NULL;
 
 	// オブジェクト2Dの生成
-	pObject2D = new CObject2D(pos, rot, nPriority);
+	pObject2D = new CObject2D(nPriority);
 
 	if (pObject2D != NULL)
 	{// 生成できた場合
 		// 初期化処理
 		pObject2D->Init();
+
+		// 座標設定
+		pObject2D->SetPosition(pos);
+
+		// 向き設定
+		pObject2D->SetRotation(rot);
 
 		// 種類設定
 		pObject2D->SetType(TYPE_NONE);
@@ -410,7 +340,7 @@ CObject2D *CObject2D::Create(const int nPriority)
 //===============================================
 // 座標設定
 //===============================================
-void CObject2D::SetPosition(const D3DXVECTOR3 pos)
+void CObject2D::SetPosition(const D3DXVECTOR3& pos)
 {
 	m_pos = pos;
 }
@@ -418,7 +348,7 @@ void CObject2D::SetPosition(const D3DXVECTOR3 pos)
 //===============================================
 // 向き設定
 //===============================================
-void CObject2D::SetRotation(const D3DXVECTOR3 rot)
+void CObject2D::SetRotation(const D3DXVECTOR3& rot)
 {
 	m_rot = rot;
 

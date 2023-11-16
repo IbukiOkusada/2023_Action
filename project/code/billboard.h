@@ -26,25 +26,25 @@ public:	// 誰でもアクセス可能
 	void Update(void);
 	void Draw(void);
 	void RotFusionDraw(void);
-	static CObjectBillboard *Create(D3DXVECTOR3 pos, const int nPriority = 3);
+	static CObjectBillboard *Create(const D3DXVECTOR3& pos, const int nPriority = 3);
 	void BindTexture(int nIdx);
 
 	// メンバ関数(設定)
-	void SetPosition(const D3DXVECTOR3 pos) { m_pos = pos; }
-	void SetRotation(const D3DXVECTOR3 rot) { m_rot = rot; }
+	void SetPosition(const D3DXVECTOR3& pos) { m_pos = pos; }
+	void SetRotation(const D3DXVECTOR3& rot) { m_rot = rot; }
 	void SetVtx(void);
 	void SetVtx(D3DXCOLOR col);
 	void SetMtx(void);
 	void SetVtx(const int nPatternAnim, const int nTexWidth, const int nTexHeight);
-	void SetCol(const D3DXCOLOR col);
+	void SetCol(const D3DXCOLOR& col);
 	void SetSize(float fWidth, float fHeight);
 	float GetHeight(void) { return m_fHeight; }
 	float GetWidth(void) { return m_fWidth; }
 	virtual CEnemy *GetEnemy(void) { return NULL; }
 
 	// メンバ関数(取得)
-	D3DXVECTOR3 GetPosition(void) { return m_pos; }
-	D3DXVECTOR3 GetRotation(void) { return m_rot; }
+	D3DXVECTOR3 GetPosition(void) const { return m_pos; }
+	D3DXVECTOR3 GetRotation(void) const { return m_rot; }
 	CObject2D *GetObject2D(void) { return NULL; }
 	D3DXMATRIX *GetMtx(void) { return &m_mtxWorld; }
 	D3DXCOLOR GetCol(void) { return m_col; }

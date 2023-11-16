@@ -29,13 +29,13 @@ public:	// 誰でもアクセス可能
 	typedef enum
 	{
 		TYPE_NONE = 0,	// 何もない
-		TYPE_BG,		// 背景
-		TYPE_PLAYER,	// プレイヤー
+		TYPE_BG,			// 背景
+		TYPE_PLAYER,		// プレイヤー
 		TYPE_ENEMY,		// 敵
-		TYPE_BULLET,	// 弾
+		TYPE_BULLET,		// 弾
 		TYPE_ITEM,		// アイテム
 		TYPE_EXPLOSION,	// 爆発
-		TYPE_EFFECT,	// エフェクト
+		TYPE_EFFECT,		// エフェクト
 		TYPE_BLOCK,		// ブロック
 		TYPE_MODEL,		// モデル
 		TYPE_CAR,		// 車　
@@ -55,12 +55,12 @@ public:	// 誰でもアクセス可能
 	virtual void Draw(void) = 0;
 
 	// メンバ関数(設定)
-	virtual void SetPosition(const D3DXVECTOR3 pos) = 0;
-	virtual void SetRotation(const D3DXVECTOR3 rot) = 0;
+	virtual void SetPosition(const D3DXVECTOR3&) = 0;
+	virtual void SetRotation(const D3DXVECTOR3&) = 0;
 
 	// メンバ関数(取得)
-	virtual D3DXVECTOR3 GetPosition(void) = 0;
-	virtual D3DXVECTOR3 GetRotation(void) = 0;
+	virtual D3DXVECTOR3 GetPosition(void) const = 0;
+	virtual D3DXVECTOR3 GetRotation(void) const = 0;
 	virtual CObject2D *GetObject2D(void) { return NULL; }
 	virtual int GetModelType(void) { return -1; }
 	virtual D3DXMATRIX *GetMtx(void) { return NULL; }
@@ -77,7 +77,6 @@ public:	// 誰でもアクセス可能
 	static int GetItemNumAll(void) { return m_nItemNumAll; }
 	static int GetPriNumAll(int nPriority) { return m_aPriNumAll[nPriority]; }
 	static int GetNumEnemAll(void) { return m_nNumEnemyAll; }
-	virtual void Hit(float fDamage){ }
 	void SetDraw(bool bUse = true) { m_bDraw = bUse; }
 
 	// メンバ関数(取得

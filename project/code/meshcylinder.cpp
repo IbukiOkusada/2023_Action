@@ -129,7 +129,7 @@ void CMeshCylinder::SetVtxInfo(void)
 // 生成
 //==========================================================
 CMeshCylinder *CMeshCylinder::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot,
-	float fLength, float fHeight, const int nPriority, const int nWidth, const int nHeight)
+	float fLength, float fHeight, const int nWidth, const int nHeight)
 {
 	CMeshCylinder *pMeshWall = NULL;	// メッシュフィールドのポインタ
 	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
@@ -283,8 +283,8 @@ void CMeshSmake::Draw(void)
 //==========================================================
 // 生成
 //==========================================================
-CMeshSmake *CMeshSmake::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot,
-	float fLength, float fHeight, const int nPriority, const int nWidth, const int nHeight)
+CMeshSmake *CMeshSmake::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot,
+	float fLength, float fHeight, const int nWidth, const int nHeight)
 {
 	CMeshSmake *pMeshWall = NULL;	// メッシュフィールドのポインタ
 	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
@@ -339,8 +339,6 @@ void CMeshSmake::SetSize(float fLength, float fHeight)
 void CMeshSmake::SetCol(D3DXCOLOR col)
 {
 	int nVertex = GetVertex();			// 頂点数を取得
-	int nNumWidth = GetNumWidth();		// 幅枚数を取得
-	int nNumHeight = GetNumHeight();	// 高さ枚数を取得
 	D3DXVECTOR3 pos = GetPosition();	// 座標
 	D3DXVECTOR3 vecDir;	//設定変更用ベクトル
 

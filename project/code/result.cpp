@@ -26,6 +26,7 @@
 #define RANKING_FILE	"data\\FILE\\ranking.bin"	// ランキングファイル
 #define MOVE_TIMER	(660)
 
+// リザルトスコア
 int CResult::m_nScore = 0;
 CResult::TYPE CResult::m_type = CResult::TYPE_MAX;
 
@@ -59,7 +60,7 @@ HRESULT CResult::Init(void)
 {
 	CManager::GetInstance()->GetSound()->Play(CSound::LABEL_BGM_RESULT);
 	CTexture *pTexture = CManager::GetInstance()->GetTexture();
-	CMeshDome::Create(D3DXVECTOR3(0.0f, -1000.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 10000.0f, 10.0f, 3, 10, 10);
+	CMeshDome::Create(D3DXVECTOR3(0.0f, -1000.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 10000.0f, 10.0f, 10, 10);
 
 	if (m_pFileLoad == NULL)
 	{// 使用していない場合

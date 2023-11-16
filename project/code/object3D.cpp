@@ -191,7 +191,7 @@ void CObject3D::Draw(void)
 //==========================================================
 //生成処理
 //==========================================================
-CObject3D *CObject3D::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
+CObject3D *CObject3D::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot)
 {
 	CObject3D *pObject3D = NULL;
 
@@ -203,7 +203,11 @@ CObject3D *CObject3D::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 		// 初期化処理
 		pObject3D->Init();
 
+		// 位置設定
 		pObject3D->SetPosition(pos);
+
+		// 向き設定
+		pObject3D->SetRotation(rot);
 
 		// 種類設定
 		pObject3D->SetType(TYPE_NONE);
@@ -268,7 +272,7 @@ void CObject3D::BindTexture(int nIdx)
 //==========================================================
 // 頂点情報設定
 //==========================================================
-float CObject3D::GetHeight(D3DXVECTOR3 pos, D3DXVECTOR3 &normal)
+float CObject3D::GetHeight(const D3DXVECTOR3& pos, D3DXVECTOR3 &normal)
 {
 	float fHeight = 0.0f;	// 高さ
 	D3DXVECTOR3 Pos0, Pos1, Pos2, Pos3;
@@ -449,9 +453,6 @@ void CObject3D::SetTextureVtx(float fWidth, float fHeight)
 //==========================================================
 void CObject3D::SetMtx(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタを取得
-	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
-
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
 
 	//ワールドマトリックスの初期化
@@ -464,7 +465,4 @@ void CObject3D::SetMtx(void)
 	//位置を反映
 	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
 	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
-
-	//ワールドマトリックスの設定
-	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
 }

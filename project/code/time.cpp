@@ -74,8 +74,6 @@ HRESULT CTime::Init(void)
 
 	for (int nCnt = 0; nCnt < NUM_PLACE; nCnt++)
 	{
-		CNumber *pNum = m_apNumber[nCnt];	// 数字のポインタ
-
 		if (m_apNumber[nCnt] == NULL)
 		{// 使用していない場合
 			D3DXVECTOR3 pos = m_pos;	// 設定座標
@@ -141,7 +139,7 @@ void CTime::Update(void)
 //===============================================
 // 生成
 //===============================================
-CTime *CTime::Create(D3DXVECTOR3 pos)
+CTime *CTime::Create(const D3DXVECTOR3& pos)
 {
 	CTime *pBg = NULL;
 

@@ -50,13 +50,13 @@ private:	// 自分だけがアクセス可能
 
 	// メンバ関数
 	void Controller(void);
-	bool CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, int &nDamage, const float fRefMulti = 0.5f);
+	bool CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, const D3DXVECTOR3& vtxMin, const D3DXVECTOR3& vtxMax, int &nDamage);
 
 	// メンバ変数
 	CObject3D *m_pObject;		// オブジェクトポインタ
-	D3DXVECTOR3 m_move;
-	D3DXVECTOR2 m_moveTex;
-	D3DXVECTOR2 m_TexPos;
+	D3DXVECTOR3 m_move;		// 移動量
+	D3DXVECTOR2 m_moveTex;		// テクスチャ移動量
+	D3DXVECTOR2 m_TexPos;		// テクスチャ座標
 	bool m_bRevease;			// 反転するか
 	float m_fWidth;			// 幅
 	float m_fHeight;			// 高さ

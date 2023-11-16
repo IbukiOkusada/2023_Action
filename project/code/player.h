@@ -70,24 +70,20 @@ private:	// 自分だけがアクセス可能な定義
 
 public:	// 誰でもアクセス可能
 
-	//CPlayer();	// コンストラクタ
-	CPlayer(const D3DXVECTOR3 pos);	// コンストラクタ(オーバーロード)
-	CPlayer(int nPriOrity = 1);
+	CPlayer();	// コンストラクタ
 	~CPlayer();	// デストラクタ
 
 	// メンバ関数
 	HRESULT Init(void);
-	HRESULT Init(const char *pBodyName, const char *pLegName);	// オーバーロード
 	void Uninit(void);
 	void Update(void);
-	static CPlayer *Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const D3DXVECTOR3 move,
-		const char *pBodyName, const char *pLegName, const int nPriority = 4);
+	static CPlayer *Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const D3DXVECTOR3& move);
 
 	// メンバ関数(設定)
-	void SetMove(const D3DXVECTOR3 move) { m_Info.move = move; }
-	void SetPosition(const D3DXVECTOR3 pos) { m_Info.pos = pos; m_Info.posDiff = pos; }
-	void SetDiffPosition(const D3DXVECTOR3 pos) { m_Info.posDiff = pos; }
-	void SetRotation(const D3DXVECTOR3 rot) { m_Info.rot = rot; }
+	void SetMove(const D3DXVECTOR3& move) { m_Info.move = move; }
+	void SetPosition(const D3DXVECTOR3& pos) { m_Info.pos = pos; m_Info.posDiff = pos; }
+	void SetDiffPosition(const D3DXVECTOR3& pos) { m_Info.posDiff = pos; }
+	void SetRotation(const D3DXVECTOR3& rot) { m_Info.rot = rot; }
 	void BindId(int nId) { m_nId = nId; }
 	void SetType(TYPE type);
 	void SetGoalValue(bool bValue) { m_bGoal = bValue; }

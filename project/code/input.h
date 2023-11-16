@@ -163,7 +163,7 @@ public:	// 誰でもアクセス可能
 	bool GetRepeat(int nKey, int nPlayer);
 	bool GetStickPress(int nPlayer, int nKey, float DeadZone, Stick PlusStick);
 	BYTE GetRightTriggerPress(int nPlayer);
-	float GetStickAdd(int nPlayer, int nKey, float DeadZone, Stick PlusStick);
+	float GetStickAdd(int nPlayer, int nKey, float DeadZone);
 
 private:	// 自分だけアクセス可能
 

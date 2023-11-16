@@ -77,7 +77,7 @@ void CShadow::Draw(void)
 //==========================================================
 //影の設定処理
 //==========================================================
-CShadow *CShadow::Create(D3DXVECTOR3 pos, float fWidth, float fHeight)
+CShadow *CShadow::Create(const D3DXVECTOR3& pos, float fWidth, float fHeight)
 {
 	CShadow *pShadow = NULL;	// 影のポインタ
 	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャのポインタ

@@ -130,12 +130,11 @@ void CGimmickRotate::Update(void)
 			if (nullptr != m_aObj[nCnt].s_pShadow) {
 				// 起伏との当たり判定
 				D3DXVECTOR3 nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-				float fHeight = CMeshField::GetHeight(m_aObj[nCnt].s_posOld);
-				//m_aObj[nCnt].s_pShadow->SetPosition(D3DXVECTOR3(m_aObj[nCnt].s_posOld.x, fHeight + 7.0f, m_aObj[nCnt].s_posOld.z));
 
 				D3DXMATRIX mtxProjection;
 				D3DXMATRIX mtxView;
 				D3DXMATRIX mtxWorld;
+				D3DXVECTOR3 pos = GetPosition();
 				D3DXVECTOR3 ScreenPos;
 				D3DVIEWPORT9 Viewport;
 
@@ -146,11 +145,11 @@ void CGimmickRotate::Update(void)
 				pDevice->GetTransform(D3DTS_VIEW, &mtxView);				// ビューマトリックスを取得
 				pDevice->GetViewport(&Viewport);							// ビューポートを取得
 
-																			//ワールドマトリックスの初期化
+				//ワールドマトリックスの初期化
 				D3DXMatrixIdentity(&mtxWorld);
 
 				// ワールド座標からスクリーン座標に変換する
-				D3DXVec3Project(&ScreenPos, &GetPosition(), &Viewport, &mtxProjection, &mtxView, &mtxWorld);
+				D3DXVec3Project(&ScreenPos, &pos, &Viewport, &mtxProjection, &mtxView, &mtxWorld);
 
 				if (ScreenPos.x < 0.0f || ScreenPos.x > SCREEN_WIDTH ||
 					ScreenPos.y < 0.0f || ScreenPos.y > SCREEN_HEIGHT || ScreenPos.z >= 1.0f)
@@ -185,10 +184,8 @@ CGimmickRotate *CGimmickRotate::Create(void)
 //==========================================================
 // 個別判定チェック
 //==========================================================
-bool CGimmickRotate::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, D3DXVECTOR3 vtxMin, D3DXVECTOR3 vtxMax, int &nDamage, const float fRefMulti)
+bool CGimmickRotate::CollisionCheck(D3DXVECTOR3 &pos, D3DXVECTOR3 &posOld, D3DXVECTOR3 &move, const D3DXVECTOR3& vtxMin, const D3DXVECTOR3& vtxMax, int &nDamage)
 {
-
-	CXFile *pFile = CManager::GetInstance()->GetModelFile();
 	bool bLand = false;	// 着地したか否か
 	D3DXVECTOR3 vtxObjMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 vtxObjMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -263,7 +260,7 @@ void CGimmickRotate::SetRotate(D3DXVECTOR3 rotate)
 //==========================================================
 void CGimmickRotate::SetRotationCharacter(void)
 {
-	if ((int)(NUM_ROTATEBOX * 0.5f) <= 0)
+	if (NUM_ROTATEBOX <= 0)
 	{
 		return;
 	}

@@ -227,7 +227,6 @@ void CMeshField::SetTex(void)
 {
 	int nVertex = GetVertex();			// 頂点数を取得
 	int nNumWidth = GetNumWidth();		// 幅枚数を取得
-	int nNumHeight = GetNumHeight();	// 高さ枚数を取得
 
 	// テクスチャ座標(左奥から右手前に向かって頂点情報を設定する
 	for (int nCntpVtx = 0; nCntpVtx < nVertex; nCntpVtx++)
@@ -241,8 +240,8 @@ void CMeshField::SetTex(void)
 //==========================================================
 // 生成
 //==========================================================
-CMeshField *CMeshField::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, 
-	float fWidth, float fHeight, const char *pFileName, const int nWidth, const int nHeight, const int nPriority)
+CMeshField *CMeshField::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, 
+	float fWidth, float fHeight, const char *pFileName, const int nWidth, const int nHeight)
 {
 	CMeshField *pMeshField = NULL;	// メッシュフィールドのポインタ
 	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
@@ -292,7 +291,7 @@ void CMeshField::SetSize(float fWidth, float fHeight)
 //==========================================================
 // 当たり判定
 //==========================================================
-float CMeshField::GetHeight(D3DXVECTOR3 pos, D3DXVECTOR3 &normal)
+float CMeshField::GetHeight(const D3DXVECTOR3& pos, D3DXVECTOR3 &normal)
 {
 	float fHeight = 0.0f;	// 高さ
 	D3DXVECTOR3 Pos0, Pos1, Pos2, Pos3;
@@ -418,7 +417,7 @@ float CMeshField::GetHeight(D3DXVECTOR3 pos, D3DXVECTOR3 &normal)
 //==========================================================
 // 全ての床との判定
 //==========================================================
-float CMeshField::GetHeight(D3DXVECTOR3 pos)
+float CMeshField::GetHeight(const D3DXVECTOR3& pos)
 {
 	CMeshField *pMesh = CMeshField::GetTop();	// 先頭を取得
 	float fHeight = 0.0f;	// 高さ
@@ -830,7 +829,7 @@ void CMeshField::UpDownLoad(const char *pFileName)
 //==========================================================
 // 現在地のエリア確認
 //==========================================================
-CMeshField *CMeshField::GetArea(D3DXVECTOR3 pos)
+CMeshField *CMeshField::GetArea(const D3DXVECTOR3& pos)
 {
 	int nCnt = 0;
 	// 床の描画

@@ -34,12 +34,12 @@ public:		// 誰でもアクセス可能
 	void Uninit(void);	// 終了処理
 	void Update(void);	// 更新処理
 	void Draw(void);	// 描画処理
-	static CMeshOrbit *Create(D3DXMATRIX *pMtx, D3DXVECTOR3 UpSet, D3DXVECTOR3 DownSet, TYPE type = TYPE_NONE);
+	static CMeshOrbit *Create(D3DXMATRIX *pMtx, const D3DXVECTOR3& UpSet, const D3DXVECTOR3& DownSet, TYPE type = TYPE_NONE);
 
 	// メンバ関数(設定)
 	void SetVtxInfo(void);
 	void SetParent(D3DXMATRIX *pMtx) { m_pMtxParent = pMtx; }
-	void SetOffSet(D3DXVECTOR3 Up, D3DXVECTOR3 Down) { m_aOffSet[0] = Up; m_aOffSet[1] = Down; }
+	void SetOffSet(const D3DXVECTOR3 Up, D3DXVECTOR3 Down) { m_aOffSet[0] = Up; m_aOffSet[1] = Down; }
 	static int Get(void) { return m_nNumAll; }
 	void Reset(void);
 	void SetNor(D3DXVECTOR3 nor) { m_nor = nor; }

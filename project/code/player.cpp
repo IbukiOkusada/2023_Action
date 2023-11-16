@@ -73,46 +73,7 @@ int CPlayer::m_nNumCount = 0;
 //===============================================
 // コンストラクタ(オーバーロード)
 //===============================================
-CPlayer::CPlayer(const D3DXVECTOR3 pos)
-{
-	// 値をクリアする
-	m_Info.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_Info.posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_Info.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_Info.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_fRotMove = 0.0f;
-	m_fRotDiff = 0.0f;
-	m_fRotDest = 0.0f;
-	m_pObject = NULL;
-	m_pShadow = NULL;
-	m_nLife = 0;
-	m_type = TYPE_NONE;
-	m_nId = -1;
-	m_fEffectCount = 0.0f;
-	m_bSetUp = false;
-	m_bGoal = false;
-	m_pGoal = nullptr;
-
-	// 自分自身をリストに追加
-	if (m_pTop != NULL)
-	{// 先頭が存在している場合
-		m_pCur->m_pNext = this;	// 現在最後尾のオブジェクトのポインタにつなげる
-		m_pPrev = m_pCur;
-		m_pCur = this;	// 自分自身が最後尾になる
-	}
-	else
-	{// 存在しない場合
-		m_pTop = this;	// 自分自身が先頭になる
-		m_pCur = this;	// 自分自身が最後尾になる
-	}
-
-	m_nNumCount++;
-}
-
-//===============================================
-// コンストラクタ(オーバーロード)
-//===============================================
-CPlayer::CPlayer(int nPriOrity)
+CPlayer::CPlayer()
 {
 	// 値をクリアする
 	m_Info.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -164,34 +125,6 @@ HRESULT CPlayer::Init(void)
 {
 	if (nullptr == m_pObject)
 	{
-		m_pObject = CCharacter::Create(GetPosition(), GetRotation(), "data\\TXT\\motion_kidsboy.txt");
-		m_pObject->SetShadow(true);
-	}
-
-	//ワールドマトリックスの初期化
-	D3DXMatrixIdentity(&m_mtxRot);
-
-	// 影の生成
-	if (nullptr == m_pShadow)
-	{
-		m_pShadow = CShadow::Create(m_Info.pos, 50.0f, 50.0f);
-	}
-
-	m_Info.state = STATE_APPEAR;
-	m_type = TYPE_NONE;
-	m_nLife = START_LIFE;
-	m_bSetUp = false;
-
-	return S_OK;
-}
-
-//===============================================
-// 初期化処理(オーバーロード)
-//===============================================
-HRESULT CPlayer::Init(const char *pBodyName, const char *pLegName)
-{
-	if (nullptr == m_pObject)
-	{
 		m_pObject = CCharacter::Create("data\\TXT\\motion_kidsboy.txt");
 		m_pObject->GetMotion()->InitSet(0);
 		m_pObject->SetShadow(true);
@@ -204,7 +137,7 @@ HRESULT CPlayer::Init(const char *pBodyName, const char *pLegName)
 	//ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxRot);
 
-	if(m_ppBillBoard == nullptr)
+	if (m_ppBillBoard == nullptr)
 	{
 		m_ppBillBoard = new CObjectBillboard*[START_LIFE];
 
@@ -522,18 +455,17 @@ void CPlayer::Update(void)
 //===============================================
 // 生成
 //===============================================
-CPlayer *CPlayer::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 move, const char *pBodyName, const char *pLegName, const int nPriority)
+CPlayer *CPlayer::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const D3DXVECTOR3& move)
 {
 	CPlayer *pPlayer = NULL;
-	CXFile *pModelFile = CManager::GetInstance()->GetModelFile();
 
 	// オブジェクト2Dの生成
-	pPlayer = new CPlayer(nPriority);
+	pPlayer = new CPlayer;
 
 	if (nullptr != pPlayer)
 	{// 生成できた場合
 		// 初期化処理
-		pPlayer->Init(pBodyName, pLegName);
+		pPlayer->Init();
 
 		// 座標設定
 		pPlayer->SetPosition(pos);
@@ -564,9 +496,6 @@ void CPlayer::Controller(void)
 {
 	D3DXVECTOR3 pos = GetPosition();	// 座標を取得
 	D3DXVECTOR3 rot = GetRotation();	// 向きを取得
-	CInputKeyboard *pInputKey = CManager::GetInstance()->GetInputKeyboard();	// キーボードのポインタ
-	CInputMouse *pInputMouse = CManager::GetInstance()->GetInputMouse();		// マウス
-	CInputPad *pInputPad = CManager::GetInstance()->GetInputPad();				// パッド
 	CCamera *pCamera = CManager::GetInstance()->GetCamera();					// カメラのポインタ
 	D3DXVECTOR3 CamRot = pCamera->GetRotation();								// カメラの角度
 	bool bDamage = false;
@@ -603,7 +532,6 @@ void CPlayer::Controller(void)
 	// オブジェクトとの当たり判定
 	if (nullptr != m_pObject)
 	{
-		CXFile *pFile = CManager::GetInstance()->GetModelFile();
 		D3DXVECTOR3 vtxMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		D3DXVECTOR3 vtxMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
@@ -613,7 +541,7 @@ void CPlayer::Controller(void)
 		}
 
 		// ギミック
-		if (CGimmick::Collision(pos, m_Info.posOld, m_Info.move, vtxMin, vtxMax, nDamage, 0.3f))
+		if (CGimmick::Collision(pos, m_Info.posOld, m_Info.move, vtxMin, vtxMax, nDamage))
 		{
 			bDamage = true;
 			CManager::GetInstance()->GetDebugProc()->Print("***ギミックと当たったよ***\n");
@@ -734,8 +662,8 @@ void CPlayer::Rotation(void)
 	}
 
 	D3DXVECTOR2 vec;
-	vec.y = pInputPad->GetStickAdd(0, CInputPad::BUTTON_LEFT_X, 0.1f, CInputPad::STICK_PLUS);
-	vec.x = pInputPad->GetStickAdd(0, CInputPad::BUTTON_LEFT_Y, 0.1f, CInputPad::STICK_PLUS);
+	vec.y = pInputPad->GetStickAdd(0, CInputPad::BUTTON_LEFT_X, 0.1f);
+	vec.x = pInputPad->GetStickAdd(0, CInputPad::BUTTON_LEFT_Y, 0.1f);
 	D3DXVec2Normalize(&vec, &vec);
 
 	m_fRotDest = atan2f(vec.y, vec.x);

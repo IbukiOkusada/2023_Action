@@ -49,20 +49,6 @@ const float CEffect::m_aRadiusInfo[TYPE_MAX]
 //===============================================
 // コンストラクタ(オーバーロード)
 //===============================================
-CEffect::CEffect(D3DXVECTOR3 pos)
-{
-	// 値のクリア
-	m_Info.col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	m_Info.fLife = 0;
-	m_Info.move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_Info.fRadius = 0.0f;
-	m_Info.Type = TYPE_NONE;
-	m_fusion = FUSION_ADD;
-}
-
-//===============================================
-// コンストラクタ(オーバーロード)
-//===============================================
 CEffect::CEffect(int nPriority) : CObjectBillboard(nPriority)
 {
 	// 値のクリア

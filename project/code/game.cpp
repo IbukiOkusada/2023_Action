@@ -130,12 +130,12 @@ HRESULT CGame::Init(void)
 	pObj->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.95f, 0.0f));
 	pObj->SetSize(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.05f);
 
-	m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, -150.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
+	m_pPlayer = CPlayer::Create(D3DXVECTOR3(0.0f, 0.0f, -150.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	m_pPlayer->SetUp(true);
 	m_pPlayer->SetType(CPlayer::TYPE_SEND);
 	m_pCountDown = CCountDown::Create();
 
-	m_pMeshDome = CMeshDome::Create(D3DXVECTOR3(-8000.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 10000.0f, 10.0f, 3, 10, 10);
+	m_pMeshDome = CMeshDome::Create(D3DXVECTOR3(-8000.0f, -300.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 10000.0f, 10.0f, 10, 10);
 
 	if (m_state == STATE_MULTI)
 	{// マルチの場合
@@ -848,7 +848,7 @@ void CGame::ByteCheck(char *pRecvData, int nRecvByte)
 
 			if (bIn == false && m_pPlayer->GetId() != -1 && nType > COMMAND_TYPE_NONE && nType < COMMAND_TYPE_MAX)
 			{// まだ存在していない場合
-				pPlayer = CPlayer::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), NULL, NULL);
+				pPlayer = CPlayer::Create(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 				pPlayer->BindId(nId);
 				pPlayer->SetType(CPlayer::TYPE_NONE);
 			}
@@ -871,7 +871,7 @@ void CGame::ByteCheck(char *pRecvData, int nRecvByte)
 //===================================================
 // 座標送信
 //===================================================
-void CGame::SendPosition(D3DXVECTOR3 pos)
+void CGame::SendPosition(const D3DXVECTOR3& pos)
 {
 	if (m_pClient != nullptr)
 	{
@@ -892,7 +892,7 @@ void CGame::SendPosition(D3DXVECTOR3 pos)
 //===================================================
 // 向き送信
 //===================================================
-void CGame::SendRotation(D3DXVECTOR3 rot)
+void CGame::SendRotation(const D3DXVECTOR3& rot)
 {
 	if (m_pClient != nullptr)
 	{
@@ -913,7 +913,7 @@ void CGame::SendRotation(D3DXVECTOR3 rot)
 //===================================================
 // ダメージ送信
 //===================================================
-void CGame::SendDamage(int nDamage)
+void CGame::SendDamage(const int nDamage)
 {
 	if (m_pClient != nullptr)
 	{
@@ -934,7 +934,7 @@ void CGame::SendDamage(int nDamage)
 //===================================================
 // 体力送信
 //===================================================
-void CGame::SendLife(int nLife)
+void CGame::SendLife(const int nLife)
 {
 	if (m_pClient != nullptr)
 	{
@@ -1019,7 +1019,7 @@ void CGame::AddressLoad(char *pAddrss)
 	{//ファイルが開けた場合
 		
 		//テキスト読み込み
-		int nResult = fscanf(pFile, "%s", pAddrss);
+		fscanf(pFile, "%s", pAddrss);
 
 		//ファイルを閉じる
 		fclose(pFile);

@@ -38,7 +38,7 @@ public:	// ここから関数(誰でもアクセス可能)
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
-	static CTime *Create(D3DXVECTOR3 pos);
+	static CTime *Create(const D3DXVECTOR3& pos);
 
 	// メンバ関数
 	void Add(int nValue);

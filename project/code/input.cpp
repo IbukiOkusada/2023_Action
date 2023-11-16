@@ -508,7 +508,7 @@ bool CInputPad::GetStickPress(int nPlayer, int nKey, float DeadZone, Stick PlusS
 //==========================================================
 // スティックの値取得
 //==========================================================
-float CInputPad::GetStickAdd(int nPlayer, int nKey, float DeadZone, Stick PlusStick)
+float CInputPad::GetStickAdd(int nPlayer, int nKey, float DeadZone)
 {
 	float fAnswer = 0.0f;
 
@@ -528,6 +528,10 @@ float CInputPad::GetStickAdd(int nPlayer, int nKey, float DeadZone, Stick PlusSt
 		break;
 	default:
 		break;
+	}
+
+	if (fAnswer >= -DeadZone && fAnswer <= DeadZone) {
+		fAnswer = 0.0f;
 	}
 
 	return fAnswer;

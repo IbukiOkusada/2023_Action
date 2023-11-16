@@ -187,7 +187,7 @@ void CObjectBillboard::RotFusionDraw(void)
 //==========================================================
 //生成処理
 //==========================================================
-CObjectBillboard *CObjectBillboard::Create(D3DXVECTOR3 pos, const int nPriority)
+CObjectBillboard *CObjectBillboard::Create(const D3DXVECTOR3& pos, const int nPriority)
 {
 	CObjectBillboard *pObjBillboard = NULL;
 
@@ -344,7 +344,7 @@ void CObjectBillboard::SetSize(float fWidth, float fHeight)
 //==========================================================
 // 色設定
 //==========================================================
-void CObjectBillboard::SetCol(D3DXCOLOR col)
+void CObjectBillboard::SetCol(const D3DXCOLOR& col)
 {
 	VERTEX_3D *pVtx;
 	m_col = col;
@@ -372,7 +372,6 @@ void CObjectBillboard::SetCol(D3DXCOLOR col)
 void CObjectBillboard::SetMtx(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();		//デバイスへのポインタを取得
-	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
 	D3DXMATRIX mtxTrans;	//計算用マトリックス
 	D3DXMATRIX mtxView;		//ビューマトリックス取得用
 

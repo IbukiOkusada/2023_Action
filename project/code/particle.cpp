@@ -35,7 +35,7 @@ CParticle::~CParticle()
 //===============================================
 // 生成
 //===============================================
-void CParticle::Create(D3DXVECTOR3 pos, CEffect::TYPE type)
+void CParticle::Create(const D3DXVECTOR3& pos, CEffect::TYPE type)
 {
 	// オブジェクトの種類の設定
 	Set(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), type);
@@ -44,7 +44,7 @@ void CParticle::Create(D3DXVECTOR3 pos, CEffect::TYPE type)
 //===============================================
 // 頂点情報設定
 //===============================================
-void CParticle::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, CEffect::TYPE type)
+void CParticle::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& move, CEffect::TYPE type)
 {
 	// オブジェクトの種類の設定
 	Set(pos, move, type);
@@ -53,7 +53,7 @@ void CParticle::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, CEffect::TYPE type)
 //===============================================
 // 設定
 //===============================================
-void CParticle::Set(D3DXVECTOR3 Defpos, D3DXVECTOR3 Defmove, CEffect::TYPE type)
+void CParticle::Set(const D3DXVECTOR3& Defpos, const D3DXVECTOR3& Defmove, CEffect::TYPE type)
 {
 	D3DXVECTOR3 pos = {};
 	D3DXVECTOR3 move = {};	// 移動量
@@ -66,10 +66,6 @@ void CParticle::Set(D3DXVECTOR3 Defpos, D3DXVECTOR3 Defmove, CEffect::TYPE type)
 
 	// 移動ベクトルを求める
 	D3DXVec3Normalize(&nor, &Defmove);	// ベクトルを正規化する
-
-	int nMoveX = (int)(D3DX_PI * nor.x) * 100;
-	int nMoveY = (int)(D3DX_PI * nor.y) * 100;
-	int nMoveZ = (int)(D3DX_PI * nor.z) * 100;
 
 	switch (type)
 	{
@@ -159,7 +155,7 @@ void CParticle::Set(D3DXVECTOR3 Defpos, D3DXVECTOR3 Defmove, CEffect::TYPE type)
 			// 座標の設定
 			pos = Defpos;
 
-			float fCol = (float)(rand() % 3) * 0.05f + 0.0f;
+			fCol = (float)(rand() % 3) * 0.05f + 0.0f;
 
 			//移動量の設定
 			move.x = -sinf(Defmove.y + -D3DX_PI * 0.1f + D3DX_PI * 0.2f * ((rand() % 10) * 0.1f)) * 1.5f;

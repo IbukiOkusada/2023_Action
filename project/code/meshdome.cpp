@@ -146,8 +146,8 @@ void CMeshDome::SetVtxInfo(void)
 //==========================================================
 // 生成
 //==========================================================
-CMeshDome *CMeshDome::Create(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot,
-	float fLength, float fHeight, const int nPriority, const int nWidth, const int nHeight)
+CMeshDome *CMeshDome::Create(const D3DXVECTOR3& pos, const D3DXVECTOR3& rot,
+	float fLength, float fHeight, const int nWidth, const int nHeight)
 {
 	CMeshDome *pMeshWall = NULL;	// メッシュフィールドのポインタ
 	CTexture *pTexture = CManager::GetInstance()->GetTexture();	// テクスチャへのポインタ
@@ -205,10 +205,6 @@ void CMeshDome::SetSize(float fLength, float fHeight)
 void CMeshDome::SetColor(float fDiff)
 {
 	int nVertex = GetVertex();			// 頂点数を取得
-	int nNumWidth = GetNumWidth();		// 幅枚数を取得
-	int nNumHeight = GetNumHeight();	// 高さ枚数を取得
-	D3DXVECTOR3 pos = GetPosition();	// 座標
-	D3DXVECTOR3 vecDir;					// 設定変更用ベクトル
 
 	// 頂点座標の設定(左奥から右手前に向かって頂点情報を設定する
 	for (int nCntVtx = 0; nCntVtx < nVertex; nCntVtx++)

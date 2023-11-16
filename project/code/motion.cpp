@@ -196,7 +196,7 @@ void CMotion::LoadMotionData(FILE *pFile)
 	while (1)
 	{
 		//テキスト読み込み
-		int nResult = fscanf(pFile, "%s", &aStr[0]);
+		fscanf(pFile, "%s", &aStr[0]);
 
 		if (nCntKey >= aInfo[m_nNumMotion].nNumKey && bKey == true)
 		{//キー数に来た場合
